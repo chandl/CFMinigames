@@ -1,0 +1,11 @@
+main: me.chandl.cfminigame.CFMinigame
+name: CFMinigame
+version: 1.0
+author: Chandler Severson
+description: A Minigame Plugin for Creative Freebuild Server
+commands:
+   mg:
+      description: The main CFMinigame command.
+      usage: /mg
+      permission: CFMinigame.mg
+      permission-message: You don't have the CFMinigame.mg permission.
