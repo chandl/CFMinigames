@@ -17,6 +17,7 @@ public class MinigamePlayer {
     private ItemStack[] beforeMGInventory;
     private Minigame currentGame;
     private PlayerConfig conf;
+    private PlayerState state;
 
     public MinigamePlayer (Player p){
         player = p;
@@ -49,5 +50,15 @@ public class MinigamePlayer {
 
     public Location getBeforeMGPosition() {
         return beforeMGPosition;
+    }
+
+    public Player getPlayerObject(){return player;}
+
+    public PlayerState getState() {
+        return state;
+    }
+
+    public void setState(PlayerState state) {
+        this.state = state;
     }
 }

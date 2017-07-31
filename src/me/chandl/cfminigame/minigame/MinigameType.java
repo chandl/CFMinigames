@@ -1,23 +1,17 @@
 package me.chandl.cfminigame.minigame;
 
 
-public class MinigameType {
-    private int id;
-    private String name;
+public enum MinigameType {
+   RACE, ELYTRARACE;
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public String toString() {
+        switch(this){
+            case ELYTRARACE:
+                return "ELYTRARACE";
+            default:
+                return null;
+        }
     }
 }
