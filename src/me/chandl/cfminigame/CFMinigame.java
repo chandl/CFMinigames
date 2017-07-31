@@ -26,8 +26,6 @@ public class CFMinigame extends JavaPlugin{
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-
         this.getCommand("mg").setExecutor(new CommandHandler());;
     }
 
