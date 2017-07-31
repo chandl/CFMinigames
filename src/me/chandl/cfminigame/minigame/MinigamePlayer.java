@@ -1,69 +1,53 @@
 package me.chandl.cfminigame.minigame;
 
+import me.chandl.cfminigame.database.PlayerConfig;
 import me.chandl.cfminigame.scores.HighScore;
 import me.chandl.cfminigame.scores.WinCount;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.List;
 
-/**
- * Created by chandler on 7/30/17.
- */
 public class MinigamePlayer {
     private Player player;
     private List<HighScore> highScores;
     private List<WinCount> winCount;
     private int currentLifeCount;
     private Location beforeMGPosition;
-    private List<ItemStack> beforeMGInventory;
+    private ItemStack[] beforeMGInventory;
+    private Minigame currentGame;
+    private PlayerConfig conf;
 
-    public Player getPlayer() {
-        return player;
+    public MinigamePlayer (Player p){
+        player = p;
+        conf = new PlayerConfig();
+
+        if(!conf.loadConfig(player) ){ // if config doesn't exist
+            conf.createUser(conf.getPlayerFile());
+
+
+            conf.set("uuid", player.getUniqueId().toString());
+            conf.set("beforePosition", player.getLocation());
+            beforeMGInventory = player.getInventory().getContents();
+            conf.set("beforeInventory",beforeMGInventory);
+
+            conf.saveUserFile();
+        }else{
+            beforeMGPosition = (Location) conf.get("beforePosition");
+            List<ItemStack> items = (List<ItemStack>) conf.getList("beforeInventory");
+            beforeMGInventory = items.toArray(new ItemStack[items.size()]);
+        }
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void loadItems(){
+        player.getInventory().setContents(beforeMGInventory);
     }
 
-    public List<HighScore> getHighScores() {
-        return highScores;
-    }
-
-    public void setHighScores(List<HighScore> highScores) {
-        this.highScores = highScores;
-    }
-
-    public List<WinCount> getWinCount() {
-        return winCount;
-    }
-
-    public void setWinCount(List<WinCount> winCount) {
-        this.winCount = winCount;
-    }
-
-    public int getCurrentLifeCount() {
-        return currentLifeCount;
-    }
-
-    public void setCurrentLifeCount(int currentLifeCount) {
-        this.currentLifeCount = currentLifeCount;
+    public void clearItems(){
+        player.getInventory().clear();
     }
 
     public Location getBeforeMGPosition() {
         return beforeMGPosition;
-    }
-
-    public void setBeforeMGPosition(Location beforeMGPosition) {
-        this.beforeMGPosition = beforeMGPosition;
-    }
-
-    public List<ItemStack> getBeforeMGInventory() {
-        return beforeMGInventory;
-    }
-
-    public void setBeforeMGInventory(List<ItemStack> beforeMGInventory) {
-        this.beforeMGInventory = beforeMGInventory;
     }
 }

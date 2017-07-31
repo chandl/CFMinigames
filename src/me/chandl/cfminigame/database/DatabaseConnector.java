@@ -48,4 +48,5 @@ public class DatabaseConnector  {
             connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database, this.username, this.password);
         }
     }
+
 }

@@ -1,13 +1,12 @@
 package me.chandl.cfminigame;
 
+import me.chandl.cfminigame.minigame.MinigamePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-/**
- * Created by chandler on 7/30/17.
- */
+
 public class CommandHandler implements CommandExecutor {
 
     @Override
@@ -37,6 +36,17 @@ public class CommandHandler implements CommandExecutor {
                                 break;
                             case "join":
                                 sender.sendMessage("'mg join' command called");
+                                //join the only active minigame.
+                                MinigamePlayer player = new MinigamePlayer(sender);
+                                player.clearItems();
+
+                                break;
+                            case "leave":
+                                sender.sendMessage("'mg leave' command called");
+                                MinigamePlayer p = new MinigamePlayer(sender);
+                                p.loadItems();
+                                sender.teleport(p.getBeforeMGPosition());
+
                                 break;
                             case "highscore":
                                 sender.sendMessage("'mg highscore' command called");

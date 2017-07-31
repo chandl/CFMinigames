@@ -1,5 +1,7 @@
 package me.chandl.cfminigame.minigame;
 
+import org.bukkit.entity.Player;
+
 import java.sql.Date;
 
 public abstract class Minigame {
@@ -14,6 +16,10 @@ public abstract class Minigame {
 
     public abstract void start ();
     public abstract void stop ();
+    public abstract void onJoin(Player player);
+    public abstract void onLeave(Player player);
+
+
 
     public int getId() {
         return id;
