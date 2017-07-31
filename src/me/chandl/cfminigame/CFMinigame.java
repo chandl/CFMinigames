@@ -1,13 +1,13 @@
 package me.chandl.cfminigame;
 
 
-import me.chandl.cfminigame.minigame.Minigame;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import java.util.logging.Logger;
 
 public class CFMinigame extends JavaPlugin{
-
+    public static final int DEFAULT_MAX_PLAYERS = 16;
+    public static final int DEFAULT_MIN_PLAYERS = 2;
+    public static final long DEFAULT_MAX_QUEUE_TIME = 1;
     private Logger log;
 
 

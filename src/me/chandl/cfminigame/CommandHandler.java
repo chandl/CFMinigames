@@ -76,26 +76,7 @@ public class CommandHandler implements CommandExecutor {
     }
 
     private void mgStart (MinigamePlayer player, String typeStr, String mapName, int difficulty){
-        MinigameType type = null;
-        MinigameMap map = null;
-
-        for(MinigameType mgType : MinigameType.values()){
-            if(typeStr.equalsIgnoreCase(mgType.toString())){
-                type = mgType;
-                break;
-            }
-        }
-
-        if(type == null){
-            player.getPlayerObject().sendMessage("[CFMinigame ERROR] No Mingame Type '" + typeStr +"'. Could not create minigame lobby.");
-            return;
-        }
-
-        map = MinigameMap.findMap(type, mapName, difficulty);
-        if(map == null){
-            player.getPlayerObject().sendMessage("[CFMinigame ERROR] No Mingame Map '" + mapName +"'. Could not create minigame lobby.");
-            return;
-        }
+        GameHandler.createMinigame(player, typeStr, mapName, difficulty);
 
 
 

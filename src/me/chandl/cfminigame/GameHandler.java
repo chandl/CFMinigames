@@ -1,9 +1,6 @@
 package me.chandl.cfminigame;
 
-import me.chandl.cfminigame.minigame.Minigame;
-import me.chandl.cfminigame.minigame.MinigamePlayer;
-import me.chandl.cfminigame.minigame.MinigameState;
-import me.chandl.cfminigame.minigame.PlayerState;
+import me.chandl.cfminigame.minigame.*;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
@@ -11,7 +8,8 @@ import java.util.List;
 
 public class GameHandler implements Listener {
 
-    private List<MinigamePlayer> playerList;
+
+    private static List<MinigamePlayer> playerList;
     private static GameHandler handler;
     private static Minigame currentMinigame;
     private static MinigameState currentState;
@@ -36,6 +34,10 @@ public class GameHandler implements Listener {
         currentState = MinigameState.IN_GAME;
 
         currentMinigame.start();
+
+        for(MinigamePlayer player : playerList){
+            player.setState(PlayerState.IN_GAME);
+        }
     }
 
     public static void stopMinigame(){
@@ -43,6 +45,47 @@ public class GameHandler implements Listener {
         currentMinigame = null;
 
         currentMinigame.stop();
+        for(MinigamePlayer player : playerList){
+            player.setState(PlayerState.NOT_IN_GAME);
+        }
+    }
+
+    public static boolean createMinigame(MinigamePlayer player, String typeStr, String mapName, int difficulty){
+        if(currentMinigame != null) return false;
+
+        MinigameType type = null;
+        MinigameMap map = null;
+
+        for(MinigameType mgType : MinigameType.values()){
+            if(typeStr.equalsIgnoreCase(mgType.toString())){
+                type = mgType;
+                break;
+            }
+        }
+
+        if(type == null){
+            player.getPlayerObject().sendMessage("[CFMinigame ERROR] No Mingame Type '" + typeStr +"'. Could not create minigame lobby.");
+            return false;
+        }
+
+        map = MinigameMap.findMap(type, mapName, difficulty);
+        if(map == null){
+            player.getPlayerObject().sendMessage("[CFMinigame ERROR] No Mingame Map '" + mapName +"'. Could not create minigame lobby.");
+            return false;
+        }
+
+        Minigame game = type.toMinigame();
+        game.setType(type);
+        game.setMaximumPlayers(CFMinigame.DEFAULT_MAX_PLAYERS);
+        game.setMinimumPlayers(CFMinigame.DEFAULT_MIN_PLAYERS);
+        game.setQueueTimeLimit(CFMinigame.DEFAULT_MAX_QUEUE_TIME);
+        game.setMap(map);
+        game.setDifficultyLevel(difficulty);
+
+        currentMinigame = game;
+        startQueue();
+
+        return true;
     }
 
     public boolean addPlayer(MinigamePlayer player){

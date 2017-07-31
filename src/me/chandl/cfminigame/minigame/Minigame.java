@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import java.sql.Date;
 
 public abstract class Minigame {
-    private int id;
     private Date startTime;
     private MinigameType type;
     private int maximumPlayers, minimumPlayers;
@@ -21,13 +20,7 @@ public abstract class Minigame {
 
 
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public Date getStartTime() {
         return startTime;
