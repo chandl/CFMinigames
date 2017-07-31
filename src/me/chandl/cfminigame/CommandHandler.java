@@ -76,10 +76,11 @@ public class CommandHandler implements CommandExecutor {
     }
 
     private void mgStart (MinigamePlayer player, String typeStr, String mapName, int difficulty){
-        GameHandler.createMinigame(player, typeStr, mapName, difficulty);
-
-
-
+        if(GameHandler.createMinigame(player, typeStr, mapName, difficulty)){
+            player.getPlayerObject().sendMessage("[CFMinigame] Minigame lobby successfully started!");
+        }else{
+            player.getPlayerObject().sendMessage("[CFMinigame ERROR] Minigame lobby COULD NOT BE started!");
+        }
     }
 
     private void mgJoin(MinigamePlayer player){

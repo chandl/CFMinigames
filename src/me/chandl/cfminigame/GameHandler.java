@@ -28,6 +28,8 @@ public class GameHandler implements Listener {
 
     public static void startQueue(){
         currentState = MinigameState.IN_QUEUE;
+
+        //Start Async Queue
     }
 
     public static void startMinigame(){
