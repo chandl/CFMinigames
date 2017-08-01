@@ -4,6 +4,7 @@ import me.chandl.cfminigame.minigame.*;
 import me.chandl.cfminigame.util.Message;
 import me.chandl.cfminigame.util.TextUtil;
 import org.bukkit.event.Listener;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,11 +27,41 @@ public class GameHandler implements Listener {
 
     public void startQueue(){
         currentState = MinigameState.IN_QUEUE;
+        Message.allPlayers("INFO", "Minigame Starting in " + CFMinigame.DEFAULT_MAX_QUEUE_TIME + " seconds...");
 
-        //Start Async Queue
+
+        //Countdown Timer at 3 Seconds
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                for(int i=3; i>0; i--){
+                    Message.allPlayers("INFO", "Minigame Starting in "+i+"...");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }.runTaskLaterAsynchronously(CFMinigame.plugin, 20 * (CFMinigame.DEFAULT_MAX_QUEUE_TIME-3 ));
+
+        //Actual Timer to Start the Minigame after DEFAULT_MAX_QUEUE_TIME seconds
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                Message.allPlayers("INFO", "Minigame Starting Now!");
+                startMinigame();
+            }
+        }.runTaskLater(CFMinigame.plugin, 20 * CFMinigame.DEFAULT_MAX_QUEUE_TIME );
     }
 
     public void startMinigame(){
+        if(playerList.size() < currentMinigame.getMinimumPlayers()){
+            Message.allPlayers("ERROR", "Not Enough Players to Start the Minigame (Minimum "+currentMinigame.getMinimumPlayers()+"). Try again with '/mg start'");
+            stopMinigame();
+            return;
+        }
         currentState = MinigameState.IN_GAME;
 
         currentMinigame.start();
@@ -96,10 +127,10 @@ public class GameHandler implements Listener {
 
     public boolean addPlayer(MinigamePlayer player){
 
-        playerList.put(player.getPlayerObject().getUniqueId(), player);
-
         //make sure player limit is not reached
         if(playerList.size() < currentMinigame.getMaximumPlayers()){
+
+            playerList.put(player.getPlayerObject().getUniqueId(), player);
 
             //Call minigame onJoin
             currentMinigame.onJoin(player);
