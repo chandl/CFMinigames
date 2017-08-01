@@ -84,11 +84,11 @@ public class CommandHandler implements CommandExecutor {
                                 }
                                 break;
                             default:
-                                sender.sendMessage("CFMingame ERROR: '" + strings[0] +"' not a recognized command!");
+                                Message.player(sender, "ERROR", "'" + strings[0] +"' is not a recognized command!");
                                 return false;
                         }
                     }else{
-                        sender.sendMessage("You must provide additional arguments to the 'mg' command. '/mg help' for more info.");
+                        Message.player(sender, "INFO", "You must provide additional arguments to the 'mg' command. '/mg help' for more info.");
                     }
 
                     return true;
@@ -103,16 +103,14 @@ public class CommandHandler implements CommandExecutor {
     private void mgStop(MinigamePlayer player){
         if(GameHandler.getHandler().getCurrentMinigame() != null && GameHandler.getHandler().getCurrentState() != MinigameState.NO_GAME){
             GameHandler.getHandler().stopMinigame();
-            player.getPlayerObject().sendMessage(TextUtil.formatMessage("INFO", "Minigame Stopped!"));
-            Message.allPlayers("Current Minigame Stopped!");
+            Message.allPlayers("INFO", "The Current Minigame was Stopped! Start a new one with '/mg start'!");
         }else{
-            player.getPlayerObject().sendMessage(TextUtil.formatMessage("ERROR", "Minigame Could not be Stopped. No Game found"));
+            Message.player(player, "ERROR", "Minigame Could not be Stopped. No Game found");
         }
     }
 
     private void mgStart (MinigamePlayer player, String typeStr, String mapName, int difficulty){
         if(GameHandler.getHandler().createMinigame(player, typeStr, mapName, difficulty)){
-            player.getPlayerObject().sendMessage(TextUtil.formatMessage("Minigame lobby successfully started!"));
             Message.allPlayers(String.format("New %s minigame started. Use '/mg join' to join the lobby!", GameHandler.getHandler().getCurrentMinigame().getType()));
         }else{
             System.out.println(String.format("[CFMinigame ERROR] Minigame lobby COULD NOT BE started! %s: type: %s, map: %s, difficulty %d", player.getPlayerObject().getName(), typeStr, mapName, difficulty));
@@ -123,21 +121,24 @@ public class CommandHandler implements CommandExecutor {
         Minigame currentMinigame = GameHandler.getHandler().getCurrentMinigame();
 
         if(currentMinigame == null){
-            player.getPlayerObject().sendMessage("No Minigame started. Start one with '/mg start'");
+            Message.player(player, "No Minigame started. Start one with '/mg start'");
+        }else if(GameHandler.getHandler().playerInGame(player)){
+            Message.player(player, "ERROR", "You are already in the minigame lobby! Use '/mg leave' to leave.");
+
         }else{
             if(GameHandler.getHandler().addPlayer(player)){
-                player.getPlayerObject().sendMessage("[CFMinigame] Successfully Joined Minigame!");
+                Message.player(player, "Successfully Joined Minigame!");
             }else{
-                player.getPlayerObject().sendMessage("[CFMinigame ERROR] Maximum player count reached. Can't join.");
+                Message.player(player, "ERROR", "Maximum player count reached. Can't join.");
             }
         }
     }
 
     private void mgLeave(MinigamePlayer player){
         if(GameHandler.getHandler().removePlayer(player)){
-            player.getPlayerObject().sendMessage("[CFMinigame] Successfully Left Minigame!");
+            Message.player(player, "Successfully Left Minigame!");
         }else{
-            player.getPlayerObject().sendMessage("[CFMinigame] You were not in a Minigame. Cannot leave.");
+            Message.player(player, "You were not in a Minigame. Cannot leave.");
         }
     }
 

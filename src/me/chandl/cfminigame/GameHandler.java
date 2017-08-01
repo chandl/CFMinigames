@@ -1,6 +1,7 @@
 package me.chandl.cfminigame;
 
 import me.chandl.cfminigame.minigame.*;
+import me.chandl.cfminigame.util.Message;
 import me.chandl.cfminigame.util.TextUtil;
 import org.bukkit.event.Listener;
 
@@ -52,18 +53,9 @@ public class GameHandler implements Listener {
         for(MinigamePlayer player : playerList.values()){
             player.setState(PlayerState.NOT_IN_GAME);
         }
-
-        messageAllPlayers("Minigame Ended!!!");
     }
 
-    public void messageAllPlayers(String msg){
-        playerList.values().forEach(new Consumer<MinigamePlayer>() {
-            @Override
-            public void accept(MinigamePlayer minigamePlayer) {
-                minigamePlayer.getPlayerObject().sendMessage(msg);
-            }
-        });
-    }
+
 
     public boolean createMinigame(MinigamePlayer player, String typeStr, String mapName, int difficulty){
         if(currentMinigame != null) return false;
@@ -106,7 +98,7 @@ public class GameHandler implements Listener {
     }
 
     public boolean addPlayer(MinigamePlayer player){
-        System.out.println("Added Player!");
+
         playerList.put(player.getPlayerObject().getUniqueId(), player);
 
         //make sure player limit is not reached
@@ -124,17 +116,23 @@ public class GameHandler implements Listener {
     public boolean removePlayer(MinigamePlayer player){
 
         if(playerList.containsKey(player.getPlayerObject().getUniqueId())){
-            System.out.println("Removed Player!");
             playerList.remove(player.getPlayerObject().getUniqueId());
             //Call minigame onLeave
             currentMinigame.onLeave(player);
+
+            if(playerList.size() == 0){
+                Message.allPlayers("All players left the current minigame! Use '/mg start' to start a new one!");
+                stopMinigame();
+            }
             return true;
         }else{
             return false;
         }
     }
 
-
+    public boolean playerInGame(MinigamePlayer player){
+        return playerList.containsKey(player.getPlayerObject().getUniqueId());
+    }
 
 
 
