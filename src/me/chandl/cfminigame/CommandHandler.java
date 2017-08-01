@@ -16,6 +16,9 @@ import java.io.File;
 
 public class CommandHandler implements CommandExecutor {
 
+    public static final String[] commands = {"new", "publish", "start", "stop",
+            "join", "leave", "highscore", "help", "createrace", "status", "playerlist"};
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
 

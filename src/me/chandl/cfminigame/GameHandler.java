@@ -27,7 +27,7 @@ public class GameHandler implements Listener {
 
     public void startQueue(){
         currentState = MinigameState.IN_QUEUE;
-        Message.allPlayers("INFO", "Minigame Starting in " + CFMinigame.DEFAULT_MAX_QUEUE_TIME + " seconds...");
+        Message.allPlayers( "The level " + currentMinigame.getDifficultyLevel() + " " + currentMinigame.getType() + " Minigame on " + currentMinigame.getMap().getName() +" will start in " + CFMinigame.DEFAULT_MAX_QUEUE_TIME + " seconds...");
 
 
         //Countdown Timer at 3 Seconds
@@ -35,7 +35,7 @@ public class GameHandler implements Listener {
             @Override
             public void run() {
                 for(int i=3; i>0; i--){
-                    Message.allPlayers("INFO", "Minigame Starting in "+i+"...");
+                    Message.allPlayers( currentMinigame.getType()+": " + currentMinigame.getMap().getName() + " (Level "+ currentMinigame.getDifficultyLevel()+") starting in " +i+"...");
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -50,7 +50,7 @@ public class GameHandler implements Listener {
         new BukkitRunnable(){
             @Override
             public void run() {
-                Message.allPlayers("INFO", "Minigame Starting Now!");
+                Message.playersInGame(currentMinigame.getType()+": " + currentMinigame.getMap().getName() + " (Level "+ currentMinigame.getDifficultyLevel()+") Starting Now!");
                 startMinigame();
             }
         }.runTaskLater(CFMinigame.plugin, 20 * CFMinigame.DEFAULT_MAX_QUEUE_TIME );
@@ -161,10 +161,6 @@ public class GameHandler implements Listener {
     public boolean playerInGame(MinigamePlayer player){
         return playerList.containsKey(player.getPlayerObject().getUniqueId());
     }
-
-
-
-
 
     public static GameHandler getHandler(){
         if(handler == null) {handler = new GameHandler();}
