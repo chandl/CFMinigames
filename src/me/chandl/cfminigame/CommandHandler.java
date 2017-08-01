@@ -1,13 +1,18 @@
 package me.chandl.cfminigame;
 
+import me.chandl.cfminigame.database.MapConfig;
 import me.chandl.cfminigame.minigame.Minigame;
 import me.chandl.cfminigame.minigame.MinigameMap;
 import me.chandl.cfminigame.minigame.MinigamePlayer;
 import me.chandl.cfminigame.minigame.MinigameType;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.io.File;
 
 
 public class CommandHandler implements CommandExecutor {
@@ -19,7 +24,7 @@ public class CommandHandler implements CommandExecutor {
         if(commandSender instanceof Player){
             Player sender = (Player) commandSender;
 
-            switch(s){
+            switch(s.toLowerCase()){
                 case "mg":
                     sender.sendMessage("mg command called");
                     MinigamePlayer player = new MinigamePlayer(sender);
@@ -27,14 +32,14 @@ public class CommandHandler implements CommandExecutor {
                     if(strings.length > 0){
                         switch(strings[0]){
                             case "new":
-                                sender.sendMessage("'mg new' command called");
+                                System.out.println("'mg new' command called");
 
                                 break;
                             case "publish":
-                                sender.sendMessage("'mg publish' command called");
+                                System.out.println("'mg publish' command called");
                                 break;
                             case "start":
-                                sender.sendMessage("'mg start' command called");
+                                System.out.println("'mg start' command called");
                                 if(strings.length != 4){
                                     sender.sendMessage("[CFMinigame ERROR] Invalid number of arguments for the 'start' command.");
                                 }else{
@@ -42,21 +47,33 @@ public class CommandHandler implements CommandExecutor {
                                 }
                                 break;
                             case "stop":
-                                sender.sendMessage("'mg stop' command called");
+                                System.out.println("'mg stop' command called");
+                                GameHandler.stopMinigame();
                                 break;
                             case "join":
-                                sender.sendMessage("'mg join' command called");
+                                System.out.println("'mg join' command called");
                                 mgJoin(player);
                                 break;
                             case "leave":
-                                sender.sendMessage("'mg leave' command called");
+                                System.out.println("'mg leave' command called");
                                 mgLeave(player);
                                 break;
                             case "highscore":
-                                sender.sendMessage("'mg highscore' command called");
+                                System.out.println("'mg highscore' command called");
                                 break;
                             case "help":
-                                sender.sendMessage("'mg help' command called");
+                                System.out.println("'mg help' command called");
+                                break;
+                            case "createrace":
+                                ItemStack[] startingItems = new ItemStack[1];
+                                startingItems[0] = new ItemStack(Material.ELYTRA);
+                                MinigameMap testMap = new MinigameMap("testMap", 3, sender.getLocation(), sender.getLocation() , 1, 1, startingItems);
+                                File testFile = new File("plugins/CFMinigame/maps/elytrarace/testMap-1.yml");
+                                MapConfig.createMap(testFile, testMap);
+                                break;
+                            case "status":
+                                System.out.println("MG STATUS:" + GameHandler.getCurrentState());
+                                System.out.println("MG: " + GameHandler.getCurrentMinigame().toString());
                                 break;
                             default:
                                 sender.sendMessage("CFMingame ERROR: '" + strings[0] +"' not a recognized command!");
@@ -79,7 +96,7 @@ public class CommandHandler implements CommandExecutor {
         if(GameHandler.createMinigame(player, typeStr, mapName, difficulty)){
             player.getPlayerObject().sendMessage("[CFMinigame] Minigame lobby successfully started!");
         }else{
-            player.getPlayerObject().sendMessage("[CFMinigame ERROR] Minigame lobby COULD NOT BE started!");
+            System.out.println(String.format("[CFMinigame ERROR] Minigame lobby COULD NOT BE started! %s: type: %s, map: %s, difficulty %d", player.getPlayerObject().getName(), typeStr, mapName, difficulty));
         }
     }
 

@@ -1,5 +1,6 @@
 package me.chandl.cfminigame.database;
 
+import me.chandl.cfminigame.minigame.MinigameMap;
 import me.chandl.cfminigame.minigame.MinigameType;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -27,13 +28,24 @@ public class MapConfig {
         return true;
     }
 
-    public static void createMap( File mapFile){
+    public static void createMap( File mapFile , MinigameMap map){
         mapConfiguration = YamlConfiguration.loadConfiguration(mapFile);
         try {
             mapConfiguration.save(mapFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+        mapConfiguration.set("mapName", map.getName());
+        mapConfiguration.set("maxLifeCount", map.getMaxLifeCount());
+        mapConfiguration.set("spawnPoint", map.getSpawnPoint());
+        mapConfiguration.set("spectatorPoint", map.getSpectatorPoint());
+        mapConfiguration.set("gameTimeLimit", map.getGameTimeLimit());
+        mapConfiguration.set("baseScore", map.getBaseScore());
+        mapConfiguration.set("startingItems", map.getStartingItems());
+
+        saveMapFile();
     }
 
 

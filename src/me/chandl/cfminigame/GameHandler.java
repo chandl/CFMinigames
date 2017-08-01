@@ -4,7 +4,9 @@ import me.chandl.cfminigame.minigame.*;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class GameHandler implements Listener {
 
@@ -50,6 +52,17 @@ public class GameHandler implements Listener {
         for(MinigamePlayer player : playerList){
             player.setState(PlayerState.NOT_IN_GAME);
         }
+
+        messageAllPlayers("Minigame Ended!!!");
+    }
+
+    public static void messageAllPlayers(String msg){
+        playerList.forEach(new Consumer<MinigamePlayer>() {
+            @Override
+            public void accept(MinigamePlayer minigamePlayer) {
+                minigamePlayer.getPlayerObject().sendMessage(msg);
+            }
+        });
     }
 
     public static boolean createMinigame(MinigamePlayer player, String typeStr, String mapName, int difficulty){
@@ -83,6 +96,7 @@ public class GameHandler implements Listener {
         game.setQueueTimeLimit(CFMinigame.DEFAULT_MAX_QUEUE_TIME);
         game.setMap(map);
         game.setDifficultyLevel(difficulty);
+        game.setStartTime(new Date());
 
         currentMinigame = game;
         startQueue();
@@ -95,19 +109,10 @@ public class GameHandler implements Listener {
 
         //make sure player limit is not reached
         if(playerList.size() < currentMinigame.getMaximumPlayers()){
-            //Clear player's inventory
-            player.clearItems();
 
-            //teleport player to MG start location
-            player.getPlayerObject().teleport(currentMinigame.getMap().getSpawnPoint());
-
-            //give player MG starting items
-            player.getPlayerObject().getInventory().setContents( currentMinigame.getMap().getStartingItems() );
-
+            //Call minigame onJoin
             currentMinigame.onJoin(player);
-
             return true;
-
         }else {
             return false;
         }
@@ -117,21 +122,13 @@ public class GameHandler implements Listener {
     public boolean removePlayer(MinigamePlayer player){
 
         if(playerList.remove(player)){
-            player.setState(PlayerState.NOT_IN_GAME);
-            player.loadItems();
-            player.getPlayerObject().teleport(player.getBeforeMGPosition());
 
+            //Call minigame onLeave
             currentMinigame.onLeave(player);
-
             return true;
-
         }else{
             return false;
         }
-    }
-
-    public List<MinigamePlayer> getPlayerList() {
-        return playerList;
     }
 
     public static Minigame getCurrentMinigame(){
@@ -140,5 +137,9 @@ public class GameHandler implements Listener {
 
     public static void setCurrentMinigame(Minigame minigame){
         currentMinigame = minigame;
+    }
+
+    public static MinigameState getCurrentState() {
+        return currentState;
     }
 }

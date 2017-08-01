@@ -1,8 +1,8 @@
 package me.chandl.cfminigame.minigame;
 
-import org.bukkit.entity.Player;
+import me.chandl.cfminigame.GameHandler;
 
-import java.sql.Date;
+import java.util.Date;
 
 public abstract class Minigame {
     private Date startTime;
@@ -12,15 +12,40 @@ public abstract class Minigame {
     private MinigameMap map;
     private int difficultyLevel;
 
+    @Override
+    public String toString(){
+        String out = String.format("[%s] %s Minigame. Map: %s. Difficulty: %d. " +
+                "Max Players: %d, Min Players: %d.", startTime.toString(), type, map.getName(),
+                difficultyLevel, maximumPlayers, minimumPlayers);
+        return out;
+    }
 
     public abstract void start ();
     public abstract void stop ();
-    public abstract void onJoin(MinigamePlayer player);
-    public abstract void onLeave(MinigamePlayer player);
 
+    /**
+     * Default onJoin Method for Minigames.
+     * Clears Player's Inventory, Saving previous inventory for after game.
+     * Teleports Player to the Minigame Spawn Point
+     * Gives Player the Minigame Starting items.
+     * @param player
+     */
+    public void onJoin(MinigamePlayer player){
+        //Clear player's inventory
+        player.clearItems();
 
+        //teleport player to MG start location
+        player.getPlayerObject().teleport(GameHandler.getCurrentMinigame().getMap().getSpawnPoint());
 
+        //give player MG starting items
+        player.getPlayerObject().getInventory().setContents( GameHandler.getCurrentMinigame().getMap().getStartingItems() );
+    }
 
+    public void onLeave(MinigamePlayer player){
+        player.setState(PlayerState.NOT_IN_GAME);
+        player.loadItems();
+        player.getPlayerObject().teleport(player.getBeforeMGPosition());
+    }
 
     public Date getStartTime() {
         return startTime;

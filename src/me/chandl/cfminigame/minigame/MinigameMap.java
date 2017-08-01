@@ -30,8 +30,8 @@ public class MinigameMap {
             int maxLife = (Integer) MapConfig.get("maxLifeCount");
             Location spawnPoint = (Location) MapConfig.get("spawnPoint");
             Location spectatorPoint = (Location) MapConfig.get("spectatorPoint");
-            long gameTimeLimit = (Long) MapConfig.get("gameTimeLimit");
-            long baseScore = (Long) MapConfig.get("baseScore");
+            long gameTimeLimit = (Integer) MapConfig.get("gameTimeLimit");
+            long baseScore = (Integer) MapConfig.get("baseScore");
             List<ItemStack> items = (List<ItemStack>) MapConfig.getList("startingItems");
             return new MinigameMap(name, maxLife, spawnPoint, spectatorPoint, gameTimeLimit, baseScore, items.toArray(new ItemStack[items.size()]));
         }else{
@@ -40,7 +40,7 @@ public class MinigameMap {
 
     }
 
-    private MinigameMap(String name, int maxLifeCount, Location spawnPoint, Location spectatorPoint, long gameTimeLimit, long baseScore, ItemStack[] startingItems) {
+    public MinigameMap(String name, int maxLifeCount, Location spawnPoint, Location spectatorPoint, long gameTimeLimit, long baseScore, ItemStack[] startingItems) {
         this.name = name;
         this.maxLifeCount = maxLifeCount;
         this.spawnPoint = spawnPoint;
@@ -58,4 +58,23 @@ public class MinigameMap {
         return startingItems;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getMaxLifeCount() {
+        return maxLifeCount;
+    }
+
+    public Location getSpectatorPoint() {
+        return spectatorPoint;
+    }
+
+    public long getGameTimeLimit() {
+        return gameTimeLimit;
+    }
+
+    public long getBaseScore() {
+        return baseScore;
+    }
 }
