@@ -19,11 +19,11 @@ public class MinigamePlayer {
     private PlayerConfig conf;
     private PlayerState state;
 
-    public MinigamePlayer (Player p){
+    public MinigamePlayer (Player p, boolean reset){
         player = p;
         conf = new PlayerConfig();
 
-        if(!conf.loadConfig(player) ){ // if config doesn't exist
+        if(!conf.loadConfig(player) || reset){ // if config doesn't exist
             conf.createUser(conf.getPlayerFile());
 
 
@@ -45,6 +45,9 @@ public class MinigamePlayer {
     }
 
     public void clearItems(){
+        beforeMGInventory = player.getInventory().getContents();
+        conf.set("beforeInventory",beforeMGInventory);
+        conf.saveUserFile();
         player.getInventory().clear();
     }
 

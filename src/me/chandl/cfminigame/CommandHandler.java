@@ -26,7 +26,7 @@ public class CommandHandler implements CommandExecutor {
             switch(s.toLowerCase()){
                 case "mg":
                     System.out.println("mg command called");
-                    MinigamePlayer player = new MinigamePlayer(sender);
+                    MinigamePlayer player = new MinigamePlayer(sender, false);
 
                     if(strings.length > 0){
                         switch(strings[0]){
@@ -40,7 +40,7 @@ public class CommandHandler implements CommandExecutor {
                             case "start":
                                 System.out.println("'mg start' command called");
                                 if(strings.length != 4){
-                                    sender.sendMessage("[CFMinigame ERROR] Invalid number of arguments for the 'start' command.");
+                                    Message.player(sender, "ERROR", "Usage: /mg start [MinigameType] [Map] [Difficulty]");
                                 }else{
                                     mgStart(player, strings[1], strings[2], Integer.parseInt(strings[3]));
                                 }
@@ -49,6 +49,7 @@ public class CommandHandler implements CommandExecutor {
                                 System.out.println("'mg stop' command called");
                                 mgStop(player);
                                 break;
+
                             case "join":
                                 System.out.println("'mg join' command called");
                                 mgJoin(player);
@@ -126,6 +127,7 @@ public class CommandHandler implements CommandExecutor {
             Message.player(player, "ERROR", "You are already in the minigame lobby! Use '/mg leave' to leave.");
 
         }else{
+
             if(GameHandler.getHandler().addPlayer(player)){
                 Message.player(player, "Successfully Joined Minigame!");
             }else{

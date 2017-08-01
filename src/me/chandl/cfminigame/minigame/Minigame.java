@@ -1,6 +1,7 @@
 package me.chandl.cfminigame.minigame;
 
 import me.chandl.cfminigame.GameHandler;
+import me.chandl.cfminigame.util.Message;
 import me.chandl.cfminigame.util.TextUtil;
 
 import java.util.Date;
@@ -32,16 +33,38 @@ public abstract class Minigame {
      * @param player
      */
     public void onJoin(MinigamePlayer player){
-        //Clear player's inventory
-        player.clearItems();
+        switch(GameHandler.getHandler().getCurrentState()){
+            case IN_GAME:
+                //Clear player's inventory
+                player.clearItems();
 
-        //teleport player to MG start location
-        player.getPlayerObject().teleport(GameHandler.getHandler().getCurrentMinigame().getMap().getSpawnPoint());
+                //teleport player to MG spectator location
+                player.getPlayerObject().teleport(GameHandler.getHandler().getCurrentMinigame().getMap().getSpectatorPoint());
 
-        //give player MG starting items
-        player.getPlayerObject().getInventory().setContents( GameHandler.getHandler().getCurrentMinigame().getMap().getStartingItems() );
+                //notify all players of someone new in the MG.
+                Message.allPlayers(String.format("%s started spectating the minigame! [%d/%d Players]", player.getPlayerObject().getDisplayName(), GameHandler.getHandler().getPlayerList().size(), getMaximumPlayers()));
+                break;
 
-        player.getPlayerObject().sendMessage(TextUtil.formatMessage("Joined new "+ GameHandler.getHandler().getCurrentMinigame().getType() + " Minigame!"));
+            case IN_QUEUE:
+                //Clear player's inventory
+                player.clearItems();
+
+                //teleport player to MG start location
+                player.getPlayerObject().teleport(GameHandler.getHandler().getCurrentMinigame().getMap().getSpawnPoint());
+
+                //give player MG starting items
+                player.getPlayerObject().getInventory().setContents( GameHandler.getHandler().getCurrentMinigame().getMap().getStartingItems() );
+
+                //notify all players of someone new in the MG.
+                Message.allPlayers(String.format("%s just joined the minigame! [%d/%d Players]", player.getPlayerObject().getDisplayName(), GameHandler.getHandler().getPlayerList().size(), getMaximumPlayers()));
+                break;
+
+            case NO_GAME:
+            default:
+                System.out.println("This ERROR should never show. If it does, ur fucked. ");
+                break;
+        }
+
     }
 
     public void onLeave(MinigamePlayer player){

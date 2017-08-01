@@ -9,12 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class GameHandler implements Listener {
 
-
-//    private static ArrayList<MinigamePlayer> playerList = new ArrayList<>();
     private static HashMap<UUID, MinigamePlayer> playerList;
     private static GameHandler handler;
     private static Minigame currentMinigame;

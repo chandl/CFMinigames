@@ -1,6 +1,5 @@
 package me.chandl.cfminigame.util;
 
-import me.chandl.cfminigame.CFMinigame;
 import me.chandl.cfminigame.GameHandler;
 import me.chandl.cfminigame.minigame.MinigamePlayer;
 import org.bukkit.Bukkit;
