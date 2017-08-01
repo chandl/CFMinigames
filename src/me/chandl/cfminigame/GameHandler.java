@@ -1,17 +1,20 @@
 package me.chandl.cfminigame;
 
 import me.chandl.cfminigame.minigame.*;
+import me.chandl.cfminigame.util.TextUtil;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class GameHandler implements Listener {
 
 
-    private static List<MinigamePlayer> playerList;
+//    private static ArrayList<MinigamePlayer> playerList = new ArrayList<>();
+    private static HashMap<UUID, MinigamePlayer> playerList;
     private static GameHandler handler;
     private static Minigame currentMinigame;
     private static MinigameState currentState;
@@ -19,45 +22,42 @@ public class GameHandler implements Listener {
     private GameHandler(){
         currentMinigame = null;
         currentState = MinigameState.NO_GAME;
-        playerList = new ArrayList<MinigamePlayer>();
-    }
-
-    public static GameHandler getHandler(){
-        if(handler == null) {handler = new GameHandler();}
-        return handler;
+        playerList = new HashMap<>();
     }
 
 
-    public static void startQueue(){
+    public void startQueue(){
         currentState = MinigameState.IN_QUEUE;
 
         //Start Async Queue
     }
 
-    public static void startMinigame(){
+    public void startMinigame(){
         currentState = MinigameState.IN_GAME;
 
         currentMinigame.start();
 
-        for(MinigamePlayer player : playerList){
+        for(MinigamePlayer player : playerList.values()){
             player.setState(PlayerState.IN_GAME);
         }
     }
 
-    public static void stopMinigame(){
+    public void stopMinigame(){
         currentState = MinigameState.NO_GAME;
-        currentMinigame = null;
 
         currentMinigame.stop();
-        for(MinigamePlayer player : playerList){
+
+        currentMinigame = null;
+
+        for(MinigamePlayer player : playerList.values()){
             player.setState(PlayerState.NOT_IN_GAME);
         }
 
         messageAllPlayers("Minigame Ended!!!");
     }
 
-    public static void messageAllPlayers(String msg){
-        playerList.forEach(new Consumer<MinigamePlayer>() {
+    public void messageAllPlayers(String msg){
+        playerList.values().forEach(new Consumer<MinigamePlayer>() {
             @Override
             public void accept(MinigamePlayer minigamePlayer) {
                 minigamePlayer.getPlayerObject().sendMessage(msg);
@@ -65,7 +65,7 @@ public class GameHandler implements Listener {
         });
     }
 
-    public static boolean createMinigame(MinigamePlayer player, String typeStr, String mapName, int difficulty){
+    public boolean createMinigame(MinigamePlayer player, String typeStr, String mapName, int difficulty){
         if(currentMinigame != null) return false;
 
         MinigameType type = null;
@@ -79,13 +79,13 @@ public class GameHandler implements Listener {
         }
 
         if(type == null){
-            player.getPlayerObject().sendMessage("[CFMinigame ERROR] No Mingame Type '" + typeStr +"'. Could not create minigame lobby.");
+            player.getPlayerObject().sendMessage(TextUtil.formatMessage("ERROR", "No Mingame Type '" + typeStr +"'. Could not create minigame lobby."));
             return false;
         }
 
         map = MinigameMap.findMap(type, mapName, difficulty);
         if(map == null){
-            player.getPlayerObject().sendMessage("[CFMinigame ERROR] No Mingame Map '" + mapName +"'. Could not create minigame lobby.");
+            player.getPlayerObject().sendMessage(TextUtil.formatMessage("ERROR", "No Mingame Map '" + mapName +"'. Could not create minigame lobby."));
             return false;
         }
 
@@ -100,12 +100,14 @@ public class GameHandler implements Listener {
 
         currentMinigame = game;
         startQueue();
+        getHandler().addPlayer(player);
 
         return true;
     }
 
     public boolean addPlayer(MinigamePlayer player){
-        playerList.add(player);
+        System.out.println("Added Player!");
+        playerList.put(player.getPlayerObject().getUniqueId(), player);
 
         //make sure player limit is not reached
         if(playerList.size() < currentMinigame.getMaximumPlayers()){
@@ -121,8 +123,9 @@ public class GameHandler implements Listener {
 
     public boolean removePlayer(MinigamePlayer player){
 
-        if(playerList.remove(player)){
-
+        if(playerList.containsKey(player.getPlayerObject().getUniqueId())){
+            System.out.println("Removed Player!");
+            playerList.remove(player.getPlayerObject().getUniqueId());
             //Call minigame onLeave
             currentMinigame.onLeave(player);
             return true;
@@ -131,15 +134,34 @@ public class GameHandler implements Listener {
         }
     }
 
-    public static Minigame getCurrentMinigame(){
+
+
+
+
+
+
+    public static GameHandler getHandler(){
+        if(handler == null) {handler = new GameHandler();}
+        return handler;
+    }
+
+    public Minigame getCurrentMinigame(){
         return currentMinigame;
     }
 
-    public static void setCurrentMinigame(Minigame minigame){
+    public void setCurrentMinigame(Minigame minigame){
         currentMinigame = minigame;
     }
 
-    public static MinigameState getCurrentState() {
+    public MinigameState getCurrentState() {
         return currentState;
+    }
+
+    public void setCurrentState(MinigameState currentState) {
+        GameHandler.currentState = currentState;
+    }
+
+    public ArrayList<MinigamePlayer> getPlayerList() {
+        return new ArrayList<MinigamePlayer>(playerList.values());
     }
 }

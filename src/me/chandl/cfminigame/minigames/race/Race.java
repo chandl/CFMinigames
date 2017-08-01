@@ -6,7 +6,7 @@ public class Race extends Minigame {
 
     @Override
     public void start() {
-
+        //start record timer
     }
 
     @Override

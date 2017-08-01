@@ -1,6 +1,7 @@
 package me.chandl.cfminigame;
 
 
+import me.chandl.cfminigame.minigame.MinigameState;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Logger;
 
@@ -19,7 +20,8 @@ public class CFMinigame extends JavaPlugin{
         //Handle Commands
         this.getCommand("mg").setExecutor(new CommandHandler());
 
-        GameHandler.setCurrentMinigame(null);
+        GameHandler.getHandler().setCurrentMinigame(null);
+        GameHandler.getHandler().setCurrentState(MinigameState.NO_GAME);
     }
 
 

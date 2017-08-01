@@ -1,6 +1,7 @@
 package me.chandl.cfminigame.minigame;
 
 import me.chandl.cfminigame.GameHandler;
+import me.chandl.cfminigame.util.TextUtil;
 
 import java.util.Date;
 
@@ -35,10 +36,12 @@ public abstract class Minigame {
         player.clearItems();
 
         //teleport player to MG start location
-        player.getPlayerObject().teleport(GameHandler.getCurrentMinigame().getMap().getSpawnPoint());
+        player.getPlayerObject().teleport(GameHandler.getHandler().getCurrentMinigame().getMap().getSpawnPoint());
 
         //give player MG starting items
-        player.getPlayerObject().getInventory().setContents( GameHandler.getCurrentMinigame().getMap().getStartingItems() );
+        player.getPlayerObject().getInventory().setContents( GameHandler.getHandler().getCurrentMinigame().getMap().getStartingItems() );
+
+        player.getPlayerObject().sendMessage(TextUtil.formatMessage("Joined new "+ GameHandler.getHandler().getCurrentMinigame().getType() + " Minigame!"));
     }
 
     public void onLeave(MinigamePlayer player){

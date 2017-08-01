@@ -1,10 +1,9 @@
 package me.chandl.cfminigame;
 
 import me.chandl.cfminigame.database.MapConfig;
-import me.chandl.cfminigame.minigame.Minigame;
-import me.chandl.cfminigame.minigame.MinigameMap;
-import me.chandl.cfminigame.minigame.MinigamePlayer;
-import me.chandl.cfminigame.minigame.MinigameType;
+import me.chandl.cfminigame.minigame.*;
+import me.chandl.cfminigame.util.Message;
+import me.chandl.cfminigame.util.TextUtil;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,7 +25,7 @@ public class CommandHandler implements CommandExecutor {
 
             switch(s.toLowerCase()){
                 case "mg":
-                    sender.sendMessage("mg command called");
+                    System.out.println("mg command called");
                     MinigamePlayer player = new MinigamePlayer(sender);
 
                     if(strings.length > 0){
@@ -48,7 +47,7 @@ public class CommandHandler implements CommandExecutor {
                                 break;
                             case "stop":
                                 System.out.println("'mg stop' command called");
-                                GameHandler.stopMinigame();
+                                mgStop(player);
                                 break;
                             case "join":
                                 System.out.println("'mg join' command called");
@@ -72,8 +71,17 @@ public class CommandHandler implements CommandExecutor {
                                 MapConfig.createMap(testFile, testMap);
                                 break;
                             case "status":
-                                System.out.println("MG STATUS:" + GameHandler.getCurrentState());
-                                System.out.println("MG: " + GameHandler.getCurrentMinigame().toString());
+                                System.out.println("MG STATUS:" + GameHandler.getHandler().getCurrentState());
+                                if(GameHandler.getHandler().getCurrentState() != MinigameState.NO_GAME)
+                                    System.out.println("MG: " + GameHandler.getHandler().getCurrentMinigame().toString());
+                                break;
+                            case "playerlist":
+                                if(GameHandler.getHandler().getCurrentState() != MinigameState.NO_GAME){
+                                    int i=1;
+                                    for(MinigamePlayer p : GameHandler.getHandler().getPlayerList()){
+                                        sender.sendMessage(TextUtil.formatMessage("Player " + (i++) +": " + p.getPlayerObject().getName()));
+                                    }
+                                }
                                 break;
                             default:
                                 sender.sendMessage("CFMingame ERROR: '" + strings[0] +"' not a recognized command!");
@@ -92,16 +100,27 @@ public class CommandHandler implements CommandExecutor {
         return false;
     }
 
+    private void mgStop(MinigamePlayer player){
+        if(GameHandler.getHandler().getCurrentMinigame() != null && GameHandler.getHandler().getCurrentState() != MinigameState.NO_GAME){
+            GameHandler.getHandler().stopMinigame();
+            player.getPlayerObject().sendMessage(TextUtil.formatMessage("INFO", "Minigame Stopped!"));
+            Message.allPlayers("Current Minigame Stopped!");
+        }else{
+            player.getPlayerObject().sendMessage(TextUtil.formatMessage("ERROR", "Minigame Could not be Stopped. No Game found"));
+        }
+    }
+
     private void mgStart (MinigamePlayer player, String typeStr, String mapName, int difficulty){
-        if(GameHandler.createMinigame(player, typeStr, mapName, difficulty)){
-            player.getPlayerObject().sendMessage("[CFMinigame] Minigame lobby successfully started!");
+        if(GameHandler.getHandler().createMinigame(player, typeStr, mapName, difficulty)){
+            player.getPlayerObject().sendMessage(TextUtil.formatMessage("Minigame lobby successfully started!"));
+            Message.allPlayers(String.format("New %s minigame started. Use '/mg join' to join the lobby!", GameHandler.getHandler().getCurrentMinigame().getType()));
         }else{
             System.out.println(String.format("[CFMinigame ERROR] Minigame lobby COULD NOT BE started! %s: type: %s, map: %s, difficulty %d", player.getPlayerObject().getName(), typeStr, mapName, difficulty));
         }
     }
 
     private void mgJoin(MinigamePlayer player){
-        Minigame currentMinigame = GameHandler.getCurrentMinigame();
+        Minigame currentMinigame = GameHandler.getHandler().getCurrentMinigame();
 
         if(currentMinigame == null){
             player.getPlayerObject().sendMessage("No Minigame started. Start one with '/mg start'");
