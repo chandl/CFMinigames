@@ -7,8 +7,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 
@@ -16,28 +14,6 @@ public class MapConfig {
     private static File mapFile;
     private static FileConfiguration mapConfiguration;
 
-    public static ArrayList<String> getMapList(String type){
-        File mapsPath = new File("plugins/CFMinigame/maps/" + type + "/");
-
-        if(!mapsPath.exists()) return new ArrayList<>();
-
-        File[] mapList = mapsPath.listFiles();
-        HashSet<String> maps = new HashSet<>();
-
-        String fn, name;
-        for(File file : mapList){
-            if(file.isFile()){//make sure it is not a directory
-                fn = file.getName();
-                System.out.println("File : " + fn);
-                name = fn.substring(0, fn.length() - 6);
-                maps.add(name);
-            }
-        }
-
-        ArrayList<String> out = new ArrayList<>();
-        out.addAll(maps);
-        return out;
-    }
 
     public static boolean loadConfig(MinigameType type, String mapName, int difficulty){
         mapFile = new File("plugins/CFMinigame/maps/" + type.toString() + "/" + mapName + "-" + difficulty + ".yml");

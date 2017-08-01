@@ -3,6 +3,7 @@ package me.chandl.cfminigame;
 import me.chandl.cfminigame.minigame.*;
 import me.chandl.cfminigame.util.Message;
 import me.chandl.cfminigame.util.TextUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -25,13 +26,15 @@ public class GameHandler implements Listener {
     }
 
 
+    private BukkitRunnable countdownTimer;
+    private BukkitRunnable gameStartTimer;
     public void startQueue(){
         currentState = MinigameState.IN_QUEUE;
         Message.allPlayers( "The level " + currentMinigame.getDifficultyLevel() + " " + currentMinigame.getType() + " Minigame on " + currentMinigame.getMap().getName() +" will start in " + CFMinigame.DEFAULT_MAX_QUEUE_TIME + " seconds...");
 
 
         //Countdown Timer at 3 Seconds
-        new BukkitRunnable(){
+        countdownTimer = new BukkitRunnable(){
             @Override
             public void run() {
                 for(int i=3; i>0; i--){
@@ -44,16 +47,19 @@ public class GameHandler implements Listener {
                 }
 
             }
-        }.runTaskLaterAsynchronously(CFMinigame.plugin, 20 * (CFMinigame.DEFAULT_MAX_QUEUE_TIME-3 ));
+        };
+
+        countdownTimer.runTaskLaterAsynchronously(CFMinigame.plugin, 20 * (CFMinigame.DEFAULT_MAX_QUEUE_TIME-3 ));
 
         //Actual Timer to Start the Minigame after DEFAULT_MAX_QUEUE_TIME seconds
-        new BukkitRunnable(){
+        gameStartTimer = new BukkitRunnable(){
             @Override
             public void run() {
                 Message.playersInGame(currentMinigame.getType()+": " + currentMinigame.getMap().getName() + " (Level "+ currentMinigame.getDifficultyLevel()+") Starting Now!");
                 startMinigame();
             }
-        }.runTaskLater(CFMinigame.plugin, 20 * CFMinigame.DEFAULT_MAX_QUEUE_TIME );
+        };
+        gameStartTimer.runTaskLater(CFMinigame.plugin, 20 * CFMinigame.DEFAULT_MAX_QUEUE_TIME );
     }
 
     public void startMinigame(){
@@ -72,6 +78,10 @@ public class GameHandler implements Listener {
     }
 
     public void stopMinigame(){
+        if(currentState == MinigameState.IN_QUEUE){
+            gameStartTimer.cancel();
+            countdownTimer.cancel();
+        }
         currentState = MinigameState.NO_GAME;
 
         currentMinigame.stop();
@@ -82,7 +92,6 @@ public class GameHandler implements Listener {
             player.setState(PlayerState.NOT_IN_GAME);
         }
     }
-
 
 
     public boolean createMinigame(MinigamePlayer player, String typeStr, String mapName, int difficulty){

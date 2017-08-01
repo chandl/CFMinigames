@@ -7,13 +7,46 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.io.File;
+import java.util.*;
 
 
 public class TabCompleteHandler implements TabCompleter {
+    private static Date lastMapUpdate;
+    private static ArrayList<String> mapNames;
+
+    public static ArrayList<String> getMapList(String type){
+
+        //If there have been no updates in 5 minutes...
+        Date now = new Date();
+        if(lastMapUpdate == null || now.getTime() - lastMapUpdate.getTime() >= 5 * 60 * 1000) {
+            ArrayList<String> out = new ArrayList<>();
+            File mapsPath = new File("plugins/CFMinigame/maps/" + type + "/");
+            if(!mapsPath.exists()) return new ArrayList<>();
+
+
+            File[] fList = mapsPath.listFiles();
+            HashSet<String> maps = new HashSet<>();
+
+            String fn, name;
+            for(File file : fList){
+                if(file.isFile()){//make sure it is not a directory
+                    fn = file.getName();
+                    System.out.println("Indexed File : " + fn);
+                    name = fn.substring(0, fn.length() - 6);
+                    maps.add(name);
+                }
+            }
+            out.addAll(maps);
+            mapNames = out;
+            lastMapUpdate = new Date();
+
+            return out;
+        } else {
+            return mapNames;
+        }
+
+    }
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
@@ -42,7 +75,7 @@ public class TabCompleteHandler implements TabCompleter {
                                 return out;
                             }
                             else if (strings.length == 3) {
-                                for(String map : MapConfig.getMapList(strings[1])){
+                                for(String map : getMapList(strings[1])){
                                     out.add(map);
                                 }
 
