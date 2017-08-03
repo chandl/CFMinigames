@@ -62,11 +62,11 @@ public class GameHandler implements Listener {
     }
 
     public void startMinigame(){
-        if(playerList.size() < currentMinigame.getMinimumPlayers()){
-            Message.allPlayers("ERROR", "Not Enough Players to Start the Minigame (Minimum "+currentMinigame.getMinimumPlayers()+"). Try again with '/mg start'");
-            stopMinigame();
-            return;
-        }
+//        if(playerList.size() < currentMinigame.getMinimumPlayers()){
+//            Message.allPlayers("ERROR", "Not Enough Players to Start the Minigame (Minimum "+currentMinigame.getMinimumPlayers()+"). Try again with '/mg start'");
+//            stopMinigame();
+//            return;
+//        }
         currentState = MinigameState.IN_GAME;
 
         currentMinigame.start();

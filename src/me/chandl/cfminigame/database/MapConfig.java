@@ -27,14 +27,14 @@ public class MapConfig {
         return true;
     }
 
-    public static void createMap( File mapFile , MinigameMap map){
+    public static FileConfiguration createMap( MinigameType type, String mapName,  MinigameMap map, int difficulty){
+        mapFile = new File("plugins/CFMinigame/maps/" + type.toString() + "/" + mapName + "-" + difficulty + ".yml");
         mapConfiguration = YamlConfiguration.loadConfiguration(mapFile);
         try {
             mapConfiguration.save(mapFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         mapConfiguration.set("mapName", map.getName());
         mapConfiguration.set("maxLifeCount", map.getMaxLifeCount());
@@ -45,6 +45,8 @@ public class MapConfig {
         mapConfiguration.set("startingItems", map.getStartingItems());
 
         saveMapFile();
+
+        return mapConfiguration;
     }
 
 

@@ -40,6 +40,7 @@ public class MinigameMap {
 
     }
 
+    public MinigameMap(){}
     public MinigameMap(String name, int maxLifeCount, Location spawnPoint, Location spectatorPoint, long gameTimeLimit, long baseScore, ItemStack[] startingItems) {
         this.name = name;
         this.maxLifeCount = maxLifeCount;

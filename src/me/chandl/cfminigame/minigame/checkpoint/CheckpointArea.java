@@ -1,6 +1,8 @@
 package me.chandl.cfminigame.minigame.checkpoint;
 
 
-public enum CheckpointArea {
+import java.io.Serializable;
+
+public enum CheckpointArea implements Serializable {
     AIR,BLOCK,HITBOX
 }

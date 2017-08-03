@@ -1,8 +1,10 @@
 package me.chandl.cfminigame;
 
 import me.chandl.cfminigame.database.CheckpointConfig;
+import me.chandl.cfminigame.database.MapConfig;
 import me.chandl.cfminigame.minigame.*;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
+import me.chandl.cfminigame.minigames.race.RaceMap;
 import me.chandl.cfminigame.util.Message;
 import me.chandl.cfminigame.util.TextUtil;
 import org.bukkit.Location;
@@ -10,7 +12,9 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -81,11 +85,14 @@ public class CommandHandler implements CommandExecutor {
 
                             case "createrace":
                                 System.out.println("createrace called");
-//                                ItemStack[] startingItems = new ItemStack[1];
-//                                startingItems[0] = new ItemStack(Material.ELYTRA);
-//                                MinigameMap testMap = new MinigameMap("testMap", 3, sender.getLocation(), sender.getLocation() , 1, 1, startingItems);
-//                                File testFile = new File("plugins/CFMinigame/maps/elytrarace/testMap-1.yml");
-//                                MapConfig.createMap(testFile, testMap);
+                                ItemStack[] startingItems = new ItemStack[1];
+                                startingItems[0] = new ItemStack(Material.ELYTRA);
+                                RaceMap testMap = new RaceMap("testMap", 3, sender.getLocation(), sender.getLocation() , 1, 1, startingItems, testPoints);
+
+                                FileConfiguration a = MapConfig.createMap(MinigameType.ELYTRARACE, "testMap2", testMap, 1);
+                                a.set("checkpoints", testPoints);
+                                MapConfig.saveMapFile();
+
                                 break;
                             case "status":
                                 System.out.println("MG STATUS:" + GameHandler.getHandler().getCurrentState());

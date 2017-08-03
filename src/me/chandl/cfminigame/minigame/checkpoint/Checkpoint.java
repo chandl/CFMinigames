@@ -3,26 +3,34 @@ package me.chandl.cfminigame.minigame.checkpoint;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Vector;
+import java.io.Serializable;
+import java.util.*;
 
 
 import static me.chandl.cfminigame.minigame.checkpoint.CheckpointArea.*;
 
-public class Checkpoint {
+public class Checkpoint implements Serializable{
     //Shape will be the shape of the checkpoint
     // Read in dynamically
     private CheckpointArea[][] shape;
     private Location spawnPoint;
     private HashMap<Location, CheckpointArea> pointLocations;
     private HashMap<Location, Material> oldBlocks;
-    private World world;
+    private HashSet<Location> hitbox;
     private String direction;
 
+
+    @Override
+    public String toString() {
+        return "Checkpoint{" +
+                "spawnPoint=" + spawnPoint +
+                ", pointLocations=" + pointLocations +
+                ", oldBlocks=" + oldBlocks +
+                ", hitbox=" + hitbox +
+                ", direction='" + direction + '\'' +
+                '}';
+    }
 
     /**
      * Creates a Checkpoint
@@ -51,7 +59,7 @@ public class Checkpoint {
         this.spawnPoint = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
         this.direction = getDirectionFromYaw(yaw);
         this.shape = readShape(shape);
-        this.world = location.getWorld();
+        this.hitbox = new HashSet<>();
 
 //        System.out.println("Direction " + direction + ". Rot: " + rot);
 
@@ -174,6 +182,7 @@ public class Checkpoint {
             switch((CheckpointArea)pair.getValue()){
                 case HITBOX:
                     l.getBlock().setType(Material.WEB);
+                    hitbox.add(l);
                     break;
                 case AIR:
                     l.getBlock().setType(Material.AIR);
@@ -208,5 +217,9 @@ public class Checkpoint {
 
     public HashMap<Location, Material> getOldBlocks() {
         return oldBlocks;
+    }
+
+    public HashSet<Location> getHitbox() {
+        return hitbox;
     }
 }
