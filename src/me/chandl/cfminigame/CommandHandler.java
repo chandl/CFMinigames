@@ -1,22 +1,28 @@
 package me.chandl.cfminigame;
 
+import me.chandl.cfminigame.database.CheckpointConfig;
 import me.chandl.cfminigame.minigame.*;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
 import me.chandl.cfminigame.util.Message;
 import me.chandl.cfminigame.util.TextUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CommandHandler implements CommandExecutor {
 
     public static final String[] commands = {"new", "publish", "start", "stop",
             "join", "leave", "highscore", "help", "createrace", "status", "playerlist"};
+
+    private List<Checkpoint> testPoints;
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
@@ -95,6 +101,7 @@ public class CommandHandler implements CommandExecutor {
                                 }
                                 break;
                             case "checkpoint":
+                                if(testPoints == null) testPoints = new ArrayList<>();
                                 String testPoint = "OOXXXOX\n" +
                                         "OXYYYXO\n" +
                                         "XYYYYYX\n" +
@@ -104,17 +111,36 @@ public class CommandHandler implements CommandExecutor {
                                         "OOXXXOO\n" +
                                         "XOOOOOO";
                                 Location here = sender.getLocation();
+                                String cp = CheckpointConfig.loadPoint(MinigameType.ELYTRARACE, new Integer(strings[1]));
 
 
 
-                                Checkpoint point = new Checkpoint(testPoint, here);
+                                Checkpoint point = new Checkpoint(cp, here, here.getYaw());
 
                                 point.spawn(Material.GLASS);
+
+                                testPoints.add(point);
+                                break;
+                            case "despawnCheckpoints":
+                                for(Checkpoint pt : testPoints){
+                                    pt.despawn();
+                                }
+                                break;
+                            case "cpfile":
+                                CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-4.txt"), "OOXXXOX\n" +
+                                        "OXYYYXO\n" +
+                                        "XYYYYYX\n" +
+                                        "XYYYYYX\n" +
+                                        "XYYYYYX\n" +
+                                        "OXYYYXO\n" +
+                                        "OOXXXOO\n" +
+                                        "XOOOOOO");
                                 break;
                             default:
                                 Message.player(sender, "ERROR", "'" + strings[0] +"' is not a recognized command!");
                                 return false;
                         }
+
                     }else{
                         Message.player(sender, "INFO", "You must provide additional arguments to the 'mg' command. '/mg help' for more info.");
                     }
