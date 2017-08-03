@@ -6,11 +6,15 @@ public class Race extends Minigame {
 
     @Override
     public void start() {
-        //start record timer
+
     }
 
     @Override
     public void stop() {
+
+    }
+
+    protected void spawnRacePoints(){
 
     }
 

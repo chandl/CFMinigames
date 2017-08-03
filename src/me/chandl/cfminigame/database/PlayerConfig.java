@@ -18,7 +18,7 @@ public class PlayerConfig {
     public boolean loadConfig(Player player){
         playerId = player.getUniqueId();
 
-        playerFile = new File("plugins/CFMinigame/data/" + playerId + ".yml");
+        playerFile = new File("plugins/CFMinigame/data/players/" + playerId + ".yml");
 
         if(!playerFile.exists()){
             return false;

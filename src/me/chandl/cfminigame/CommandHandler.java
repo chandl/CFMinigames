@@ -1,17 +1,16 @@
 package me.chandl.cfminigame;
 
-import me.chandl.cfminigame.database.MapConfig;
 import me.chandl.cfminigame.minigame.*;
+import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
 import me.chandl.cfminigame.util.Message;
 import me.chandl.cfminigame.util.TextUtil;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-import java.io.File;
 
 
 public class CommandHandler implements CommandExecutor {
@@ -66,13 +65,21 @@ public class CommandHandler implements CommandExecutor {
                                 break;
                             case "help":
                                 System.out.println("'mg help' command called");
+                                StringBuilder sb = new StringBuilder();
+                                sb.append("CFMinigame Commands:\n/mg");
+                                for(String cmd : commands)
+                                    sb.append(" "+cmd+",");
+                                Message.player(player, sb.toString().substring(0,sb.toString().length()-1));
+
                                 break;
+
                             case "createrace":
-                                ItemStack[] startingItems = new ItemStack[1];
-                                startingItems[0] = new ItemStack(Material.ELYTRA);
-                                MinigameMap testMap = new MinigameMap("testMap", 3, sender.getLocation(), sender.getLocation() , 1, 1, startingItems);
-                                File testFile = new File("plugins/CFMinigame/maps/elytrarace/testMap-1.yml");
-                                MapConfig.createMap(testFile, testMap);
+                                System.out.println("createrace called");
+//                                ItemStack[] startingItems = new ItemStack[1];
+//                                startingItems[0] = new ItemStack(Material.ELYTRA);
+//                                MinigameMap testMap = new MinigameMap("testMap", 3, sender.getLocation(), sender.getLocation() , 1, 1, startingItems);
+//                                File testFile = new File("plugins/CFMinigame/maps/elytrarace/testMap-1.yml");
+//                                MapConfig.createMap(testFile, testMap);
                                 break;
                             case "status":
                                 System.out.println("MG STATUS:" + GameHandler.getHandler().getCurrentState());
@@ -86,6 +93,23 @@ public class CommandHandler implements CommandExecutor {
                                         sender.sendMessage(TextUtil.formatMessage("Player " + (i++) +": " + p.getPlayerObject().getName()));
                                     }
                                 }
+                                break;
+                            case "checkpoint":
+                                String testPoint = "OOXXXOX\n" +
+                                        "OXYYYXO\n" +
+                                        "XYYYYYX\n" +
+                                        "XYYYYYX\n" +
+                                        "XYYYYYX\n" +
+                                        "OXYYYXO\n" +
+                                        "OOXXXOO\n" +
+                                        "XOOOOOO";
+                                Location here = sender.getLocation();
+
+
+
+                                Checkpoint point = new Checkpoint(testPoint, here);
+
+                                point.spawn(Material.GLASS);
                                 break;
                             default:
                                 Message.player(sender, "ERROR", "'" + strings[0] +"' is not a recognized command!");

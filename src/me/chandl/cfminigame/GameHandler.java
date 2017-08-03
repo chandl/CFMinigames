@@ -3,7 +3,6 @@ package me.chandl.cfminigame;
 import me.chandl.cfminigame.minigame.*;
 import me.chandl.cfminigame.util.Message;
 import me.chandl.cfminigame.util.TextUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
