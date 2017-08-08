@@ -13,11 +13,12 @@ import static me.chandl.cfminigame.minigame.checkpoint.CheckpointArea.*;
 public class Checkpoint implements Serializable{
     //Shape will be the shape of the checkpoint
     // Read in dynamically
-    private CheckpointArea[][] shape;
-    private Location spawnPoint;
-    private HashMap<Location, CheckpointArea> pointLocations;
-    private HashMap<Location, Material> oldBlocks;
-    private HashSet<Location> hitbox;
+    private transient CheckpointArea[][] shape;
+    private transient Location spawnPoint;
+    private int spawnPointX, spawnPointY, spawnPointZ;
+    private transient HashMap<Location, CheckpointArea> pointLocations;
+    private transient HashMap<Location, Material> oldBlocks;
+    private transient HashSet<Location> hitbox;
     private String direction;
 
 
@@ -86,7 +87,7 @@ public class Checkpoint implements Serializable{
         } else if (315 <= rot && rot < 360.0) {
             direction = "W";
         } else {
-            System.out.println("New Checkpoint couldn't tell which direction player is facing. Defaulting to N");
+            System.out.println("New Checkpoint - couldn't tell which direction player is facing. Defaulting to N");
             direction = "N";
         }
 

@@ -1,8 +1,9 @@
-package me.chandl.cfminigame.minigame;
+package me.chandl.cfminigame.minigame.core;
 
 import me.chandl.cfminigame.GameHandler;
+import me.chandl.cfminigame.minigame.player.MinigamePlayer;
+import me.chandl.cfminigame.minigame.player.PlayerState;
 import me.chandl.cfminigame.util.Message;
-import me.chandl.cfminigame.util.TextUtil;
 
 import java.util.Date;
 
@@ -10,7 +11,6 @@ public abstract class Minigame {
     private Date startTime;
     private MinigameType type;
     private int maximumPlayers, minimumPlayers;
-    private long queueTimeLimit;
     private MinigameMap map;
     private int difficultyLevel;
 
@@ -34,7 +34,7 @@ public abstract class Minigame {
      */
     public void onJoin(MinigamePlayer player){
         switch(GameHandler.getHandler().getCurrentState()){
-            case IN_GAME:
+            case MinigameState.IN_GAME:
                 //Clear player's inventory
                 player.clearItems();
 
@@ -45,7 +45,7 @@ public abstract class Minigame {
                 Message.allPlayers(String.format("%s started spectating the minigame! [%d/%d Players]", player.getPlayerObject().getDisplayName(), GameHandler.getHandler().getPlayerList().size(), getMaximumPlayers()));
                 break;
 
-            case IN_QUEUE:
+            case MinigameState.IN_QUEUE:
                 //Clear player's inventory
                 player.clearItems();
 
@@ -59,7 +59,7 @@ public abstract class Minigame {
                 Message.allPlayers(String.format("%s just joined the minigame! [%d/%d Players]", player.getPlayerObject().getDisplayName(), GameHandler.getHandler().getPlayerList().size(), getMaximumPlayers()));
                 break;
 
-            case NO_GAME:
+            case MinigameState.NO_GAME:
             default:
                 System.out.println("This ERROR should never show. If it does, ur fucked. ");
                 break;
@@ -105,14 +105,6 @@ public abstract class Minigame {
 
     public void setMinimumPlayers(int minimumPlayers) {
         this.minimumPlayers = minimumPlayers;
-    }
-
-    public long getQueueTimeLimit() {
-        return queueTimeLimit;
-    }
-
-    public void setQueueTimeLimit(long queueTimeLimit) {
-        this.queueTimeLimit = queueTimeLimit;
     }
 
     public MinigameMap getMap() {

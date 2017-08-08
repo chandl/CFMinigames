@@ -1,8 +1,8 @@
 package me.chandl.cfminigame.scores;
 
 
-import me.chandl.cfminigame.minigame.MinigameMap;
-import me.chandl.cfminigame.minigame.MinigamePlayer;
+import me.chandl.cfminigame.minigame.core.MinigameMap;
+import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 
 public class WinCount {
     private MinigamePlayer player;

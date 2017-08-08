@@ -1,6 +1,11 @@
 package me.chandl.cfminigame;
 
-import me.chandl.cfminigame.minigame.*;
+import me.chandl.cfminigame.minigame.core.Minigame;
+import me.chandl.cfminigame.minigame.core.MinigameMap;
+import me.chandl.cfminigame.minigame.core.MinigameState;
+import me.chandl.cfminigame.minigame.core.MinigameType;
+import me.chandl.cfminigame.minigame.player.MinigamePlayer;
+import me.chandl.cfminigame.minigame.player.PlayerState;
 import me.chandl.cfminigame.util.Message;
 import me.chandl.cfminigame.util.TextUtil;
 import org.bukkit.event.Listener;
@@ -111,7 +116,7 @@ public class GameHandler implements Listener {
             return false;
         }
 
-        map = MinigameMap.findMap(type, mapName, difficulty);
+        map = MinigameMap.findMap(type, mapName);
         if(map == null){
             player.getPlayerObject().sendMessage(TextUtil.formatMessage("ERROR", "No Mingame Map '" + mapName +"'. Could not create minigame lobby."));
             return false;
@@ -121,7 +126,6 @@ public class GameHandler implements Listener {
         game.setType(type);
         game.setMaximumPlayers(CFMinigame.DEFAULT_MAX_PLAYERS);
         game.setMinimumPlayers(CFMinigame.DEFAULT_MIN_PLAYERS);
-        game.setQueueTimeLimit(CFMinigame.DEFAULT_MAX_QUEUE_TIME);
         game.setMap(map);
         game.setDifficultyLevel(difficulty);
         game.setStartTime(new Date());

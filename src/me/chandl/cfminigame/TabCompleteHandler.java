@@ -1,7 +1,6 @@
 package me.chandl.cfminigame;
 
-import me.chandl.cfminigame.database.MapConfig;
-import me.chandl.cfminigame.minigame.MinigameType;
+import me.chandl.cfminigame.minigame.core.MinigameType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -88,6 +87,17 @@ public class TabCompleteHandler implements TabCompleter {
                                 return out;
                             }
                             break;
+                        case "new":
+                            HashSet<String> types = new HashSet();
+
+                            for(MinigameType type : MinigameType.values() ){
+                                if(type.toString() != null) types.add(type.toString());
+                            }
+
+                            out.clear();
+                            out.addAll(types);
+
+                            return out;
 
                         default:
                             return new ArrayList<>();

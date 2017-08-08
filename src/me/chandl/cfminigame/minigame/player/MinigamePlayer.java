@@ -1,6 +1,7 @@
-package me.chandl.cfminigame.minigame;
+package me.chandl.cfminigame.minigame.player;
 
 import me.chandl.cfminigame.database.PlayerConfig;
+import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.scores.HighScore;
 import me.chandl.cfminigame.scores.WinCount;
 import org.bukkit.Location;

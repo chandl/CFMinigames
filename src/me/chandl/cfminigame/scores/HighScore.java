@@ -1,7 +1,7 @@
 package me.chandl.cfminigame.scores;
 
-import me.chandl.cfminigame.minigame.Minigame;
-import me.chandl.cfminigame.minigame.MinigamePlayer;
+import me.chandl.cfminigame.minigame.core.Minigame;
+import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 
 /**
  * Created by chandler on 7/30/17.

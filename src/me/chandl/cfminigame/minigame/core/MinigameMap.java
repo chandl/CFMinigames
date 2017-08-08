@@ -1,4 +1,4 @@
-package me.chandl.cfminigame.minigame;
+package me.chandl.cfminigame.minigame.core;
 
 
 import me.chandl.cfminigame.database.MapConfig;
@@ -17,6 +17,7 @@ public class MinigameMap {
     private Location spectatorPoint;
 
     private long gameTimeLimit;
+    private long queueTimeLimit;
     private long baseScore;
     private long[] difficultyMultipliers;
 
@@ -24,8 +25,8 @@ public class MinigameMap {
     private List<HighScore> highScores;
 
 
-    public static MinigameMap findMap(MinigameType type, String mapName, int difficulty){
-        if(MapConfig.loadConfig(type, mapName, difficulty)){//map exists
+    public static MinigameMap findMap(MinigameType type, String mapName){
+        if(MapConfig.loadConfig(type, mapName)){//map exists
             String name = (String) MapConfig.get("mapName");
             int maxLife = (Integer) MapConfig.get("maxLifeCount");
             Location spawnPoint = (Location) MapConfig.get("spawnPoint");
@@ -41,6 +42,15 @@ public class MinigameMap {
     }
 
     public MinigameMap(){}
+
+    public MinigameMap(String name, Location spawnPoint, Location spectatorPoint, long gameTimeLimit, long queueTimeLimit) {
+        this.name = name;
+        this.spawnPoint = spawnPoint;
+        this.spectatorPoint = spectatorPoint;
+        this.gameTimeLimit = gameTimeLimit;
+        this.queueTimeLimit = queueTimeLimit;
+    }
+
     public MinigameMap(String name, int maxLifeCount, Location spawnPoint, Location spectatorPoint, long gameTimeLimit, long baseScore, ItemStack[] startingItems) {
         this.name = name;
         this.maxLifeCount = maxLifeCount;
@@ -73,6 +83,10 @@ public class MinigameMap {
 
     public long getGameTimeLimit() {
         return gameTimeLimit;
+    }
+
+    public long getQueueTimeLimit() {
+        return queueTimeLimit;
     }
 
     public long getBaseScore() {

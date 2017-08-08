@@ -1,4 +1,4 @@
-package me.chandl.cfminigame.minigame;
+package me.chandl.cfminigame.minigame.core;
 
 /**
  * Created by chandler on 7/30/17.
