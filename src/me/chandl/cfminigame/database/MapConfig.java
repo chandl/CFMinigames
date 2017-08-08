@@ -15,8 +15,8 @@ public class MapConfig {
     private static FileConfiguration mapConfiguration;
 
 
-    public static boolean loadConfig(MinigameType type, String mapName, int difficulty){
-        mapFile = new File("plugins/CFMinigame/maps/" + type.toString() + "/" + mapName + "/" + difficulty + ".yml");
+    public static boolean loadConfig(MinigameType type, String mapName){
+        mapFile = new File("plugins/CFMinigame/maps/" + type.toString() + "/" + mapName +".yml");
 
         if(!mapFile.exists()){
             return false;
@@ -27,8 +27,8 @@ public class MapConfig {
         return true;
     }
 
-    public static FileConfiguration createMap( MinigameType type, String mapName,  MinigameMap map, int difficulty){
-        mapFile = new File("plugins/CFMinigame/maps/" + type.toString() + "/" + mapName + "-" + difficulty + ".yml");
+    public static FileConfiguration createMap( MinigameType type, String mapName,  MinigameMap map){
+        mapFile = new File("plugins/CFMinigame/maps/" + type.toString() + "/" + mapName +".yml");
         mapConfiguration = YamlConfiguration.loadConfiguration(mapFile);
         try {
             mapConfiguration.save(mapFile);
@@ -41,6 +41,7 @@ public class MapConfig {
         mapConfiguration.set("spawnPoint", map.getSpawnPoint());
         mapConfiguration.set("spectatorPoint", map.getSpectatorPoint());
         mapConfiguration.set("gameTimeLimit", map.getGameTimeLimit());
+        mapConfiguration.set("queueTimeLimit", map.getQueueTimeLimit());
         mapConfiguration.set("baseScore", map.getBaseScore());
         mapConfiguration.set("startingItems", map.getStartingItems());
 

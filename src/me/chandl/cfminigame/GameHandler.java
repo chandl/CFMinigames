@@ -111,7 +111,7 @@ public class GameHandler implements Listener {
             return false;
         }
 
-        map = MinigameMap.findMap(type, mapName, difficulty);
+        map = MinigameMap.findMap(type, mapName);
         if(map == null){
             player.getPlayerObject().sendMessage(TextUtil.formatMessage("ERROR", "No Mingame Map '" + mapName +"'. Could not create minigame lobby."));
             return false;
@@ -121,7 +121,6 @@ public class GameHandler implements Listener {
         game.setType(type);
         game.setMaximumPlayers(CFMinigame.DEFAULT_MAX_PLAYERS);
         game.setMinimumPlayers(CFMinigame.DEFAULT_MIN_PLAYERS);
-        game.setQueueTimeLimit(CFMinigame.DEFAULT_MAX_QUEUE_TIME);
         game.setMap(map);
         game.setDifficultyLevel(difficulty);
         game.setStartTime(new Date());

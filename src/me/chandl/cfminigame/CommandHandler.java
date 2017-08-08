@@ -48,7 +48,7 @@ public class CommandHandler implements CommandExecutor {
                             case "build":
                                 MinigameBuilder builder = MinigameBuilders.getBuilders().getMinigameBuilder(player);
                                 if(builder == null) Message.player(player, "ERROR", "You are not in the Minigame Build Mode. Use '/mg new' to start.");
-                                else builder.handleCommands(strings);
+                                else builder.handleCommand(strings);
                                 break;
                             case "new":
                                 System.out.println("'mg new' command called");
@@ -100,7 +100,7 @@ public class CommandHandler implements CommandExecutor {
                                 startingItems[0] = new ItemStack(Material.ELYTRA);
                                 RaceMap testMap = new RaceMap("testMap", 3, sender.getLocation(), sender.getLocation() , 1, 1, startingItems, testPoints);
 
-                                FileConfiguration a = MapConfig.createMap(MinigameType.ELYTRARACE, "testMap2", testMap, 1);
+                                FileConfiguration a = MapConfig.createMap(MinigameType.ELYTRARACE, "testMap2", testMap);
                                 a.set("checkpoints", testPoints);
                                 MapConfig.saveMapFile();
 

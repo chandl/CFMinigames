@@ -10,7 +10,6 @@ public abstract class Minigame {
     private Date startTime;
     private MinigameType type;
     private int maximumPlayers, minimumPlayers;
-    private long queueTimeLimit;
     private MinigameMap map;
     private int difficultyLevel;
 
@@ -105,14 +104,6 @@ public abstract class Minigame {
 
     public void setMinimumPlayers(int minimumPlayers) {
         this.minimumPlayers = minimumPlayers;
-    }
-
-    public long getQueueTimeLimit() {
-        return queueTimeLimit;
-    }
-
-    public void setQueueTimeLimit(long queueTimeLimit) {
-        this.queueTimeLimit = queueTimeLimit;
     }
 
     public MinigameMap getMap() {

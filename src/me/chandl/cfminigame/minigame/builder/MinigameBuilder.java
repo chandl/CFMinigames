@@ -41,44 +41,43 @@ public abstract class MinigameBuilder {
 
 
         sb.append("New Minigame Progression:\n");
-        if(name == null) sb.append(ChatColor.RED + "* Minigame Name [/mg build name MinigameName]");
+        if(name == null) sb.append(ChatColor.DARK_RED + "* Minigame Name [/mg build name MinigameName]");
         else sb.append(ChatColor.GREEN + "* Minigame Name [" + name + "]");
 
         sb.append("\n");
 
-        if(minPlayers == null) sb.append(ChatColor.RED + "* Minigame Minimum Players [/mg build minplayers 2]");
+        if(minPlayers == null) sb.append(ChatColor.DARK_RED + "* Minigame Minimum Players [/mg build minplayers 2]");
         else sb.append(ChatColor.GREEN + "* Minigame Minimum Players [" + minPlayers + "]");
 
         sb.append("\n");
 
-        if(maxPlayers == null) sb.append(ChatColor.RED + "* Minigame Maximum Players [/mg build maxplayers 16]");
+        if(maxPlayers == null) sb.append(ChatColor.DARK_RED + "* Minigame Maximum Players [/mg build maxplayers 16]");
         else sb.append(ChatColor.GREEN + "* Minigame Maximum Players [" + maxPlayers + "]");
 
         sb.append("\n");
 
-        if(timeLimit == null) sb.append(ChatColor.RED + "* Minigame Time Limit [/mg build timelimit 5] (in minutes)");
+        if(timeLimit == null) sb.append(ChatColor.DARK_RED + "* Minigame Time Limit [/mg build timelimit 5] (in minutes)");
         else sb.append(ChatColor.GREEN + "* Minigame Time Limit [" + timeLimit + "]");
 
         sb.append("\n");
 
-        if(queueLimit == null) sb.append(ChatColor.RED + "* Minigame Queue Time Limit [/mg build queuelimit 1] (in minutes)");
+        if(queueLimit == null) sb.append(ChatColor.DARK_RED + "* Minigame Queue Time Limit [/mg build queuelimit 1] (in minutes)");
         else sb.append(ChatColor.GREEN + "* Minigame Queue Time Limit [" + queueLimit + "]");
 
         sb.append("\n");
 
-        if(spawnPoint == null) sb.append(ChatColor.RED + "* Minigame Spawn Location [/mg build spawn] (sets to current location)");
+        if(spawnPoint == null) sb.append(ChatColor.DARK_RED + "* Minigame Spawn Location [/mg build spawn] (sets to current location)");
         else sb.append(ChatColor.GREEN + "* Minigame Spawn Point [" + locationToString(spawnPoint) + "]");
 
         sb.append("\n");
 
-        if(spectatorPoint == null) sb.append(ChatColor.RED + "* Minigame Spectator Location [/mg build spectate] (sets to current location)");
+        if(spectatorPoint == null) sb.append(ChatColor.DARK_RED + "* Minigame Spectator Location [/mg build spectate] (sets to current location)");
         else sb.append(ChatColor.GREEN + "* Minigame Spectator Location [" + locationToString(spectatorPoint) + "]");
 
         sb.append("\n");
 
-        if(startingItems == null) sb.append(ChatColor.RED + "* Minigame Starting Items [/mg build items] (sets to your current inventory)");
+        if(startingItems == null) sb.append(ChatColor.DARK_RED + "* Minigame Starting Items [/mg build items] (sets to your current inventory)");
         else sb.append(ChatColor.GREEN + "* Minigame Starting Items: " + startingItemsList());
-
 
         sb.append("\n");
 
@@ -91,7 +90,7 @@ public abstract class MinigameBuilder {
 
     public abstract MinigameMap createMap();
 
-    public boolean handleCommands(String[] args) throws IllegalArgumentException{
+    public boolean handleCommand(String[] args) throws IllegalArgumentException{
         if(args.length < 2) {
             Message.player(builder, "ERROR", "Invalid builder command");
             return false;
@@ -101,7 +100,7 @@ public abstract class MinigameBuilder {
                 String msg = getProgression();
 
                 msg += "\n\n" + ChatColor.WHITE + ChatColor.BOLD + "To Confirm These Settings and Create the Minigame, type /mg build confirm";
-                Message.player(builder, getProgression());
+                Message.player(builder, msg);
                 break;
             case "confirm":
                 if(name == null){
