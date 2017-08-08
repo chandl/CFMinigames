@@ -16,7 +16,7 @@ public class MapConfig {
 
 
     public static boolean loadConfig(MinigameType type, String mapName, int difficulty){
-        mapFile = new File("plugins/CFMinigame/maps/" + type.toString() + "/" + mapName + "-" + difficulty + ".yml");
+        mapFile = new File("plugins/CFMinigame/maps/" + type.toString() + "/" + mapName + "/" + difficulty + ".yml");
 
         if(!mapFile.exists()){
             return false;

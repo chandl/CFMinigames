@@ -3,6 +3,8 @@ package me.chandl.cfminigame;
 import me.chandl.cfminigame.database.CheckpointConfig;
 import me.chandl.cfminigame.database.MapConfig;
 import me.chandl.cfminigame.minigame.*;
+import me.chandl.cfminigame.minigame.builder.MinigameBuilder;
+import me.chandl.cfminigame.minigame.builder.MinigameBuilders;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigames.race.RaceMap;
 import me.chandl.cfminigame.util.Message;
@@ -41,10 +43,18 @@ public class CommandHandler implements CommandExecutor {
                     MinigamePlayer player = new MinigamePlayer(sender, false);
 
                     if(strings.length > 0){
-                        switch(strings[0]){
+                        switch(strings[0].toLowerCase()){
+                            case "build":
+                                MinigameBuilder builder = MinigameBuilders.getBuilders().getMinigameBuilder(player);
+                                if(builder == null) Message.player(player, "ERROR", "You are not in the Minigame Build Mode. Use '/mg new' to start.");
+                                else builder.handleCommands(strings);
+                                break;
                             case "new":
                                 System.out.println("'mg new' command called");
-
+                                if(strings.length < 2) Message.player(sender, "ERROR", "Usage /mg new [MinigameType]");
+                                else{
+                                    mgNewMap(player, strings[1]);
+                                }
                                 break;
                             case "publish":
                                 System.out.println("'mg publish' command called");
@@ -128,7 +138,7 @@ public class CommandHandler implements CommandExecutor {
 
                                 testPoints.add(point);
                                 break;
-                            case "despawnCheckpoints":
+                            case "despawncheckpoints":
                                 for(Checkpoint pt : testPoints){
                                     pt.despawn();
                                 }
@@ -204,5 +214,32 @@ public class CommandHandler implements CommandExecutor {
         }
     }
 
+    public void mgNewMap(MinigamePlayer player, String mgType){
+        if(MinigameBuilders.getBuilders().isBuilding(player)){
+            Message.player(player, "ERROR", "You are already in build mode. Type '/mg build stop' to exit.");
+            return ;
+        }
 
+        MinigameType type = null;
+        for(MinigameType t : MinigameType.values()){
+            if(mgType.equalsIgnoreCase(t.toString())){
+                type = t;
+                break;
+            }
+        }
+
+        if(type == null) Message.player(player, "ERROR", "Minigame Type '"+ mgType + "' not found!" );
+
+        switch(type){
+            case ELYTRARACE:
+                Message.player(player, "In Minigame Build Mode! Type '/mg build spawn' to select a Spawn Point.");
+                MinigameBuilder builder = new MinigameBuilder(player);
+                MinigameBuilders.getBuilders().setBuilding(player, builder);
+                break;
+            default:
+                Message.player(player, "ERROR", "No Minigame Builder for Type '"+ mgType + "' found!" );
+                break;
+
+        }
+    }
 }
