@@ -7,6 +7,7 @@ import me.chandl.cfminigame.minigame.builder.MinigameBuilder;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilders;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigames.race.RaceMap;
+import me.chandl.cfminigame.minigames.race.builder.RaceBuilder;
 import me.chandl.cfminigame.util.Message;
 import me.chandl.cfminigame.util.TextUtil;
 import org.bukkit.Location;
@@ -228,12 +229,15 @@ public class CommandHandler implements CommandExecutor {
             }
         }
 
-        if(type == null) Message.player(player, "ERROR", "Minigame Type '"+ mgType + "' not found!" );
+        if(type == null) {
+            Message.player(player, "ERROR", "Minigame Type '"+ mgType + "' not found!" );
+            return ;
+        }
 
         switch(type){
             case ELYTRARACE:
-                Message.player(player, "In Minigame Build Mode! Type '/mg build spawn' to select a Spawn Point.");
-                MinigameBuilder builder = new MinigameBuilder(player);
+                Message.player(player, "In Minigame Build Mode! Type '/mg build status' to see Available Minigame Options.");
+                MinigameBuilder builder = new RaceBuilder(player);
                 MinigameBuilders.getBuilders().setBuilding(player, builder);
                 break;
             default:

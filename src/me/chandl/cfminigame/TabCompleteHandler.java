@@ -88,6 +88,17 @@ public class TabCompleteHandler implements TabCompleter {
                                 return out;
                             }
                             break;
+                        case "new":
+                            HashSet<String> types = new HashSet();
+
+                            for(MinigameType type : MinigameType.values() ){
+                                if(type.toString() != null) types.add(type.toString());
+                            }
+
+                            out.clear();
+                            out.addAll(types);
+
+                            return out;
 
                         default:
                             return new ArrayList<>();
