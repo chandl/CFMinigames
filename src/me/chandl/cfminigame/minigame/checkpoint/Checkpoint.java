@@ -270,4 +270,12 @@ public class Checkpoint implements Serializable{
     public HashSet<Location> getHitbox() {
         return hitbox;
     }
+
+    public Location getSpawnPoint() {
+        return spawnPoint;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
 }

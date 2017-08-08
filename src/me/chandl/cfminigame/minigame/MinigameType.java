@@ -3,7 +3,9 @@ package me.chandl.cfminigame.minigame;
 
 import me.chandl.cfminigame.minigames.race.ElytraRace;
 
-public enum MinigameType {
+import java.io.Serializable;
+
+public enum MinigameType implements Serializable{
    RACE, ELYTRARACE;
 
 
