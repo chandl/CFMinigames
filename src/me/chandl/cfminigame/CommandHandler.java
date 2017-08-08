@@ -37,7 +37,7 @@ public class CommandHandler implements CommandExecutor {
 
             switch(s.toLowerCase()){
                 case "mg":
-                    System.out.println("mg command called");
+//                    System.out.println("mg command called");
                     MinigamePlayer player = new MinigamePlayer(sender, false);
 
                     if(strings.length > 0){
@@ -132,6 +132,8 @@ public class CommandHandler implements CommandExecutor {
                                 for(Checkpoint pt : testPoints){
                                     pt.despawn();
                                 }
+
+                                testPoints.clear();
                                 break;
                             case "cpfile":
                                 CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-4.txt"), "OOXXXOX\n" +

@@ -103,6 +103,54 @@ public class Checkpoint implements Serializable{
 
         Location spTmp = spawnPoint.clone();
 
+        int xSize = lines.length;
+        int ySize = lines[0].length();
+
+        // Move checkpoint to the center of the player
+        switch(direction){
+            case "E":
+            case "W":
+                if(xSize%2 != 0){ //Shift X-Value
+                    spTmp.subtract(0, 0, (xSize +1 ) / 2);
+                    System.out.println(String.format("Subtracting %d to Z", (xSize+1)/2));
+                }else{
+                    spTmp.subtract(0, 0, xSize / 2);
+                    System.out.println(String.format("Subtracting %d to Z", (xSize/2)));
+                }
+
+//                if(ySize % 2 != 0) { //Shift Y-Value
+//
+//                }else{
+//
+//                }
+                break;
+            case "N":
+            case "S":
+                if(xSize%2 != 0){ //Shift X-Value
+                    spTmp.subtract((xSize +1 ) / 2, 0, 0);
+                    System.out.println(String.format("Subtracting %d to X", (xSize+1)/2));
+                }else{
+                    spTmp.subtract(xSize / 2, 0, 0);
+                    System.out.println(String.format("Subtracting %d to X", (xSize/2)));
+                }
+
+//                if(ySize % 2 != 0) { //Shift Y-Value
+//
+//                }else{
+//
+//                }
+                break;
+        }
+
+
+        if(ySize % 2 != 0){
+            spTmp.add( 0, (ySize + 1) / 2, 0);
+            System.out.println(String.format("Adding %d to Y", (ySize+1)/2));
+        }else{
+            spTmp.add(0,ySize/2,0);
+            System.out.println(String.format("Adding %d to Y", (ySize/2)));
+        }
+
         System.out.println("LOCATION: " + spawnPoint + spawnPoint.getDirection());
         int i = 0;
         for(String line : lines){
