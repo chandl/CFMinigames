@@ -1,7 +1,6 @@
 package me.chandl.cfminigame;
 
-import me.chandl.cfminigame.database.MapConfig;
-import me.chandl.cfminigame.minigame.MinigameType;
+import me.chandl.cfminigame.minigame.core.MinigameType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;

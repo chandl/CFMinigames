@@ -2,10 +2,13 @@ package me.chandl.cfminigame;
 
 import me.chandl.cfminigame.database.CheckpointConfig;
 import me.chandl.cfminigame.database.MapConfig;
-import me.chandl.cfminigame.minigame.*;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilder;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilders;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
+import me.chandl.cfminigame.minigame.core.Minigame;
+import me.chandl.cfminigame.minigame.core.MinigameState;
+import me.chandl.cfminigame.minigame.core.MinigameType;
+import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.minigames.race.RaceMap;
 import me.chandl.cfminigame.minigames.race.builder.RaceBuilder;
 import me.chandl.cfminigame.util.Message;
@@ -21,13 +24,14 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
 public class CommandHandler implements CommandExecutor {
 
     public static final String[] commands = {"new", "publish", "start", "stop",
-            "join", "leave", "highscore", "help", "createrace", "status", "playerlist"};
+            "join", "leave", "highscore", "help", "status", "playerlist"};
 
     private List<Checkpoint> testPoints;
 
@@ -101,7 +105,8 @@ public class CommandHandler implements CommandExecutor {
                                 RaceMap testMap = new RaceMap("testMap", 3, sender.getLocation(), sender.getLocation() , 1, 1, startingItems, testPoints);
 
                                 FileConfiguration a = MapConfig.createMap(MinigameType.ELYTRARACE, "testMap2", testMap);
-                                a.set("checkpoints", testPoints);
+                                LinkedList<Checkpoint> checkpointList = new LinkedList<>(testPoints);
+                                a.set("checkpoints", checkpointList);
                                 MapConfig.saveMapFile();
 
                                 break;
@@ -120,14 +125,14 @@ public class CommandHandler implements CommandExecutor {
                                 break;
                             case "checkpoint":
                                 if(testPoints == null) testPoints = new ArrayList<>();
-                                String testPoint = "OOXXXOX\n" +
-                                        "OXYYYXO\n" +
-                                        "XYYYYYX\n" +
-                                        "XYYYYYX\n" +
-                                        "XYYYYYX\n" +
-                                        "OXYYYXO\n" +
-                                        "OOXXXOO\n" +
-                                        "XOOOOOO";
+//                                String testPoint = "OOXXXOX\n" +
+//                                        "OXYYYXO\n" +
+//                                        "XYYYYYX\n" +
+//                                        "XYYYYYX\n" +
+//                                        "XYYYYYX\n" +
+//                                        "OXYYYXO\n" +
+//                                        "OOXXXOO\n" +
+//                                        "XOOOOOO";
                                 Location here = sender.getLocation();
                                 String cp = CheckpointConfig.loadPoint(MinigameType.ELYTRARACE, new Integer(strings[1]));
 

@@ -1,18 +1,20 @@
 package me.chandl.cfminigame.minigames.race.builder;
 
-import me.chandl.cfminigame.minigame.MinigameMap;
-import me.chandl.cfminigame.minigame.MinigamePlayer;
+import me.chandl.cfminigame.minigame.core.MinigameMap;
+import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilder;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilders;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
 import org.bukkit.Location;
 
+import java.util.LinkedList;
 import java.util.Queue;
 
 
 public class RaceBuilder extends MinigameBuilder {
     private Queue<Checkpoint> points;
     private Location endPoint;
+    private Integer maxLives;
 
     public RaceBuilder(MinigamePlayer builder) {
         super(builder);
@@ -49,8 +51,15 @@ public class RaceBuilder extends MinigameBuilder {
         }catch(IllegalArgumentException ie){
             switch(args[1]){
                 //TODO Capture Checkpoints from Player
+                case "point":
+                    if(points == null) points = new LinkedList<>();
+                    break;
                 //TODO Capture Ending Point from Player
+                case "endpoint":
+                    break;
                 //TODO Get Maximum Life Count.
+                case "lives":
+                    break;
             }
         }
 

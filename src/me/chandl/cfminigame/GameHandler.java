@@ -1,6 +1,11 @@
 package me.chandl.cfminigame;
 
-import me.chandl.cfminigame.minigame.*;
+import me.chandl.cfminigame.minigame.core.Minigame;
+import me.chandl.cfminigame.minigame.core.MinigameMap;
+import me.chandl.cfminigame.minigame.core.MinigameState;
+import me.chandl.cfminigame.minigame.core.MinigameType;
+import me.chandl.cfminigame.minigame.player.MinigamePlayer;
+import me.chandl.cfminigame.minigame.player.PlayerState;
 import me.chandl.cfminigame.util.Message;
 import me.chandl.cfminigame.util.TextUtil;
 import org.bukkit.event.Listener;

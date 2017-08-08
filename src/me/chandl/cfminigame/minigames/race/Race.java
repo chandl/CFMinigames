@@ -1,6 +1,6 @@
 package me.chandl.cfminigame.minigames.race;
 
-import me.chandl.cfminigame.minigame.Minigame;
+import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
 import org.bukkit.Material;
 

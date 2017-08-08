@@ -1,8 +1,8 @@
 package me.chandl.cfminigame.minigame.builder;
 
 
-import me.chandl.cfminigame.minigame.MinigameMap;
-import me.chandl.cfminigame.minigame.MinigamePlayer;
+import me.chandl.cfminigame.minigame.core.MinigameMap;
+import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.util.Message;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

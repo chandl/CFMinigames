@@ -1,6 +1,7 @@
-package me.chandl.cfminigame.minigame;
+package me.chandl.cfminigame.minigame.core;
 
 
+import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigames.race.ElytraRace;
 
 public enum MinigameType {

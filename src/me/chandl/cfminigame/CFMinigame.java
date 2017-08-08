@@ -1,7 +1,7 @@
 package me.chandl.cfminigame;
 
 
-import me.chandl.cfminigame.minigame.MinigameState;
+import me.chandl.cfminigame.minigame.core.MinigameState;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Logger;
 

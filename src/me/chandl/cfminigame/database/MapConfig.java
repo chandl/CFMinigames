@@ -1,7 +1,7 @@
 package me.chandl.cfminigame.database;
 
-import me.chandl.cfminigame.minigame.MinigameMap;
-import me.chandl.cfminigame.minigame.MinigameType;
+import me.chandl.cfminigame.minigame.core.MinigameMap;
+import me.chandl.cfminigame.minigame.core.MinigameType;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 

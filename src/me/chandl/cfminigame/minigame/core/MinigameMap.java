@@ -1,4 +1,4 @@
-package me.chandl.cfminigame.minigame;
+package me.chandl.cfminigame.minigame.core;
 
 
 import me.chandl.cfminigame.database.MapConfig;

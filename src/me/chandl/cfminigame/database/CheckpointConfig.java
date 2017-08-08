@@ -1,6 +1,6 @@
 package me.chandl.cfminigame.database;
 
-import me.chandl.cfminigame.minigame.MinigameType;
+import me.chandl.cfminigame.minigame.core.MinigameType;
 
 import java.io.*;
 import java.nio.file.Files;

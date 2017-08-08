@@ -1,6 +1,6 @@
 package me.chandl.cfminigame.minigame.builder;
 
-import me.chandl.cfminigame.minigame.MinigamePlayer;
+import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 
 import java.util.HashMap;
 import java.util.Map;
