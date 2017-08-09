@@ -1,7 +1,9 @@
 package me.chandl.cfminigame;
 
 
+import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigame.core.MinigameState;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Logger;
 
@@ -29,6 +31,7 @@ public class CFMinigame extends JavaPlugin{
 
         GameHandler.getHandler().setCurrentMinigame(null);
         GameHandler.getHandler().setCurrentState(MinigameState.NO_GAME);
+        ConfigurationSerialization.registerClass(Checkpoint.class);
     }
 
 

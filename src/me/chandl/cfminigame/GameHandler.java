@@ -102,7 +102,7 @@ public class GameHandler implements Listener {
         if(currentMinigame != null) return false;
 
         MinigameType type = null;
-        MinigameMap map = null;
+        MinigameMap map;
 
         for(MinigameType mgType : MinigameType.values()){
             if(typeStr.equalsIgnoreCase(mgType.toString())){
@@ -122,10 +122,14 @@ public class GameHandler implements Listener {
             return false;
         }
 
+        System.out.println("Type: " + type);
+        System.out.println("Map: " + map);
+
         Minigame game = type.toMinigame();
         game.setType(type);
         game.setMaximumPlayers(CFMinigame.DEFAULT_MAX_PLAYERS);
         game.setMinimumPlayers(CFMinigame.DEFAULT_MIN_PLAYERS);
+        System.out.println("In createMinigame. Map: " + map);
         game.setMap(map);
         game.setDifficultyLevel(difficulty);
         game.setStartTime(new Date());

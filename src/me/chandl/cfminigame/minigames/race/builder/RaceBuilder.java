@@ -6,6 +6,7 @@ import me.chandl.cfminigame.minigame.builder.MinigameBuilder;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilders;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
 import org.bukkit.Location;
+import org.bukkit.Material;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -15,6 +16,7 @@ public class RaceBuilder extends MinigameBuilder {
     private Queue<Checkpoint> points;
     private Location endPoint;
     private Integer maxLives;
+    private Material pointMaterial;
 
     public RaceBuilder(MinigamePlayer builder) {
         super(builder);
@@ -60,6 +62,7 @@ public class RaceBuilder extends MinigameBuilder {
                 //TODO Get Maximum Life Count.
                 case "lives":
                     break;
+                //TODO Get Checkpoint Material
             }
         }
 

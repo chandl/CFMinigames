@@ -141,6 +141,7 @@ public class CommandHandler implements CommandExecutor {
                                 Checkpoint point = new Checkpoint(cp, here, here.getYaw());
 
                                 point.spawn(Material.GLASS);
+                                point.setMaterial(Material.GLASS);
 
                                 testPoints.add(point);
                                 break;

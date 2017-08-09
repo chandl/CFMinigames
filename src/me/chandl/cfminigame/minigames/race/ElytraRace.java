@@ -8,6 +8,9 @@ public class ElytraRace extends Race{
 
     @Override
     public void start() {
+
+//        System.out.println("From ElytraRace. Map " + getMap());
+
         super.start();
 
 

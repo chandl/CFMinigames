@@ -6,11 +6,11 @@ import me.chandl.cfminigame.scores.HighScore;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class MinigameMap {
     private String name;
-
     private int maxLifeCount;
 
     private Location spawnPoint;
@@ -34,11 +34,29 @@ public class MinigameMap {
             long gameTimeLimit = (Integer) MapConfig.get("gameTimeLimit");
             long baseScore = (Integer) MapConfig.get("baseScore");
             List<ItemStack> items = (List<ItemStack>) MapConfig.getList("startingItems");
-            return new MinigameMap(name, maxLife, spawnPoint, spectatorPoint, gameTimeLimit, baseScore, items.toArray(new ItemStack[items.size()]));
+            MinigameMap out = new MinigameMap(name, maxLife, spawnPoint, spectatorPoint, gameTimeLimit, baseScore, items.toArray(new ItemStack[items.size()]));
+//            System.out.println("Could find map. " + out.toString());
+            return out;
         }else{
+//            System.out.println("Could not find map. Type " + type +". MapName: " + mapName);
             return null;
         }
+    }
 
+    @Override
+    public String toString() {
+        return "MinigameMap{" +
+                "name='" + name + '\'' +
+                ", maxLifeCount=" + maxLifeCount +
+                ", spawnPoint=" + spawnPoint +
+                ", spectatorPoint=" + spectatorPoint +
+                ", gameTimeLimit=" + gameTimeLimit +
+                ", queueTimeLimit=" + queueTimeLimit +
+                ", baseScore=" + baseScore +
+                ", difficultyMultipliers=" + Arrays.toString(difficultyMultipliers) +
+                ", startingItems=" + Arrays.toString(startingItems) +
+                ", highScores=" + highScores +
+                '}';
     }
 
     public MinigameMap(){}

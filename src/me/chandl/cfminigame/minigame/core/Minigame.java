@@ -14,11 +14,17 @@ public abstract class Minigame {
     private MinigameMap map;
     private int difficultyLevel;
 
+    public Minigame(){}
+
     @Override
     public String toString(){
         String out = String.format("[%s] %s Minigame. Map: %s. Difficulty: %d. " +
-                "Max Players: %d, Min Players: %d.", startTime.toString(), type, map.getName(),
-                difficultyLevel, maximumPlayers, minimumPlayers);
+                "Max Players: %d, Min Players: %d.", startTime.toString(),
+                type,
+                map.getName(),
+                difficultyLevel,
+                maximumPlayers,
+                minimumPlayers);
         return out;
     }
 
@@ -34,7 +40,7 @@ public abstract class Minigame {
      */
     public void onJoin(MinigamePlayer player){
         switch(GameHandler.getHandler().getCurrentState()){
-            case MinigameState.IN_GAME:
+            case IN_GAME:
                 //Clear player's inventory
                 player.clearItems();
 
@@ -45,7 +51,7 @@ public abstract class Minigame {
                 Message.allPlayers(String.format("%s started spectating the minigame! [%d/%d Players]", player.getPlayerObject().getDisplayName(), GameHandler.getHandler().getPlayerList().size(), getMaximumPlayers()));
                 break;
 
-            case MinigameState.IN_QUEUE:
+            case IN_QUEUE:
                 //Clear player's inventory
                 player.clearItems();
 
@@ -59,7 +65,7 @@ public abstract class Minigame {
                 Message.allPlayers(String.format("%s just joined the minigame! [%d/%d Players]", player.getPlayerObject().getDisplayName(), GameHandler.getHandler().getPlayerList().size(), getMaximumPlayers()));
                 break;
 
-            case MinigameState.NO_GAME:
+            case NO_GAME:
             default:
                 System.out.println("This ERROR should never show. If it does, ur fucked. ");
                 break;
@@ -112,6 +118,7 @@ public abstract class Minigame {
     }
 
     public void setMap(MinigameMap map) {
+        System.out.println("In SetMap. Map: " + map);
         this.map = map;
     }
 

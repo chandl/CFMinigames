@@ -14,6 +14,8 @@ public class MapConfig {
     private static File mapFile;
     private static FileConfiguration mapConfiguration;
 
+    //TODO Add File/FileConfiguration cache
+
 
     public static boolean loadConfig(MinigameType type, String mapName){
         mapFile = new File("plugins/CFMinigame/maps/" + type.toString() + "/" + mapName +".yml");
@@ -21,7 +23,9 @@ public class MapConfig {
         if(!mapFile.exists()){
             return false;
         }else{
+
             mapConfiguration = YamlConfiguration.loadConfiguration(mapFile);
+            System.out.println("Configuration: " + mapConfiguration.saveToString());
         }
 
         return true;
