@@ -30,10 +30,10 @@ public class TabCompleteHandler implements TabCompleter {
 
             String fn, name;
             for(File file : fList){
-                if(file.isFile()){//make sure it is not a directory
+                if(file.isFile() && !file.getName().equalsIgnoreCase(".DS_Store")){//make sure it is not a directory
                     fn = file.getName();
                     System.out.println("Indexed File : " + fn);
-                    name = fn.substring(0, fn.length() - 6);
+                    name = fn.split(".yml")[0];
                     maps.add(name);
                 }
             }
