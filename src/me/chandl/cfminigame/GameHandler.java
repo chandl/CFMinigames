@@ -129,7 +129,7 @@ public class GameHandler implements Listener {
         game.setType(type);
         game.setMaximumPlayers(CFMinigame.DEFAULT_MAX_PLAYERS);
         game.setMinimumPlayers(CFMinigame.DEFAULT_MIN_PLAYERS);
-        System.out.println("In createMinigame. Map: " + map);
+//        System.out.println("In createMinigame. Map: " + map);
         game.setMap(map);
         game.setDifficultyLevel(difficulty);
         game.setStartTime(new Date());

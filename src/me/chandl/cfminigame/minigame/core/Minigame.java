@@ -118,7 +118,7 @@ public abstract class Minigame {
     }
 
     public void setMap(MinigameMap map) {
-        System.out.println("In SetMap. Map: " + map);
+//        System.out.println("In SetMap. Map: " + map);
         this.map = map;
     }
 

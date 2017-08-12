@@ -21,6 +21,7 @@ public class MapConfig {
         mapFile = new File("plugins/CFMinigame/maps/" + type.toString() + "/" + mapName +".yml");
 
         if(!mapFile.exists()){
+            System.out.println("Map File " + mapFile.getName() + " does not exist D:");
             return false;
         }else{
 

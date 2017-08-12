@@ -14,7 +14,7 @@ public class CFMinigame extends JavaPlugin{
     public static final int DEFAULT_MAX_DIFFICULTY = 5;
 
     //Maximum Queuing Time (Seconds)
-    public static final long DEFAULT_MAX_QUEUE_TIME = 60;
+    public static final long DEFAULT_MAX_QUEUE_TIME = 5;
     private Logger log;
     public static CFMinigame plugin;
 
@@ -31,6 +31,7 @@ public class CFMinigame extends JavaPlugin{
 
         GameHandler.getHandler().setCurrentMinigame(null);
         GameHandler.getHandler().setCurrentState(MinigameState.NO_GAME);
+
         ConfigurationSerialization.registerClass(Checkpoint.class);
     }
 

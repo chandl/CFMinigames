@@ -102,7 +102,7 @@ public class CommandHandler implements CommandExecutor {
                                 System.out.println("createrace called");
                                 ItemStack[] startingItems = new ItemStack[1];
                                 startingItems[0] = new ItemStack(Material.ELYTRA);
-                                RaceMap testMap = new RaceMap("testMap", 3, sender.getLocation(), sender.getLocation() , 1, 1, startingItems, testPoints);
+                                RaceMap testMap = new RaceMap("testMap2", 3, sender.getLocation(), sender.getLocation() , 1, 1, startingItems, testPoints);
 
                                 FileConfiguration a = MapConfig.createMap(MinigameType.ELYTRARACE, "testMap2", testMap);
                                 LinkedList<Checkpoint> checkpointList = new LinkedList<>(testPoints);
@@ -139,10 +139,9 @@ public class CommandHandler implements CommandExecutor {
 
 
                                 Checkpoint point = new Checkpoint(cp, here, here.getYaw());
-
-                                point.spawn(Material.GLASS);
-                                point.setMaterial(Material.GLASS);
-
+                                Material mat = player.getPlayerObject().getInventory().getItemInMainHand().getType();
+                                point.setMaterial(mat);
+                                point.spawn();
                                 testPoints.add(point);
                                 break;
                             case "despawncheckpoints":

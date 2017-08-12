@@ -1,8 +1,10 @@
 package me.chandl.cfminigame.minigame.checkpoint;
 
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.io.Serializable;
@@ -66,18 +68,18 @@ public class Checkpoint implements Serializable, ConfigurationSerializable {
 //        System.out.println("Direction " + direction + ". Rot: " + rot);
     }
 
-    private Checkpoint(Location location, String direction, Material pointMaterial){
-        this.spawnPoint = location;
-        this.direction = direction;
-        this.material = pointMaterial;
-        this.hitbox = new HashSet<>();
-    }
-
-    private Checkpoint(Location location, String direction){
-        this.spawnPoint = location;
-        this.direction = direction;
-        this.material = Material.GLASS;
-        this.hitbox = new HashSet<>();
+    public Checkpoint(Map<String, Object> map){
+        double x,y,z;
+        x = (Double) map.get("x");
+        y = (Double) map.get("y");
+        z = (Double) map.get("z");
+        String w = (String) map.get("world");
+        World world = Bukkit.getWorld(w);
+        spawnPoint = new Location(world, x,y,z,0,0);
+        direction = (String) map.get("direction");
+//        material = Material.GLASS;
+        material = Material.getMaterial((String)map.get("material"));
+        hitbox = new HashSet<>();
     }
 
     public String getDirectionFromYaw(float yaw){
@@ -131,20 +133,20 @@ public class Checkpoint implements Serializable, ConfigurationSerializable {
             case "W":
                 if(xSize%2 != 0){ //Shift X-Value
                     spTmp.subtract(0, 0, (xSize +1 ) / 2);
-                    System.out.println(String.format("Subtracting %d to Z", (xSize+1)/2));
+//                    System.out.println(String.format("Subtracting %d to Z", (xSize+1)/2));
                 }else{
                     spTmp.subtract(0, 0, xSize / 2);
-                    System.out.println(String.format("Subtracting %d to Z", (xSize/2)));
+//                    System.out.println(String.format("Subtracting %d to Z", (xSize/2)));
                 }
                 break;
             case "N":
             case "S":
                 if(xSize%2 != 0){ //Shift X-Value
                     spTmp.subtract((xSize +1 ) / 2, 0, 0);
-                    System.out.println(String.format("Subtracting %d to X", (xSize+1)/2));
+//                    System.out.println(String.format("Subtracting %d to X", (xSize+1)/2));
                 }else{
                     spTmp.subtract(xSize / 2, 0, 0);
-                    System.out.println(String.format("Subtracting %d to X", (xSize/2)));
+//                    System.out.println(String.format("Subtracting %d to X", (xSize/2)));
                 }
                 break;
         }
@@ -218,7 +220,7 @@ public class Checkpoint implements Serializable, ConfigurationSerializable {
     /**
      * Spawns the checkpoint object in the game.
      */
-    public void spawn(Material spawnMaterial){
+    public void spawn(){
 
         if(oldBlocks == null) oldBlocks = new HashMap<>();
 
@@ -245,7 +247,7 @@ public class Checkpoint implements Serializable, ConfigurationSerializable {
                     break;
 
                 case BLOCK:
-                    l.getBlock().setType(spawnMaterial);
+                    l.getBlock().setType(material);
                     break;
             }
         }
@@ -290,19 +292,27 @@ public class Checkpoint implements Serializable, ConfigurationSerializable {
     @Override
     public Map<String, Object> serialize() {
         HashMap<String, Object> out = new HashMap<>();
-        out.put("location", spawnPoint);
+//        out.put("location", spawnPoint);
+        out.put("world", spawnPoint.getWorld().getName());
+        out.put("x", spawnPoint.getX());
+        out.put("y", spawnPoint.getY());
+        out.put("z", spawnPoint.getZ());
         out.put("direction", direction);
+        out.put("material", material.toString());
 //        out.put("material", material.toString());
         return out;
     }
 
-    //Used for configuration deserialization.
-    public static Checkpoint deserialize(HashMap<String, Object> map){
-        Location location = map.containsKey("location")? (Location)map.get("location"): null;
-        String direction = map.containsKey("direction")? (String)map.get("direction"): null;
-//        Material mat = map.containsKey("material")? (Material) map.get("material"): null;
-        return new Checkpoint(location, direction);
-    }
+//    //Used for configuration deserialization.
+//    public static Checkpoint deserialize(HashMap<String, Object> map){
+//
+//        Location location = map.containsKey("location")? (Location)map.get("location"): null;
+//        String direction = map.containsKey("direction")? (String)map.get("direction"): null;
+//
+//        System.out.println("Deserialize called. Location: " + location + ". Direction + " + direction);
+////        Material mat = map.containsKey("material")? (Material) map.get("material"): null;
+//        return new Checkpoint(location, direction);
+//    }
 
     public void setMaterial(Material material) {
         this.material = material;
