@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class TabCompleteHandler implements TabCompleter {
@@ -49,13 +50,20 @@ public class TabCompleteHandler implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
+        String startsWith = "";
         List<String> out = new ArrayList<>();
         //Make sure command sender is player
         if (commandSender instanceof Player) {
             if (s.equalsIgnoreCase("mg")) {
                 if (strings.length > 0) {
                     if(strings.length == 1){
-                        out = Arrays.asList(CommandHandler.commands);
+                        startsWith = strings[0];
+
+                        List<String> tmp = Arrays.asList(CommandHandler.commands);
+
+                        for(String cmd : tmp){
+                            if(cmd.startsWith(startsWith.toLowerCase())) out.add(cmd);
+                        }
                         return out;
                     }
 
@@ -63,10 +71,11 @@ public class TabCompleteHandler implements TabCompleter {
                         case "start":
 
                             if (strings.length == 2) {
+                                startsWith = strings[1];
                                 HashSet<String> types = new HashSet();
 
                                 for(MinigameType type : MinigameType.values() ){
-                                    if(type.toString() != null) types.add(type.toString());
+                                    if(type.toString() != null && type.toString().startsWith(startsWith.toUpperCase())) types.add(type.toString());
                                 }
 
                                 out.addAll(types);
@@ -74,8 +83,10 @@ public class TabCompleteHandler implements TabCompleter {
                                 return out;
                             }
                             else if (strings.length == 3) {
+                                startsWith = strings[2];
                                 for(String map : getMapList(strings[1])){
-                                    out.add(map);
+                                    if(map.startsWith(startsWith))
+                                        out.add(map);
                                 }
 
                                 return out;
@@ -91,7 +102,10 @@ public class TabCompleteHandler implements TabCompleter {
                             HashSet<String> types = new HashSet();
 
                             for(MinigameType type : MinigameType.values() ){
-                                if(type.toString() != null) types.add(type.toString());
+                                startsWith = strings[1];
+                                if(type.toString() != null && type.toString().startsWith(startsWith.toUpperCase())) {
+                                    types.add(type.toString());
+                                }
                             }
 
                             out.clear();
