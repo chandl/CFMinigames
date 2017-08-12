@@ -19,29 +19,26 @@ public class Race extends Minigame {
 
     @Override
     public void start() {
-        System.out.println("This Minigame: " + this);
-        System.out.println("Type: "  + this.getType());
-        System.out.println("Map: "  + this.getMap().getName());
-
+//        System.out.println("This Minigame: " + this);
+//        System.out.println("Type: "  + this.getType());
+//        System.out.println("Map: "  + this.getMap().getName());
 
         //Load correct shape for difficulty level...
         String shape = CheckpointConfig.loadPoint(this.getType(), this.getDifficultyLevel());
 
-
-        //Load Checkpoints
+        //Load and Configure Checkpoints
         if(MapConfig.loadConfig(getType(), getMap().getName())){
             checkPoints = (ArrayList<Checkpoint>) MapConfig.get("checkpoints");
             for(Checkpoint p : checkPoints){
-                System.out.println("Checkpoint List: " + p);
+//                System.out.println("Checkpoint List: " + p);
                 p.setShape(shape);
-                p.setMaterial(Material.GLASS);
             }
 
         }else{
-            System.out.println("Could not Load Checkpoints D: ");
+            System.err.println("ERROR: Could not Load Checkpoints.");
         }
 
-
+        //Spawn all of the checkpoints
         for(Checkpoint p : checkPoints ){
             p.spawn();
         }

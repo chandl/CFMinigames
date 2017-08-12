@@ -65,6 +65,7 @@ public class CommandHandler implements CommandExecutor {
                                 System.out.println("'mg publish' command called");
                                 break;
                             case "start":
+                                player = new MinigamePlayer(sender, true);
                                 System.out.println("'mg start' command called");
                                 if(strings.length != 4){
                                     Message.player(sender, "ERROR", "Usage: /mg start [MinigameType] [Map] [Difficulty]");
@@ -78,6 +79,7 @@ public class CommandHandler implements CommandExecutor {
                                 break;
 
                             case "join":
+                                player = new MinigamePlayer(sender, true);
                                 System.out.println("'mg join' command called");
                                 mgJoin(player);
                                 break;

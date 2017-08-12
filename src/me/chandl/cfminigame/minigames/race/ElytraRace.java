@@ -1,8 +1,10 @@
 package me.chandl.cfminigame.minigames.race;
 
-/**
- * Created by chandler on 7/30/17.
- */
+import me.chandl.cfminigame.GameHandler;
+import me.chandl.cfminigame.minigame.player.MinigamePlayer;
+import org.bukkit.GameMode;
+
+
 public class ElytraRace extends Race{
 
 
@@ -10,9 +12,27 @@ public class ElytraRace extends Race{
     public void start() {
 
 //        System.out.println("From ElytraRace. Map " + getMap());
+        for(MinigamePlayer p : GameHandler.getHandler().getPlayerList()){
 
+            p.getPlayerObject().setGameMode(GameMode.SURVIVAL);
+        }
         super.start();
 
 
+    }
+
+    @Override
+    public void stop() {
+        for(MinigamePlayer p : GameHandler.getHandler().getPlayerList()){
+            p.getPlayerObject().setGameMode(p.getPreviousGamemode());
+        }
+        super.stop();
+    }
+
+    @Override
+    public void onLeave(MinigamePlayer player) {
+        player.getPlayerObject().setGameMode(player.getPreviousGamemode());
+
+        super.onLeave(player);
     }
 }
