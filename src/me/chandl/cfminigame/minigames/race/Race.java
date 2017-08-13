@@ -1,19 +1,15 @@
 package me.chandl.cfminigame.minigames.race;
 
-import me.chandl.cfminigame.GameHandler;
 import me.chandl.cfminigame.database.CheckpointConfig;
 import me.chandl.cfminigame.database.MapConfig;
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
-import me.chandl.cfminigame.minigame.core.MinigameState;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class Race extends Minigame {
     private ArrayList<Checkpoint> checkPoints;
-    private Material checkPointMaterial;
 
     public Race() {
         super();
@@ -54,7 +50,5 @@ public class Race extends Minigame {
             }
         }
     }
-
-
 
 }

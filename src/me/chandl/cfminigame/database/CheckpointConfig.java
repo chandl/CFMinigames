@@ -44,7 +44,7 @@ public class CheckpointConfig {
     }
 
     private static String readCheckpointFile(File pointFile){
-        System.out.println("Reading Checkpoint File " + pointFile);
+//        System.out.println("Reading Checkpoint File " + pointFile);
         try {
             String ln = new String(Files.readAllBytes(Paths.get(pointFile.toURI())));
             checkpointConfigCache.put(pointFile, ln);
