@@ -133,7 +133,6 @@ public class GameHandler implements Listener {
 //        System.out.println("In createMinigame. Map: " + map);
         game.setMap(map);
         game.setDifficultyLevel(difficulty);
-        game.setStartTime(new Date());
 
         currentMinigame = game;
         startQueue();

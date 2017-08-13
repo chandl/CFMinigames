@@ -9,10 +9,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -112,6 +114,15 @@ public class RaceListener implements Listener {
 
         Minigame curr = GameHandler.getHandler().getCurrentMinigame();
         curr.onRespawn(evt, mp);
+    }
+
+    @EventHandler
+    public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent evt){
+        if(GameHandler.getHandler().getCurrentState() != MinigameState.IN_GAME){return;}
+        Entity damageEntity = evt.getDamager();
+        if(damageEntity.getType() != EntityType.FIREWORK && evt.getEntity() instanceof Player){
+            evt.setCancelled(true);
+        }
     }
 
     @EventHandler

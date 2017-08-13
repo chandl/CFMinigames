@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Race extends Minigame {
     private ArrayList<Checkpoint> checkPoints;
@@ -111,6 +112,8 @@ public class Race extends Minigame {
         CFMinigame.plugin.registerRaceHandler();
         RaceListener.getListener().setCheckpoints(checkPoints);
 
+
+        setStartTime(new Date());
     }
 
     @Override

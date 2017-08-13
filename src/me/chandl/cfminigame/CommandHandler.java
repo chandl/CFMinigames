@@ -139,28 +139,29 @@ public class CommandHandler implements CommandExecutor {
 
                             case "createrace":
                                 if(sender.hasPermission("CFMinigame.mg.admin")) {
+                                    if(strings.length < 2){
+                                        Message.player(player, "ERROR", "Usage: /mg createrace 'racename' ");
+                                        return false;
+                                    }
+                                    String name = "";
+
+                                    for(int i=1; i<strings.length; i++){
+                                        name += strings[i];
+                                        if(i+1 < strings.length) name += "-";
+                                    }
+
                                     System.out.println("createrace called");
                                     ItemStack[] startingItems = new ItemStack[1];
                                     startingItems[0] = new ItemStack(Material.ELYTRA);
 
-                                    File f;
-                                    int iteration = 0;
-                                    for (int i = 0; i < 99; i++) {
-                                        f = new File("plugins/CFMinigame/maps/elytrarace/testMap" + i + ".yml");
-                                        if (!f.exists()) {
-                                            iteration = i;
-                                            break;
-                                        }
-                                    }
+                                    RaceMap testMap = new RaceMap(name, 10, sender.getLocation(), sender.getLocation(), 1, 1, startingItems, testPoints);
 
-                                    RaceMap testMap = new RaceMap("testMap" + iteration, 10, sender.getLocation(), sender.getLocation(), 1, 1, startingItems, testPoints);
-
-                                    FileConfiguration a = MapConfig.createMap(MinigameType.ELYTRARACE, "testMap" + iteration, testMap);
+                                    FileConfiguration a = MapConfig.createMap(MinigameType.ELYTRARACE, name, testMap);
                                     LinkedList<Checkpoint> checkpointList = new LinkedList<>(testPoints);
                                     a.set("checkpoints", checkpointList);
                                     MapConfig.saveMapFile();
 
-                                    Message.player(player, "New Map Created: testMap" + iteration);
+                                    Message.player(player, "New Map Created: " + name);
 
                                     for (Checkpoint pt : testPoints) {
                                         pt.despawn();
