@@ -22,7 +22,8 @@ public class Race extends Minigame {
 
     @Override
     public void onPlayerFinish(MinigamePlayer player) {
-        System.out.println("MINIGAMEPLAYER FINISHED THE RACE!");
+//        System.out.println("MINIGAMEPLAYER FINISHED THE RACE!");
+        super.onPlayerFinish(player);
     }
 
     @Override
@@ -37,6 +38,15 @@ public class Race extends Minigame {
 
     public void onCheckpoint(MinigamePlayer player){
         player.setProgress(player.getProgress() + 1);
+
+        if(checkPoints.size() == player.getProgress()){
+            onPlayerFinish(player);
+        }
+    }
+
+    public void onFall(MinigamePlayer player){
+        System.out.println("PLAYER ON BLOCK D: ");
+        player.getPlayerObject().setHealth(0);
     }
 
     @Override

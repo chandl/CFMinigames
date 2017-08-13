@@ -4,10 +4,13 @@ import me.chandl.cfminigame.GameHandler;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.minigame.player.PlayerState;
 import me.chandl.cfminigame.util.Message;
+import org.bukkit.ChatColor;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public abstract class Minigame {
     private Date startTime;
@@ -15,6 +18,7 @@ public abstract class Minigame {
     private int maximumPlayers, minimumPlayers;
     private MinigameMap map;
     private int difficultyLevel;
+    private List<MinigamePlayer> scoreboard;
 
     public Minigame(){}
 
@@ -38,8 +42,25 @@ public abstract class Minigame {
 
 
     public void onPlayerFinish(MinigamePlayer player){
+        if(scoreboard == null) {
+            scoreboard = new ArrayList<>();
+        }
 
+        Date finished = new Date();
+        long time = (finished.getTime() - startTime.getTime()) / 1000;
+        player.setGameTime(time);
+        scoreboard.add(player);
+
+        Message.playersInGame(player.getPlayerObject().getName() + " Finished the Minigame in position " + scoreboard.size() + "! Time: " + time + " seconds." );
+        player.setState(PlayerState.SPECTATING);
+        player.getPlayerObject().teleport(getMap().getSpectatorPoint());
+
+        if(GameHandler.getHandler().checkIfAllPlayersAreFinished()){
+            Message.allPlayers("INFO", "The Current Minigame Has Finished! 1st Place was " + scoreboard.get(0).getPlayerObject().getName() + " at " + scoreboard.get(0).getGameTime() + " seconds.");
+            stop();
+        }
     }
+
 
 
     public void onRespawn(PlayerRespawnEvent event, MinigamePlayer player){
@@ -63,8 +84,10 @@ public abstract class Minigame {
         player.setProgress(0);
         if(player.getCurrentLifeCount() == 1){ //player just died for the last time
             player.setState(PlayerState.SPECTATING);
+            Message.player(player, "You have Died and have used all of your lives. Spectating now...");
         }else{
             player.setCurrentLifeCount(player.getCurrentLifeCount() - 1);
+            Message.player(player, ChatColor.DARK_RED + "You Have Died!"+ ChatColor.WHITE +" Remaining Lives: " + player.getCurrentLifeCount());
         }
 
     }

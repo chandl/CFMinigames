@@ -6,6 +6,8 @@ import me.chandl.cfminigame.minigame.core.MinigameState;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.minigames.race.Race;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -66,8 +68,22 @@ public class RaceListener implements Listener {
                 }
 
             }
-
         }
+
+        //Check if player has hit the ground (only if they are past first checkpoint)
+        if(progress > 0){
+            if(p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() != Material.AIR){
+                Minigame curr = GameHandler.getHandler().getCurrentMinigame();
+                if(curr instanceof Race){
+                    ((Race) curr).onFall(mp);
+                }
+
+
+            }
+        }
+
+
+
     }
 
     @EventHandler
@@ -101,7 +117,7 @@ public class RaceListener implements Listener {
         Entity e = evt.getEntity();
 
         //Call onDamage if player takes fall damage.
-        if(e instanceof Player && evt.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL || evt.getCause() == EntityDamageEvent.DamageCause.FALL){
+        if(e instanceof Player && (evt.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL || evt.getCause() == EntityDamageEvent.DamageCause.FALL)){
             System.out.println("DAMAGE CAUSED. TYPE: " + evt.getCause());
             Player p = (Player) e;
             MinigamePlayer mp = findPlayer(p);

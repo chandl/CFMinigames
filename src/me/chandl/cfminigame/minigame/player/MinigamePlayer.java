@@ -23,6 +23,7 @@ public class MinigamePlayer {
     private PlayerConfig conf;
     private PlayerState state;
     private GameMode previousGamemode;
+    private long gameTime;
 
     //Keep track of the progress in each game. (e.g. Race: The last checkpoint that you have gone through)
     private int progress;
@@ -116,5 +117,13 @@ public class MinigamePlayer {
 
     public void setCurrentLifeCount(int currentLifeCount) {
         this.currentLifeCount = currentLifeCount;
+    }
+
+    public long getGameTime() {
+        return gameTime;
+    }
+
+    public void setGameTime(long gameTime) {
+        this.gameTime = gameTime;
     }
 }

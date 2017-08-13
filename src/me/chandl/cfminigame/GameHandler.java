@@ -184,6 +184,14 @@ public class GameHandler implements Listener {
         }
     }
 
+    public boolean checkIfAllPlayersAreFinished(){
+        for(MinigamePlayer p : GameHandler.getHandler().getPlayerList()){
+            if(p.getState() != PlayerState.SPECTATING) return false;
+        }
+
+        return true;
+    }
+
     public boolean playerInGame(MinigamePlayer player){
         return playerList.containsKey(player.getPlayerObject().getUniqueId());
     }

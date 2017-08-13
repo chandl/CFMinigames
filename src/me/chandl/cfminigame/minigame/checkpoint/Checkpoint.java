@@ -226,33 +226,33 @@ public class Checkpoint implements Serializable, ConfigurationSerializable {
         for(Location loc : hitbox){
 
             double x = loc.getX(), y = loc.getY(), z = loc.getZ();
-            System.out.println(String.format("(%f,%f,%f) | (%f,%f,%f) | (%f, %f, %f)",x,y,z,minX,minY,minZ,maxX,maxY,maxZ));
-            System.out.println("X " + x + ". MaxX: " + maxX);
+//            System.out.println(String.format("(%f,%f,%f) | (%f,%f,%f) | (%f, %f, %f)",x,y,z,minX,minY,minZ,maxX,maxY,maxZ));
+//            System.out.println("X " + x + ". MaxX: " + maxX);
             if(x < minX){
                 minX = x;
-                System.out.println("New Min X: " + minX);
+//                System.out.println("New Min X: " + minX);
             }
             if(x > maxX) {
                 maxX = x;
-                System.out.println("New Max X: " + maxX);
+//                System.out.println("New Max X: " + maxX);
             }
 
             if(y < minY) {
                 minY = y;
-                System.out.println("New Min Y: " + minY);
+//                System.out.println("New Min Y: " + minY);
             }
             if(y > maxY) {
                 maxY = y;
-                System.out.println("New Max Y: " + maxY);
+//                System.out.println("New Max Y: " + maxY);
             }
 
             if(z < minZ) {
                 minZ = z;
-                System.out.println("New Min Z: " + minZ);
+//                System.out.println("New Min Z: " + minZ);
             }
             if(z > maxZ) {
                 maxZ = z;
-                System.out.println("New Max Z: " + maxZ);
+//                System.out.println("New Max Z: " + maxZ);
             }
         }
 
@@ -293,7 +293,7 @@ public class Checkpoint implements Serializable, ConfigurationSerializable {
             }
         }
 
-        System.out.println(String.format("Max X: %f, Max Y: %f, Max Z: %f. Min X: %f, Min Y: %f, Min Z: %f", hitboxMaxX, hitboxMaxY, hitboxMaxZ, hitboxMinX, hitboxMinY, hitboxMinZ));
+//        System.out.println(String.format("Max X: %f, Max Y: %f, Max Z: %f. Min X: %f, Min Y: %f, Min Z: %f", hitboxMaxX, hitboxMaxY, hitboxMaxZ, hitboxMinX, hitboxMinY, hitboxMinZ));
     }
 
     /**
