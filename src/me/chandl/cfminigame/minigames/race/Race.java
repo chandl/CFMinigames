@@ -2,6 +2,7 @@ package me.chandl.cfminigame.minigames.race;
 
 import me.chandl.cfminigame.database.CheckpointConfig;
 import me.chandl.cfminigame.database.MapConfig;
+import me.chandl.cfminigame.minigame.checkpoint.CollisionListener;
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
 import org.bukkit.Material;
@@ -40,6 +41,9 @@ public class Race extends Minigame {
         for(Checkpoint p : checkPoints ){
             p.spawn();
         }
+
+        CollisionListener.getListener().setCheckpoints(checkPoints);
+
     }
 
     @Override

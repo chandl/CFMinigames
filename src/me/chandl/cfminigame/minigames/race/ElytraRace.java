@@ -2,6 +2,7 @@ package me.chandl.cfminigame.minigames.race;
 
 import me.chandl.cfminigame.GameHandler;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
+import me.chandl.cfminigame.minigame.player.PlayerState;
 import org.bukkit.GameMode;
 
 
@@ -15,6 +16,9 @@ public class ElytraRace extends Race{
         for(MinigamePlayer p : GameHandler.getHandler().getPlayerList()){
 
             p.getPlayerObject().setGameMode(GameMode.SURVIVAL);
+            if(p.getState() != PlayerState.SPECTATING)
+                p.getPlayerObject().teleport(getMap().getSpawnPoint());
+
         }
         super.start();
 

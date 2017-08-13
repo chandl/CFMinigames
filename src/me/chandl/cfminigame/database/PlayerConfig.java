@@ -15,6 +15,8 @@ public class PlayerConfig {
     private File playerFile;
     private FileConfiguration configuration;
 
+    //TODO Make PlayerConfig cache.
+
     public boolean loadConfig(Player player){
         playerId = player.getUniqueId();
 

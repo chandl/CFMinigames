@@ -24,6 +24,9 @@ public class MinigamePlayer {
     private PlayerState state;
     private GameMode previousGamemode;
 
+    //Keep track of the progress in each game. (e.g. Race: The last checkpoint that you have gone through)
+    private int progress;
+
     @Override
     public String toString() {
         return "MinigamePlayer{" +
@@ -97,5 +100,13 @@ public class MinigamePlayer {
 
     public void setState(PlayerState state) {
         this.state = state;
+    }
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
     }
 }

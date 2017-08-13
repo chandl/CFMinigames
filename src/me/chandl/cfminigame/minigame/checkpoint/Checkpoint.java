@@ -14,14 +14,19 @@ import java.util.*;
 import static me.chandl.cfminigame.minigame.checkpoint.CheckpointArea.*;
 
 public class Checkpoint implements Serializable, ConfigurationSerializable {
+
+    //This value will determine when you hit the checkpoint hitbox.
+    // e.g. 2 means that you will hit the hitbox when 2 blocks in front or behind of the point.
+    private static final double CHECKPOINT_HITBOX_EXTENSION = 2;
     //Shape will be the shape of the checkpoint
     // Read in dynamically
     private transient CheckpointArea[][] shape;
     private transient Location spawnPoint;
-    private int spawnPointX, spawnPointY, spawnPointZ;
     private transient HashMap<Location, CheckpointArea> pointLocations;
     private transient HashMap<Location, Material> oldBlocks;
     private transient HashSet<Location> hitbox;
+
+    public double hitboxMinX,hitboxMinY,hitboxMinZ,hitboxMaxX,hitboxMaxY,hitboxMaxZ;
     private String direction;
     private Material material;
 
@@ -208,14 +213,88 @@ public class Checkpoint implements Serializable, ConfigurationSerializable {
                 default:
                     break;
             }
-
-
         }
 
         return out;
     }
 
+    /**
+     * Reads the Hitbox, generating a minimum and maximum set of X,Y,Z Coordinates.
+     */
+    private void readHitbox(){
+        double minX = Double.MAX_VALUE, maxX=-Double.MAX_VALUE, minY=Double.MAX_VALUE,maxY=-Double.MAX_VALUE, minZ=Double.MAX_VALUE, maxZ=-Double.MAX_VALUE;
+        for(Location loc : hitbox){
 
+            double x = loc.getX(), y = loc.getY(), z = loc.getZ();
+            System.out.println(String.format("(%f,%f,%f) | (%f,%f,%f) | (%f, %f, %f)",x,y,z,minX,minY,minZ,maxX,maxY,maxZ));
+            System.out.println("X " + x + ". MaxX: " + maxX);
+            if(x < minX){
+                minX = x;
+                System.out.println("New Min X: " + minX);
+            }
+            if(x > maxX) {
+                maxX = x;
+                System.out.println("New Max X: " + maxX);
+            }
+
+            if(y < minY) {
+                minY = y;
+                System.out.println("New Min Y: " + minY);
+            }
+            if(y > maxY) {
+                maxY = y;
+                System.out.println("New Max Y: " + maxY);
+            }
+
+            if(z < minZ) {
+                minZ = z;
+                System.out.println("New Min Z: " + minZ);
+            }
+            if(z > maxZ) {
+                maxZ = z;
+                System.out.println("New Max Z: " + maxZ);
+            }
+        }
+
+
+
+        this.hitboxMaxX = Math.round(maxX);
+        this.hitboxMaxY = Math.round(maxY);
+        this.hitboxMaxZ = Math.round(maxZ);
+
+        this.hitboxMinX = Math.round(minX);
+        this.hitboxMinY = Math.round(minY);
+        this.hitboxMinZ = Math.round(minZ);
+
+        if(direction.equals("N") || direction.equals("S")){
+            if(hitboxMaxZ < 0){
+                hitboxMaxZ -= CHECKPOINT_HITBOX_EXTENSION;
+            }else{
+                hitboxMaxZ += CHECKPOINT_HITBOX_EXTENSION;
+            }
+
+            if(hitboxMinZ < 0){
+                hitboxMinZ += CHECKPOINT_HITBOX_EXTENSION;
+            }else{
+                hitboxMinZ -=CHECKPOINT_HITBOX_EXTENSION;
+            }
+
+        }else{
+            if(hitboxMaxX < 0){
+                hitboxMaxX -= CHECKPOINT_HITBOX_EXTENSION;
+            }else{
+                hitboxMaxX += CHECKPOINT_HITBOX_EXTENSION;
+            }
+
+            if(hitboxMinX < 0 ){
+                hitboxMinX += CHECKPOINT_HITBOX_EXTENSION;
+            }else{
+                hitboxMinX -= CHECKPOINT_HITBOX_EXTENSION;
+            }
+        }
+
+        System.out.println(String.format("Max X: %f, Max Y: %f, Max Z: %f. Min X: %f, Min Y: %f, Min Z: %f", hitboxMaxX, hitboxMaxY, hitboxMaxZ, hitboxMinX, hitboxMinY, hitboxMinZ));
+    }
 
     /**
      * Spawns the checkpoint object in the game.
@@ -239,7 +318,7 @@ public class Checkpoint implements Serializable, ConfigurationSerializable {
 
             switch((CheckpointArea)pair.getValue()){
                 case HITBOX:
-                    l.getBlock().setType(Material.WEB);
+                    l.getBlock().setType(Material.AIR);
                     hitbox.add(l);
                     break;
                 case AIR:
@@ -251,6 +330,9 @@ public class Checkpoint implements Serializable, ConfigurationSerializable {
                     break;
             }
         }
+
+        //Read Hitbox Locations - Find Min through Max Locations
+        readHitbox();
     }
 
     public void despawn(){
@@ -278,6 +360,7 @@ public class Checkpoint implements Serializable, ConfigurationSerializable {
     }
 
     public HashSet<Location> getHitbox() {
+
         return hitbox;
     }
 
@@ -318,3 +401,9 @@ public class Checkpoint implements Serializable, ConfigurationSerializable {
         this.material = material;
     }
 }
+
+
+
+//Checkpoint Hitbox Boundaries:
+//For each Checkpoint - find Min X,Y,Z
+//IN Logic, Check if player is between min and max

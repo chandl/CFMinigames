@@ -2,6 +2,7 @@ package me.chandl.cfminigame;
 
 
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
+import me.chandl.cfminigame.minigame.checkpoint.CollisionListener;
 import me.chandl.cfminigame.minigame.core.MinigameState;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,13 +32,16 @@ public class CFMinigame extends JavaPlugin{
 
         GameHandler.getHandler().setCurrentMinigame(null);
         GameHandler.getHandler().setCurrentState(MinigameState.NO_GAME);
-
+        getServer().getPluginManager().registerEvents(CollisionListener.getListener(), this);
         ConfigurationSerialization.registerClass(Checkpoint.class);
     }
 
 
     @Override
     public void onDisable() {
+        if(GameHandler.getHandler().getCurrentState() != MinigameState.NO_GAME){
+            GameHandler.getHandler().stopMinigame();
+        }
         log.info("OnDisable called.");
     }
 

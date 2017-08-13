@@ -11,10 +11,7 @@ import me.chandl.cfminigame.util.TextUtil;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class GameHandler implements Listener {
 
@@ -208,5 +205,8 @@ public class GameHandler implements Listener {
 
     public ArrayList<MinigamePlayer> getPlayerList() {
         return new ArrayList<MinigamePlayer>(playerList.values());
+    }
+    public HashSet<UUID> getPlayerUUIDs(){
+        return new HashSet<UUID>(playerList.keySet());
     }
 }
