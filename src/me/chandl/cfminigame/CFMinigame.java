@@ -2,9 +2,11 @@ package me.chandl.cfminigame;
 
 
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
-import me.chandl.cfminigame.minigame.checkpoint.CollisionListener;
+import me.chandl.cfminigame.minigame.checkpoint.RaceListener;
 import me.chandl.cfminigame.minigame.core.MinigameState;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Logger;
 
@@ -32,8 +34,16 @@ public class CFMinigame extends JavaPlugin{
 
         GameHandler.getHandler().setCurrentMinigame(null);
         GameHandler.getHandler().setCurrentState(MinigameState.NO_GAME);
-        getServer().getPluginManager().registerEvents(CollisionListener.getListener(), this);
+
         ConfigurationSerialization.registerClass(Checkpoint.class);
+    }
+
+    public void registerRaceHandler(){
+        getServer().getPluginManager().registerEvents(RaceListener.getListener(), this);
+    }
+
+    public void unregisterRaceHandler(){
+        HandlerList.unregisterAll(RaceListener.getListener());
     }
 
 

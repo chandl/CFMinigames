@@ -15,10 +15,10 @@ public class ElytraRace extends Race{
 //        System.out.println("From ElytraRace. Map " + getMap());
         for(MinigamePlayer p : GameHandler.getHandler().getPlayerList()){
 
-            p.getPlayerObject().setGameMode(GameMode.SURVIVAL);
             if(p.getState() != PlayerState.SPECTATING)
                 p.getPlayerObject().teleport(getMap().getSpawnPoint());
 
+            p.getPlayerObject().setGameMode(GameMode.SURVIVAL);
         }
         super.start();
 

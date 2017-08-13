@@ -1,11 +1,14 @@
 package me.chandl.cfminigame.minigames.race;
 
+import me.chandl.cfminigame.CFMinigame;
+import me.chandl.cfminigame.GameHandler;
 import me.chandl.cfminigame.database.CheckpointConfig;
 import me.chandl.cfminigame.database.MapConfig;
-import me.chandl.cfminigame.minigame.checkpoint.CollisionListener;
+import me.chandl.cfminigame.minigame.checkpoint.RaceListener;
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
-import org.bukkit.Material;
+import me.chandl.cfminigame.minigame.player.MinigamePlayer;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.ArrayList;
 
@@ -14,6 +17,26 @@ public class Race extends Minigame {
 
     public Race() {
         super();
+    }
+
+
+    @Override
+    public void onPlayerFinish(MinigamePlayer player) {
+        System.out.println("MINIGAMEPLAYER FINISHED THE RACE!");
+    }
+
+    @Override
+    public void onPlayerDamage(MinigamePlayer player) {
+
+
+//            onDie(new PlayerDeathEvent(player.getPlayerObject(), null, 0 , "Fell in Game."), player);
+        System.out.println("PLAYER DAMAGE D: ");
+        player.getPlayerObject().setHealth(0);
+
+    }
+
+    public void onCheckpoint(MinigamePlayer player){
+        player.setProgress(player.getProgress() + 1);
     }
 
     @Override
@@ -42,12 +65,21 @@ public class Race extends Minigame {
             p.spawn();
         }
 
-        CollisionListener.getListener().setCheckpoints(checkPoints);
+        for(MinigamePlayer player : GameHandler.getHandler().getPlayerList()){
+            //give players MG starting items
+            player.getPlayerObject().getInventory().setContents( getMap().getStartingItems() );
+        }
+
+
+        //Start Race Listener
+        CFMinigame.plugin.registerRaceHandler();
+        RaceListener.getListener().setCheckpoints(checkPoints);
 
     }
 
     @Override
     public void stop() {
+        CFMinigame.plugin.unregisterRaceHandler();
         if(checkPoints != null && checkPoints.size() > 0){
             for(Checkpoint p : checkPoints){
                 p.despawn();

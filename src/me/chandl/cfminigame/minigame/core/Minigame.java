@@ -4,6 +4,8 @@ import me.chandl.cfminigame.GameHandler;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.minigame.player.PlayerState;
 import me.chandl.cfminigame.util.Message;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.Date;
 
@@ -31,6 +33,42 @@ public abstract class Minigame {
     public abstract void start ();
     public abstract void stop ();
 
+
+    public abstract void onPlayerDamage(MinigamePlayer player);
+
+
+    public void onPlayerFinish(MinigamePlayer player){
+
+    }
+
+
+    public void onRespawn(PlayerRespawnEvent event, MinigamePlayer player){
+        System.out.println("ONRESPAWN CALLED!!!");
+        System.out.println("Player State: " + player.getState());
+        //Respawn Players
+        if(player.getState() == PlayerState.IN_GAME){
+            event.setRespawnLocation(map.getSpawnPoint());
+        }else if(player.getState() == PlayerState.SPECTATING){
+            event.setRespawnLocation(getMap().getSpectatorPoint());
+        }
+
+        //give player MG starting items
+        player.getPlayerObject().getInventory().setContents( getMap().getStartingItems() );
+
+    }
+
+    public void onDie(PlayerDeathEvent event, MinigamePlayer player){
+//        player.getPlayerObject().getInventory().setContents(null);
+        event.getDrops().clear();
+        player.setProgress(0);
+        if(player.getCurrentLifeCount() == 1){ //player just died for the last time
+            player.setState(PlayerState.SPECTATING);
+        }else{
+            player.setCurrentLifeCount(player.getCurrentLifeCount() - 1);
+        }
+
+    }
+
     /**
      * Default onJoin Method for Minigames.
      * Clears Player's Inventory, Saving previous inventory for after game.
@@ -45,10 +83,13 @@ public abstract class Minigame {
                 player.clearItems();
 
                 //teleport player to MG spectator location
-                player.getPlayerObject().teleport(GameHandler.getHandler().getCurrentMinigame().getMap().getSpectatorPoint());
+                player.getPlayerObject().teleport(getMap().getSpectatorPoint());
 
                 //notify all players of someone new in the MG.
                 Message.allPlayers(String.format("%s started spectating the minigame! [%d/%d Players]", player.getPlayerObject().getDisplayName(), GameHandler.getHandler().getPlayerList().size(), getMaximumPlayers()));
+
+                //give player MG starting items
+                player.getPlayerObject().getInventory().setContents( getMap().getStartingItems() );
                 break;
 
             case IN_QUEUE:
@@ -56,10 +97,7 @@ public abstract class Minigame {
                 player.clearItems();
 
                 //teleport player to MG start location
-                player.getPlayerObject().teleport(GameHandler.getHandler().getCurrentMinigame().getMap().getSpawnPoint());
-
-                //give player MG starting items
-                player.getPlayerObject().getInventory().setContents( GameHandler.getHandler().getCurrentMinigame().getMap().getStartingItems() );
+                player.getPlayerObject().teleport(getMap().getSpawnPoint());
 
                 //notify all players of someone new in the MG.
                 Message.allPlayers(String.format("%s just joined the minigame! [%d/%d Players]", player.getPlayerObject().getDisplayName(), GameHandler.getHandler().getPlayerList().size(), getMaximumPlayers()));

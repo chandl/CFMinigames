@@ -150,6 +150,12 @@ public class GameHandler implements Listener {
 
             //Call minigame onJoin
             currentMinigame.onJoin(player);
+            if(getCurrentState() == MinigameState.IN_QUEUE){
+                player.setState(PlayerState.IN_QUEUE);
+            }else if(getCurrentState() == MinigameState.IN_GAME){
+                player.setState(PlayerState.IN_GAME);
+            }
+
 
 //            System.out.println("AddPlayer: " + player);
             return true;
@@ -201,6 +207,14 @@ public class GameHandler implements Listener {
 
     public void setCurrentState(MinigameState currentState) {
         GameHandler.currentState = currentState;
+    }
+
+    public static MinigamePlayer getPlayer(UUID playerId){
+        if(playerList.containsKey(playerId)){
+            return playerList.get(playerId);
+        }else{
+            return null;
+        }
     }
 
     public ArrayList<MinigamePlayer> getPlayerList() {

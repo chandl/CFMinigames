@@ -109,4 +109,12 @@ public class MinigamePlayer {
     public void setProgress(int progress) {
         this.progress = progress;
     }
+
+    public int getCurrentLifeCount() {
+        return currentLifeCount;
+    }
+
+    public void setCurrentLifeCount(int currentLifeCount) {
+        this.currentLifeCount = currentLifeCount;
+    }
 }
