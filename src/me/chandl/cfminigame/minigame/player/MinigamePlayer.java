@@ -8,6 +8,8 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
 import java.util.List;
 
 public class MinigamePlayer {
@@ -22,6 +24,22 @@ public class MinigamePlayer {
     private PlayerState state;
     private GameMode previousGamemode;
 
+    @Override
+    public String toString() {
+        return "MinigamePlayer{" +
+                "player=" + player +
+                ", highScores=" + highScores +
+                ", winCount=" + winCount +
+                ", currentLifeCount=" + currentLifeCount +
+                ", beforeMGPosition=" + beforeMGPosition +
+                ", beforeMGInventory=" + Arrays.toString(beforeMGInventory) +
+                ", currentGame=" + currentGame +
+                ", conf=" + conf +
+                ", state=" + state +
+                ", previousGamemode=" + previousGamemode +
+                '}';
+    }
+
     public MinigamePlayer (Player p, boolean reset){
         player = p;
         conf = new PlayerConfig();
@@ -31,20 +49,24 @@ public class MinigamePlayer {
 
 
             conf.set("uuid", player.getUniqueId().toString());
-            conf.set("beforePosition", player.getLocation());
+
+            beforeMGPosition = player.getLocation();
+            conf.set("beforePosition", beforeMGPosition);
+
             beforeMGInventory = player.getInventory().getContents();
             conf.set("beforeInventory",beforeMGInventory);
-            conf.set("previousGamemode", player.getGameMode().name());
 
-            System.out.println("Previous Gamemode: " + player.getGameMode());
+            previousGamemode = player.getGameMode();
+            conf.set("previousGamemode", previousGamemode.name());
 
             conf.saveUserFile();
         }else{
             beforeMGPosition = (Location) conf.get("beforePosition");
             List<ItemStack> items = (List<ItemStack>) conf.getList("beforeInventory");
             beforeMGInventory = items.toArray(new ItemStack[items.size()]);
-
             previousGamemode = GameMode.valueOf((String)conf.get("previousGamemode"));
+
+//            System.out.println("PREVIOUS GAMEMODE LOADED: " + GameMode.valueOf((String)conf.get("previousGamemode")));
         }
     }
 

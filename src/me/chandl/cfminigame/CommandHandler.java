@@ -191,6 +191,7 @@ public class CommandHandler implements CommandExecutor {
     }
 
     private void mgStart (MinigamePlayer player, String typeStr, String mapName, int difficulty){
+//        System.out.println("MGStart Player: " + player);
         if(GameHandler.getHandler().createMinigame(player, typeStr, mapName, difficulty)){
             Message.allPlayers(String.format("New %s minigame started. Use '/mg join' to join the lobby!", GameHandler.getHandler().getCurrentMinigame().getType()));
         }else{

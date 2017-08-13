@@ -23,9 +23,6 @@ public class ElytraRace extends Race{
 
     @Override
     public void stop() {
-        for(MinigamePlayer p : GameHandler.getHandler().getPlayerList()){
-            p.getPlayerObject().setGameMode(p.getPreviousGamemode());
-        }
         super.stop();
     }
 

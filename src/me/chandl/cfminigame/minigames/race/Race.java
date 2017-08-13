@@ -1,9 +1,11 @@
 package me.chandl.cfminigame.minigames.race;
 
+import me.chandl.cfminigame.GameHandler;
 import me.chandl.cfminigame.database.CheckpointConfig;
 import me.chandl.cfminigame.database.MapConfig;
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
+import me.chandl.cfminigame.minigame.core.MinigameState;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
@@ -46,8 +48,10 @@ public class Race extends Minigame {
 
     @Override
     public void stop() {
-        for(Checkpoint p : checkPoints){
-            p.despawn();
+        if(checkPoints != null && checkPoints.size() > 0){
+            for(Checkpoint p : checkPoints){
+                p.despawn();
+            }
         }
     }
 

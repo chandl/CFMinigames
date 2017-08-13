@@ -224,13 +224,13 @@ public class Checkpoint implements Serializable, ConfigurationSerializable {
 
         if(oldBlocks == null) oldBlocks = new HashMap<>();
 
-        System.out.println("Spawn called!");
+//        System.out.println("Spawn called!");
         if(pointLocations == null || pointLocations.size() == 0) {
             System.out.println("pointLocations not found. Can't spawn Checkpoint");
             return ;
         }
 
-        System.out.println("Spawn Locations");
+//        System.out.println("Spawn Locations");
         Iterator it = pointLocations.entrySet().iterator();
         while(it.hasNext()){
             Map.Entry pair = (Map.Entry)it.next();
@@ -254,7 +254,7 @@ public class Checkpoint implements Serializable, ConfigurationSerializable {
     }
 
     public void despawn(){
-        System.out.println("Despawn Called");
+//        System.out.println("Despawn Called");
         if(oldBlocks == null || oldBlocks.size() == 0){
             System.out.println("olDBlocks not cound. Cannot despawn Checkpoints.");
             return ;

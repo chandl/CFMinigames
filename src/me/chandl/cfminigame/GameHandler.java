@@ -46,7 +46,7 @@ public class GameHandler implements Listener {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        System.out.println("[CFMinigame] Minigame Countdown Timer was Interruputed.");
                     }
                 }
 
@@ -82,19 +82,21 @@ public class GameHandler implements Listener {
     }
 
     public void stopMinigame(){
+        if(currentState == MinigameState.NO_GAME) return; //return if we are already stopping the minigame
         if(currentState == MinigameState.IN_QUEUE){
             gameStartTimer.cancel();
             countdownTimer.cancel();
         }
+
         currentState = MinigameState.NO_GAME;
 
-        currentMinigame.stop();
-
-        currentMinigame = null;
-
         for(MinigamePlayer player : playerList.values()){
+            removePlayer(player);
             player.setState(PlayerState.NOT_IN_GAME);
         }
+
+        currentMinigame.stop();
+        currentMinigame = null;
     }
 
 
@@ -150,6 +152,8 @@ public class GameHandler implements Listener {
 
             //Call minigame onJoin
             currentMinigame.onJoin(player);
+
+            System.out.println("AddPlayer: " + player);
             return true;
         }else {
             return false;
@@ -161,6 +165,8 @@ public class GameHandler implements Listener {
 
         if(playerList.containsKey(player.getPlayerObject().getUniqueId())){
             playerList.remove(player.getPlayerObject().getUniqueId());
+
+            System.out.println("Shit Player 1: " + player);
             //Call minigame onLeave
             currentMinigame.onLeave(player);
 
