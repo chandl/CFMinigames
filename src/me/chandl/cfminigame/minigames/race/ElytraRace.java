@@ -19,6 +19,8 @@ public class ElytraRace extends Race{
                 p.getPlayerObject().teleport(getMap().getSpawnPoint());
 
             p.getPlayerObject().setGameMode(GameMode.SURVIVAL);
+            p.getPlayerObject().setHealth(20);
+            p.getPlayerObject().setExhaustion(0);
         }
         super.start();
 

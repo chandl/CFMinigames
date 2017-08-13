@@ -17,7 +17,7 @@ public class CFMinigame extends JavaPlugin{
     public static final int DEFAULT_MAX_DIFFICULTY = 5;
 
     //Maximum Queuing Time (Seconds)
-    public static final long DEFAULT_MAX_QUEUE_TIME = 5;
+    public static final long DEFAULT_MAX_QUEUE_TIME = 20;
     private Logger log;
     public static CFMinigame plugin;
 

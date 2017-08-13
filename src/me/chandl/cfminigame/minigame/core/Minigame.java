@@ -9,6 +9,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -52,12 +53,15 @@ public abstract class Minigame {
         scoreboard.add(player);
 
         Message.playersInGame(player.getPlayerObject().getName() + " Finished the Minigame in position " + scoreboard.size() + "! Time: " + time + " seconds." );
+        System.out.println(player.getPlayerObject().getName() + " Finished the Minigame in position " + scoreboard.size() + "! Time: " + time + " seconds.");
         player.setState(PlayerState.SPECTATING);
         player.getPlayerObject().teleport(getMap().getSpectatorPoint());
 
         if(GameHandler.getHandler().checkIfAllPlayersAreFinished()){
             Message.allPlayers("INFO", "The Current Minigame Has Finished! 1st Place was " + scoreboard.get(0).getPlayerObject().getName() + " at " + scoreboard.get(0).getGameTime() + " seconds.");
-            stop();
+            System.out.println("The Current Minigame Has Finished! 1st Place was " + scoreboard.get(0).getPlayerObject().getName() + " at " + scoreboard.get(0).getGameTime() + " seconds.");
+
+            GameHandler.getHandler().stopMinigame();
         }
     }
 
@@ -80,11 +84,24 @@ public abstract class Minigame {
 
     public void onDie(PlayerDeathEvent event, MinigamePlayer player){
 //        player.getPlayerObject().getInventory().setContents(null);
+
+
+
         event.getDrops().clear();
         player.setProgress(0);
         if(player.getCurrentLifeCount() == 1){ //player just died for the last time
             player.setState(PlayerState.SPECTATING);
             Message.player(player, "You have Died and have used all of your lives. Spectating now...");
+
+            if(GameHandler.getHandler().checkIfAllPlayersAreFinished()){
+                if(scoreboard == null || scoreboard.size() == 0){
+                    Message.allPlayers("INFO", "The Current Minigame has Finished! Nobody was able to complete it!!");
+                }else{
+                    Message.allPlayers("INFO", "The Current Minigame Has Finished! 1st Place was " + scoreboard.get(0).getPlayerObject().getName() + " at " + scoreboard.get(0).getGameTime() + " seconds.");
+                }
+
+                GameHandler.getHandler().stopMinigame();
+            }
         }else{
             player.setCurrentLifeCount(player.getCurrentLifeCount() - 1);
             Message.player(player, ChatColor.DARK_RED + "You Have Died!"+ ChatColor.WHITE +" Remaining Lives: " + player.getCurrentLifeCount());
@@ -105,6 +122,8 @@ public abstract class Minigame {
                 //Clear player's inventory
                 player.clearItems();
 
+                player.setState(PlayerState.IN_GAME);
+
                 //teleport player to MG spectator location
                 player.getPlayerObject().teleport(getMap().getSpectatorPoint());
 
@@ -118,6 +137,8 @@ public abstract class Minigame {
             case IN_QUEUE:
                 //Clear player's inventory
                 player.clearItems();
+
+                player.setState(PlayerState.IN_QUEUE);
 
                 //teleport player to MG start location
                 player.getPlayerObject().teleport(getMap().getSpawnPoint());

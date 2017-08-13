@@ -17,9 +17,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 
 public class RaceListener implements Listener {
@@ -88,9 +86,14 @@ public class RaceListener implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent evt){
+
+
+
+        System.out.println("Player Death. Cause: " + evt.getDeathMessage());
         if(GameHandler.getHandler().getCurrentState() != MinigameState.IN_GAME){return;}
         Player p = evt.getEntity();
         MinigamePlayer mp = findPlayer(p);
+
         //Stop logic if player is not in minigame.
         if(!GameHandler.getHandler().getPlayerUUIDs().contains(p.getUniqueId())){return;}
 
@@ -132,13 +135,15 @@ public class RaceListener implements Listener {
     private MinigamePlayer findPlayer(Player player){
         UUID playerId = player.getUniqueId();
         MinigamePlayer mp;
-        if(playerStore.containsKey(playerId)){
+        /*if(playerStore.containsKey(playerId)){
             mp = playerStore.get(playerId);
         }else{
 //            mp = new MinigamePlayer(player, false);
             mp = GameHandler.getHandler().getPlayer(playerId);
             playerStore.put(playerId, mp);
-        }
+        }*/
+
+        mp = GameHandler.getHandler().getPlayer(playerId);
 
         return mp;
     }

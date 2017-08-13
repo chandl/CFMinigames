@@ -8,7 +8,14 @@ import me.chandl.cfminigame.minigame.checkpoint.RaceListener;
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
+import me.chandl.cfminigame.minigame.player.PlayerState;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.Material;
+import org.bukkit.entity.Firework;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.ArrayList;
 
@@ -31,23 +38,33 @@ public class Race extends Minigame {
 
 
 //            onDie(new PlayerDeathEvent(player.getPlayerObject(), null, 0 , "Fell in Game."), player);
-        System.out.println("PLAYER DAMAGE D: ");
+//        System.out.println("PLAYER DAMAGE D: ");
+//        player.getPlayerObject().damage(10);
         player.getPlayerObject().setHealth(0);
+    }
 
+    public void onFall(MinigamePlayer player){
+//        System.out.println("PLAYER ON BLOCK D: ");
+//        player.getPlayerObject().damage();
+        player.getPlayerObject().setHealth(0);
     }
 
     public void onCheckpoint(MinigamePlayer player){
+        ItemStack firework = new ItemStack(Material.FIREWORK);
+        FireworkMeta fwMeta = (FireworkMeta) firework.getItemMeta();
+        fwMeta.addEffects(FireworkEffect.builder().withColor(Color.RED).with(FireworkEffect.Type.BALL_LARGE).build());
+        fwMeta.setPower(2);
+        firework.setItemMeta(fwMeta);
+
         player.setProgress(player.getProgress() + 1);
+        player.getPlayerObject().getInventory().addItem(firework);
 
         if(checkPoints.size() == player.getProgress()){
             onPlayerFinish(player);
         }
     }
 
-    public void onFall(MinigamePlayer player){
-        System.out.println("PLAYER ON BLOCK D: ");
-        player.getPlayerObject().setHealth(0);
-    }
+
 
     @Override
     public void start() {
@@ -78,6 +95,15 @@ public class Race extends Minigame {
         for(MinigamePlayer player : GameHandler.getHandler().getPlayerList()){
             //give players MG starting items
             player.getPlayerObject().getInventory().setContents( getMap().getStartingItems() );
+
+            //Reset Player's Progress
+            player.setProgress(0);
+
+            player.setState(PlayerState.IN_GAME);
+
+
+            System.out.println("Setting Player Current Life Count to " + getMap().getMaxLifeCount());
+            player.setCurrentLifeCount(getMap().getMaxLifeCount());
         }
 
 

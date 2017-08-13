@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class MinigamePlayer {
@@ -24,6 +25,7 @@ public class MinigamePlayer {
     private PlayerState state;
     private GameMode previousGamemode;
     private long gameTime;
+    private Date lastDeath;
 
     //Keep track of the progress in each game. (e.g. Race: The last checkpoint that you have gone through)
     private int progress;
@@ -125,5 +127,13 @@ public class MinigamePlayer {
 
     public void setGameTime(long gameTime) {
         this.gameTime = gameTime;
+    }
+
+    public Date getLastDeath() {
+        return lastDeath;
+    }
+
+    public void setLastDeath(Date lastDeath) {
+        this.lastDeath = lastDeath;
     }
 }

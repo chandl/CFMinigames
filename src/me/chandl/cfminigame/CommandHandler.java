@@ -104,12 +104,31 @@ public class CommandHandler implements CommandExecutor {
                                 System.out.println("createrace called");
                                 ItemStack[] startingItems = new ItemStack[1];
                                 startingItems[0] = new ItemStack(Material.ELYTRA);
-                                RaceMap testMap = new RaceMap("testMap2", 3, sender.getLocation(), sender.getLocation() , 1, 1, startingItems, testPoints);
 
-                                FileConfiguration a = MapConfig.createMap(MinigameType.ELYTRARACE, "testMap2", testMap);
+                                File f;
+                                int iteration = 0;
+                                for(int i=0; i<99; i++){
+                                    f = new File("plugins/CFMinigame/maps/elytrarace/testMap" + i +".yml");
+                                    if(!f.exists()){
+                                        iteration = i;
+                                        break;
+                                    }
+                                }
+
+                                RaceMap testMap = new RaceMap("testMap"+iteration, 10, sender.getLocation(), sender.getLocation() , 1, 1, startingItems, testPoints);
+
+                                FileConfiguration a = MapConfig.createMap(MinigameType.ELYTRARACE, "testMap"+iteration, testMap);
                                 LinkedList<Checkpoint> checkpointList = new LinkedList<>(testPoints);
                                 a.set("checkpoints", checkpointList);
                                 MapConfig.saveMapFile();
+
+                                Message.player(player, "New Map Created: testMap" + iteration);
+
+                                for(Checkpoint pt : testPoints){
+                                    pt.despawn();
+                                }
+
+                                testPoints.clear();
 
                                 break;
                             case "status":
@@ -154,6 +173,40 @@ public class CommandHandler implements CommandExecutor {
                                 testPoints.clear();
                                 break;
                             case "cpfile":
+
+                                CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-1.txt"), "OOXXXXXXXXXOO\n" +
+                                        "OXYYYYYYYYYXO\n" +
+                                        "XYYYYYYYYYYYX\n" +
+                                        "XYYYYYYYYYYYX\n" +
+                                        "XYYYYYYYYYYYX\n" +
+                                        "XYYYYYYYYYYYX\n" +
+                                        "XYYYYYYYYYYYX\n" +
+                                        "XYYYYYYYYYYYX\n" +
+                                        "XYYYYYYYYYYYX\n" +
+                                        "XYYYYYYYYYYYX\n" +
+                                        "XYYYYYYYYYYYX\n" +
+                                        "OXYYYYYYYYYXO\n" +
+                                        "OOXXXXXXXXXOO");
+                                CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-2.txt"), "OOXXXXXXXOO\n" +
+                                        "OXYYYYYYYXO\n" +
+                                        "XYYYYYYYYYX\n" +
+                                        "XYYYYYYYYYX\n" +
+                                        "XYYYYYYYYYX\n" +
+                                        "XYYYYYYYYYX\n" +
+                                        "XYYYYYYYYYX\n" +
+                                        "XYYYYYYYYYX\n" +
+                                        "XYYYYYYYYYX\n" +
+                                        "OXYYYYYYYXO\n" +
+                                        "OOXXXXXXXOO\n");
+                                CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-3.txt"), "OOXXXXXOO\n" +
+                                        "OXYYYYYXO\n" +
+                                        "XYYYYYYYX\n" +
+                                        "XYYYYYYYX\n" +
+                                        "XYYYYYYYX\n" +
+                                        "XYYYYYYYX\n" +
+                                        "XYYYYYYYX\n" +
+                                        "OXYYYYYXO\n" +
+                                        "OOXXXXXOO");
                                 CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-4.txt"), "OOXXXOX\n" +
                                         "OXYYYXO\n" +
                                         "XYYYYYX\n" +
@@ -162,6 +215,13 @@ public class CommandHandler implements CommandExecutor {
                                         "OXYYYXO\n" +
                                         "OOXXXOO\n" +
                                         "XOOOOOO");
+                                CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-5.txt"), "OOXXXOO\n" +
+                                        "OXYYYXO\n" +
+                                        "XYYYYYX\n" +
+                                        "XYYYYYX\n" +
+                                        "XYYYYYX\n" +
+                                        "OXYYYXO\n" +
+                                        "OOXXXOO");
                                 break;
                             default:
                                 Message.player(sender, "ERROR", "'" + strings[0] +"' is not a recognized command!");
