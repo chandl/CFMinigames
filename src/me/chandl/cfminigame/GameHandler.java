@@ -60,6 +60,7 @@ public class GameHandler implements Listener {
             @Override
             public void run() {
                 Message.playersInGame(currentMinigame.getType()+": " + currentMinigame.getMap().getName() + " (Level "+ currentMinigame.getDifficultyLevel()+") Starting Now!");
+                System.out.println("[CFMinigame]" + currentMinigame.getType()+": " + currentMinigame.getMap().getName() + " (Level "+ currentMinigame.getDifficultyLevel()+") Starting Now!");
                 startMinigame();
             }
         };
@@ -124,8 +125,8 @@ public class GameHandler implements Listener {
             return false;
         }
 
-        System.out.println("Type: " + type);
-        System.out.println("Map: " + map);
+//        System.out.println("Type: " + type);
+//        System.out.println("Map: " + map);
 
         Minigame game = type.toMinigame();
         game.setType(type);
@@ -153,7 +154,7 @@ public class GameHandler implements Listener {
             //Call minigame onJoin
             currentMinigame.onJoin(player);
 
-            System.out.println("AddPlayer: " + player);
+//            System.out.println("AddPlayer: " + player);
             return true;
         }else {
             return false;
@@ -166,7 +167,7 @@ public class GameHandler implements Listener {
         if(playerList.containsKey(player.getPlayerObject().getUniqueId())){
             playerList.remove(player.getPlayerObject().getUniqueId());
 
-            System.out.println("Shit Player 1: " + player);
+//            System.out.println("Shit Player 1: " + player);
             //Call minigame onLeave
             currentMinigame.onLeave(player);
 

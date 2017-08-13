@@ -155,13 +155,13 @@ public class Checkpoint implements Serializable, ConfigurationSerializable {
         //Shift the Y-Value
         if(ySize % 2 != 0){
             spTmp.add( 0, (ySize + 1) / 2, 0);
-            System.out.println(String.format("Adding %d to Y", (ySize+1)/2));
+//            System.out.println(String.format("Adding %d to Y", (ySize+1)/2));
         }else{
             spTmp.add(0,ySize/2,0);
-            System.out.println(String.format("Adding %d to Y", (ySize/2)));
+//            System.out.println(String.format("Adding %d to Y", (ySize/2)));
         }
 
-        System.out.println("LOCATION: " + spawnPoint + spawnPoint.getDirection());
+//        System.out.println("LOCATION: " + spawnPoint + spawnPoint.getDirection());
         int i = 0;
         for(String line : lines){
             int lineLen = line.length();

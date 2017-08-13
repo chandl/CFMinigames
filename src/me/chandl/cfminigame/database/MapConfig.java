@@ -26,7 +26,7 @@ public class MapConfig {
         }else{
 
             mapConfiguration = YamlConfiguration.loadConfiguration(mapFile);
-            System.out.println("Configuration: " + mapConfiguration.saveToString());
+//            System.out.println("Configuration: " + mapConfiguration.saveToString());
         }
 
         return true;
