@@ -50,178 +50,227 @@ public class CommandHandler implements CommandExecutor {
                     if(strings.length > 0){
                         switch(strings[0].toLowerCase()){
                             case "build":
-                                MinigameBuilder builder = MinigameBuilders.getBuilders().getMinigameBuilder(player);
-                                if(builder == null) Message.player(player, "ERROR", "You are not in the Minigame Build Mode. Use '/mg new' to start.");
-                                else builder.handleCommand(strings);
+                                if(sender.hasPermission("CFMinigame.mg.admin")){
+                                    MinigameBuilder builder = MinigameBuilders.getBuilders().getMinigameBuilder(player);
+                                    if(builder == null) Message.player(player, "ERROR", "You are not in the Minigame Build Mode. Use '/mg new' to start.");
+                                    else builder.handleCommand(strings);
+                                }else{
+                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
+                                }
+
                                 break;
                             case "new":
-                                System.out.println("'mg new' command called");
-                                if(strings.length < 2) Message.player(sender, "ERROR", "Usage /mg new [MinigameType]");
-                                else{
-                                    mgNewMap(player, strings[1]);
+                                if(sender.hasPermission("CFMinigame.mg.admin")) {
+                                    System.out.println("'mg new' command called");
+                                    if (strings.length < 2)
+                                        Message.player(sender, "ERROR", "Usage /mg new [MinigameType]");
+                                    else {
+                                        mgNewMap(player, strings[1]);
+                                    }
+                                }else{
+                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
                                 }
                                 break;
                             case "publish":
-                                System.out.println("'mg publish' command called");
+                                if(sender.hasPermission("CFMinigame.mg.admin")) {
+                                    System.out.println("'mg publish' command called");
+                                }else{
+                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
+                                }
                                 break;
                             case "start":
-                                player = new MinigamePlayer(sender, true);
-                                System.out.println("'mg start' command called");
-                                if(strings.length != 4){
-                                    Message.player(sender, "ERROR", "Usage: /mg start [MinigameType] [Map] [Difficulty]");
+                                if(sender.hasPermission("CFMinigame.mg.start")) {
+                                    player = new MinigamePlayer(sender, true);
+                                    System.out.println("'mg start' command called");
+                                    if (strings.length != 4) {
+                                        Message.player(sender, "ERROR", "Usage: /mg start [MinigameType] [Map] [Difficulty]");
+                                    } else {
+                                        mgStart(player, strings[1], strings[2], Integer.parseInt(strings[3]));
+                                    }
                                 }else{
-                                    mgStart(player, strings[1], strings[2], Integer.parseInt(strings[3]));
+                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
                                 }
                                 break;
                             case "stop":
-                                System.out.println("'mg stop' command called");
-                                mgStop(player);
+                                if(sender.hasPermission("CFMinigame.mg.stop")) {
+                                    System.out.println("'mg stop' command called");
+                                    mgStop(player);
+                                }else{
+                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
+                                }
                                 break;
 
                             case "join":
-                                player = new MinigamePlayer(sender, true);
-                                System.out.println("'mg join' command called");
-                                mgJoin(player);
+                                if(sender.hasPermission("CFMinigame.mg.join")) {
+                                    player = new MinigamePlayer(sender, true);
+                                    System.out.println("'mg join' command called");
+                                    mgJoin(player);
+                                }else{
+                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
+                                }
                                 break;
                             case "leave":
-                                System.out.println("'mg leave' command called");
-                                mgLeave(player);
+                                if(sender.hasPermission("CFMinigame.mg.leave")) {
+                                    System.out.println("'mg leave' command called");
+                                    mgLeave(player);
+                                }else{
+                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
+                                }
                                 break;
                             case "highscore":
-                                System.out.println("'mg highscore' command called");
+                                if(sender.hasPermission("CFMinigame.mg.highscore")) {
+                                    System.out.println("'mg highscore' command called");
+                                }else{
+                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
+                                }
                                 break;
                             case "help":
-                                System.out.println("'mg help' command called");
-                                StringBuilder sb = new StringBuilder();
-                                sb.append("CFMinigame Commands:\n/mg");
-                                for(String cmd : commands)
-                                    sb.append(" "+cmd+",");
-                                Message.player(player, sb.toString().substring(0,sb.toString().length()-1));
-
+                                if(sender.hasPermission("CFMinigame.mg.help")) {
+                                    System.out.println("'mg help' command called");
+                                    StringBuilder sb = new StringBuilder();
+                                    sb.append("CFMinigame Commands:\n/mg");
+                                    for (String cmd : commands)
+                                        sb.append(" " + cmd + ",");
+                                    Message.player(player, sb.toString().substring(0, sb.toString().length() - 1));
+                                }else{
+                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
+                                }
                                 break;
 
                             case "createrace":
-                                System.out.println("createrace called");
-                                ItemStack[] startingItems = new ItemStack[1];
-                                startingItems[0] = new ItemStack(Material.ELYTRA);
+                                if(sender.hasPermission("CFMinigame.mg.admin")) {
+                                    System.out.println("createrace called");
+                                    ItemStack[] startingItems = new ItemStack[1];
+                                    startingItems[0] = new ItemStack(Material.ELYTRA);
 
-                                File f;
-                                int iteration = 0;
-                                for(int i=0; i<99; i++){
-                                    f = new File("plugins/CFMinigame/maps/elytrarace/testMap" + i +".yml");
-                                    if(!f.exists()){
-                                        iteration = i;
-                                        break;
+                                    File f;
+                                    int iteration = 0;
+                                    for (int i = 0; i < 99; i++) {
+                                        f = new File("plugins/CFMinigame/maps/elytrarace/testMap" + i + ".yml");
+                                        if (!f.exists()) {
+                                            iteration = i;
+                                            break;
+                                        }
                                     }
+
+                                    RaceMap testMap = new RaceMap("testMap" + iteration, 10, sender.getLocation(), sender.getLocation(), 1, 1, startingItems, testPoints);
+
+                                    FileConfiguration a = MapConfig.createMap(MinigameType.ELYTRARACE, "testMap" + iteration, testMap);
+                                    LinkedList<Checkpoint> checkpointList = new LinkedList<>(testPoints);
+                                    a.set("checkpoints", checkpointList);
+                                    MapConfig.saveMapFile();
+
+                                    Message.player(player, "New Map Created: testMap" + iteration);
+
+                                    for (Checkpoint pt : testPoints) {
+                                        pt.despawn();
+                                    }
+
+                                    testPoints.clear();
+                                }else{
+                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
                                 }
-
-                                RaceMap testMap = new RaceMap("testMap"+iteration, 10, sender.getLocation(), sender.getLocation() , 1, 1, startingItems, testPoints);
-
-                                FileConfiguration a = MapConfig.createMap(MinigameType.ELYTRARACE, "testMap"+iteration, testMap);
-                                LinkedList<Checkpoint> checkpointList = new LinkedList<>(testPoints);
-                                a.set("checkpoints", checkpointList);
-                                MapConfig.saveMapFile();
-
-                                Message.player(player, "New Map Created: testMap" + iteration);
-
-                                for(Checkpoint pt : testPoints){
-                                    pt.despawn();
-                                }
-
-                                testPoints.clear();
-
                                 break;
                             case "status":
-                                System.out.println("MG STATUS:" + GameHandler.getHandler().getCurrentState());
-                                if(GameHandler.getHandler().getCurrentState() != MinigameState.NO_GAME)
-                                    System.out.println("MG: " + GameHandler.getHandler().getCurrentMinigame().toString());
+                                if(sender.hasPermission("CFMinigame.mg.admin")) {
+                                    System.out.println("MG STATUS:" + GameHandler.getHandler().getCurrentState());
+                                    if (GameHandler.getHandler().getCurrentState() != MinigameState.NO_GAME)
+                                        System.out.println("MG: " + GameHandler.getHandler().getCurrentMinigame().toString());
+                                }else{
+                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
+                                }
                                 break;
                             case "playerlist":
-                                if(GameHandler.getHandler().getCurrentState() != MinigameState.NO_GAME){
-                                    int i=1;
-                                    for(MinigamePlayer p : GameHandler.getHandler().getPlayerList()){
-                                        sender.sendMessage(TextUtil.formatMessage("Player " + (i++) +": " + p.getPlayerObject().getName()));
+                                if(sender.hasPermission("CFMinigame.mg.playerlist")) {
+                                    if (GameHandler.getHandler().getCurrentState() != MinigameState.NO_GAME) {
+                                        int i = 1;
+                                        for (MinigamePlayer p : GameHandler.getHandler().getPlayerList()) {
+                                            sender.sendMessage(TextUtil.formatMessage("Player " + (i++) + ": " + p.getPlayerObject().getName()));
+                                        }
                                     }
+                                }else{
+                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
                                 }
                                 break;
                             case "checkpoint":
-                                if(testPoints == null) testPoints = new ArrayList<>();
-//                                String testPoint = "OOXXXOX\n" +
-//                                        "OXYYYXO\n" +
-//                                        "XYYYYYX\n" +
-//                                        "XYYYYYX\n" +
-//                                        "XYYYYYX\n" +
-//                                        "OXYYYXO\n" +
-//                                        "OOXXXOO\n" +
-//                                        "XOOOOOO";
-                                Location here = sender.getLocation();
-                                String cp = CheckpointConfig.loadPoint(MinigameType.ELYTRARACE, new Integer(strings[1]));
+                                if(sender.hasPermission("CFMinigame.mg.admin")) {
+                                    if (testPoints == null) testPoints = new ArrayList<>();
+                                    Location here = sender.getLocation();
+                                    String cp = CheckpointConfig.loadPoint(MinigameType.ELYTRARACE, new Integer(strings[1]));
 
 
-
-                                Checkpoint point = new Checkpoint(cp, here, here.getYaw());
-                                Material mat = player.getPlayerObject().getInventory().getItemInMainHand().getType();
-                                point.setMaterial(mat);
-                                point.spawn();
-                                testPoints.add(point);
+                                    Checkpoint point = new Checkpoint(cp, here, here.getYaw());
+                                    Material mat = player.getPlayerObject().getInventory().getItemInMainHand().getType();
+                                    point.setMaterial(mat);
+                                    point.spawn();
+                                    testPoints.add(point);
+                                }else{
+                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
+                                }
                                 break;
                             case "despawncheckpoints":
-                                for(Checkpoint pt : testPoints){
-                                    pt.despawn();
+                                if(sender.hasPermission("CFMinigame.mg.admin")) {
+                                    for (Checkpoint pt : testPoints) {
+                                        pt.despawn();
+                                    }
+
+                                    testPoints.clear();
+                                }else{
+                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
                                 }
-
-                                testPoints.clear();
                                 break;
-                            case "cpfile":
 
-                                CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-1.txt"), "OOXXXXXXXXXOO\n" +
-                                        "OXYYYYYYYYYXO\n" +
-                                        "XYYYYYYYYYYYX\n" +
-                                        "XYYYYYYYYYYYX\n" +
-                                        "XYYYYYYYYYYYX\n" +
-                                        "XYYYYYYYYYYYX\n" +
-                                        "XYYYYYYYYYYYX\n" +
-                                        "XYYYYYYYYYYYX\n" +
-                                        "XYYYYYYYYYYYX\n" +
-                                        "XYYYYYYYYYYYX\n" +
-                                        "XYYYYYYYYYYYX\n" +
-                                        "OXYYYYYYYYYXO\n" +
-                                        "OOXXXXXXXXXOO");
-                                CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-2.txt"), "OOXXXXXXXOO\n" +
-                                        "OXYYYYYYYXO\n" +
-                                        "XYYYYYYYYYX\n" +
-                                        "XYYYYYYYYYX\n" +
-                                        "XYYYYYYYYYX\n" +
-                                        "XYYYYYYYYYX\n" +
-                                        "XYYYYYYYYYX\n" +
-                                        "XYYYYYYYYYX\n" +
-                                        "XYYYYYYYYYX\n" +
-                                        "OXYYYYYYYXO\n" +
-                                        "OOXXXXXXXOO\n");
-                                CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-3.txt"), "OOXXXXXOO\n" +
-                                        "OXYYYYYXO\n" +
-                                        "XYYYYYYYX\n" +
-                                        "XYYYYYYYX\n" +
-                                        "XYYYYYYYX\n" +
-                                        "XYYYYYYYX\n" +
-                                        "XYYYYYYYX\n" +
-                                        "OXYYYYYXO\n" +
-                                        "OOXXXXXOO");
-                                CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-4.txt"), "OOXXXOX\n" +
-                                        "OXYYYXO\n" +
-                                        "XYYYYYX\n" +
-                                        "XYYYYYX\n" +
-                                        "XYYYYYX\n" +
-                                        "OXYYYXO\n" +
-                                        "OOXXXOO\n" +
-                                        "XOOOOOO");
-                                CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-5.txt"), "OOXXXOO\n" +
-                                        "OXYYYXO\n" +
-                                        "XYYYYYX\n" +
-                                        "XYYYYYX\n" +
-                                        "XYYYYYX\n" +
-                                        "OXYYYXO\n" +
-                                        "OOXXXOO");
+                            case "cpfile":
+                                if(sender.hasPermission("CFMinigame.mg.admin")) {
+                                    CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-1.txt"), "OOXXXXXXXXXOO\n" +
+                                            "OXYYYYYYYYYXO\n" +
+                                            "XYYYYYYYYYYYX\n" +
+                                            "XYYYYYYYYYYYX\n" +
+                                            "XYYYYYYYYYYYX\n" +
+                                            "XYYYYYYYYYYYX\n" +
+                                            "XYYYYYYYYYYYX\n" +
+                                            "XYYYYYYYYYYYX\n" +
+                                            "XYYYYYYYYYYYX\n" +
+                                            "XYYYYYYYYYYYX\n" +
+                                            "XYYYYYYYYYYYX\n" +
+                                            "OXYYYYYYYYYXO\n" +
+                                            "OOXXXXXXXXXOO");
+                                    CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-2.txt"), "OOXXXXXXXOO\n" +
+                                            "OXYYYYYYYXO\n" +
+                                            "XYYYYYYYYYX\n" +
+                                            "XYYYYYYYYYX\n" +
+                                            "XYYYYYYYYYX\n" +
+                                            "XYYYYYYYYYX\n" +
+                                            "XYYYYYYYYYX\n" +
+                                            "XYYYYYYYYYX\n" +
+                                            "XYYYYYYYYYX\n" +
+                                            "OXYYYYYYYXO\n" +
+                                            "OOXXXXXXXOO\n");
+                                    CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-3.txt"), "OOXXXXXOO\n" +
+                                            "OXYYYYYXO\n" +
+                                            "XYYYYYYYX\n" +
+                                            "XYYYYYYYX\n" +
+                                            "XYYYYYYYX\n" +
+                                            "XYYYYYYYX\n" +
+                                            "XYYYYYYYX\n" +
+                                            "OXYYYYYXO\n" +
+                                            "OOXXXXXOO");
+                                    CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-4.txt"), "OOXXXOX\n" +
+                                            "OXYYYXO\n" +
+                                            "XYYYYYX\n" +
+                                            "XYYYYYX\n" +
+                                            "XYYYYYX\n" +
+                                            "OXYYYXO\n" +
+                                            "OOXXXOO\n" +
+                                            "XOOOOOO");
+                                    CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-5.txt"), "OOXXXOO\n" +
+                                            "OXYYYXO\n" +
+                                            "XYYYYYX\n" +
+                                            "XYYYYYX\n" +
+                                            "XYYYYYX\n" +
+                                            "OXYYYXO\n" +
+                                            "OOXXXOO");
+                                }
                                 break;
                             default:
                                 Message.player(sender, "ERROR", "'" + strings[0] +"' is not a recognized command!");

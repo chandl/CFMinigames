@@ -12,10 +12,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GameHandler implements Listener {
 
-    private static HashMap<UUID, MinigamePlayer> playerList;
+    private static ConcurrentHashMap<UUID, MinigamePlayer> playerList;
     private static GameHandler handler;
     private static Minigame currentMinigame;
     private static MinigameState currentState;
@@ -23,7 +24,7 @@ public class GameHandler implements Listener {
     private GameHandler(){
         currentMinigame = null;
         currentState = MinigameState.NO_GAME;
-        playerList = new HashMap<>();
+        playerList = new ConcurrentHashMap<>();
     }
 
 
@@ -166,7 +167,6 @@ public class GameHandler implements Listener {
     }
 
     public boolean removePlayer(MinigamePlayer player){
-
         if(playerList.containsKey(player.getPlayerObject().getUniqueId())){
             playerList.remove(player.getPlayerObject().getUniqueId());
 

@@ -11,6 +11,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -101,7 +102,7 @@ public class RaceListener implements Listener {
         curr.onDie(evt, mp);
     }
 
-    @EventHandler
+    @EventHandler (priority =  EventPriority.HIGHEST)
     public void onPlayerRespawn(PlayerRespawnEvent evt){
         if(GameHandler.getHandler().getCurrentState() != MinigameState.IN_GAME){return;}
         Player p = evt.getPlayer();

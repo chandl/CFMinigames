@@ -7,5 +7,31 @@ commands:
    mg:
       description: The main CFMinigame command.
       usage: /mg
-      permission: CFMinigame.mg
-      permission-message: You don't have the CFMinigame.mg permission.
+permissions:
+  CFMinigame.mg.*:
+     description: Gives access to all minigame commands.
+  CFMinigame.mg.admin:
+     description: Gives access to all admin minigame commands.
+     children:
+        CFMinigame.mg.stop: true
+  CFMinigame.mg.user:
+     description: Gives access to all user minigame commands
+     children:
+        CFMinigame.mg.playerlist: true
+        CFMinigame.mg.help: true
+        CFMinigame.mg.highscore: true
+        CFMinigame.mg.leave: true
+        CFMinigame.mg.join: true
+        CFMinigame.mg.start: true
+  CFMinigame.mg.playerlist:
+     description: Shows the player list.
+  CFMinigame.mg.help:
+     description: Shows help for plugin.
+  CFMinigame.mg.highscore:
+     description: Shows the high scores.
+  CFMinigame.mg.leave:
+     description: Leave a game.
+  CFMinigame.mg.join:
+     description: Join a game.
+  CFMinigame.mg.start:
+     description: Start a game.
