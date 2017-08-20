@@ -1,6 +1,7 @@
 package me.chandl.cfminigame.minigame.core;
 
 import me.chandl.cfminigame.CFMinigame;
+import me.chandl.cfminigame.database.MapStore;
 import me.chandl.cfminigame.ex.GameTypeNotFoundException;
 import me.chandl.cfminigame.ex.MapNotFoundException;
 
@@ -40,7 +41,7 @@ public class MinigameFactory {
             throw new GameTypeNotFoundException("No Minigame Type " + typeStr + ". Could not instantiate Minigame.");
         }
 
-        map = MinigameMap.findMap(type, mapName);
+        map = MapStore.findMap(type, mapName);
         if(map == null){
             throw new MapNotFoundException("No Minigame Map " + mapName +". Could not instantiate Minigame.");
         }
