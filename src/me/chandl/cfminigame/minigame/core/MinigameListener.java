@@ -8,8 +8,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-import java.util.UUID;
-
 /**
  * MinigameListener - A Wrapper Class for the Minecraft {@link Listener}.
  * Used for EventHandler actions in Minigames.
