@@ -1,6 +1,8 @@
 package me.chandl.cfminigame;
 
 
+import me.chandl.cfminigame.minigame.builder.MinigameBuilder;
+import me.chandl.cfminigame.minigame.builder.MinigameBuilders;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigame.checkpoint.RaceListener;
 import me.chandl.cfminigame.minigame.core.MinigameListener;
@@ -19,7 +21,7 @@ public class CFMinigame extends JavaPlugin{
     public static final int DEFAULT_MAX_DIFFICULTY = 5;
 
     //Maximum Queuing Time (Seconds)
-    public static final long DEFAULT_MAX_QUEUE_TIME = 20;
+    public static final long DEFAULT_MAX_QUEUE_TIME = 30;
     private Logger log;
     public static CFMinigame plugin;
 
@@ -69,6 +71,10 @@ public class CFMinigame extends JavaPlugin{
     public void onDisable() {
         if(GameHandler.getHandler().getCurrentState() != MinigameState.NO_GAME){
             GameHandler.getHandler().stopMinigame();
+        }
+
+        for(MinigameBuilder builders : MinigameBuilders.getBuilders().getAllBuilders()){
+            builders.stopBuilding();
         }
         log.info("OnDisable called.");
     }

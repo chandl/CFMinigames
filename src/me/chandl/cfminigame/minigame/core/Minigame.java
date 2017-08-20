@@ -156,7 +156,8 @@ public abstract class Minigame {
         player.loadItems();
         player.getPlayerObject().teleport(player.getBeforeMGPosition());
         //notify all players of someone leaving the MG.
-        Message.allPlayers(String.format("%s just left the minigame! [%d/%d Players]", player.getPlayerObject().getDisplayName(), GameHandler.getHandler().getPlayerList().size(), getMaximumPlayers()));
+        if(GameHandler.getHandler().getPlayerList().size() != 0)
+            Message.allPlayers(String.format("%s just left the minigame! [%d/%d Players]", player.getPlayerObject().getDisplayName(), GameHandler.getHandler().getPlayerList().size(), getMaximumPlayers()));
     }
 
     public Date getStartTime() {

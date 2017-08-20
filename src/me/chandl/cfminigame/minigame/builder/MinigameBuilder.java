@@ -11,10 +11,11 @@ import org.bukkit.inventory.ItemStack;
 public abstract class MinigameBuilder {
     private MinigamePlayer builder;
 
-    private String name;
-    private Integer minPlayers, maxPlayers, timeLimit, queueLimit;
-    private Location spawnPoint, spectatorPoint;
-    private ItemStack[] startingItems;
+    protected String name;
+    protected Integer minPlayers, maxPlayers, timeLimit, queueLimit;
+    protected Location spawnPoint, spectatorPoint;
+    protected ItemStack[] startingItems;
+    protected static final int DEFAULT_MIN_PLAYERS=2, DEFAULT_MAX_PLAYERS=16, DEFAULT_TIME_LIMIT=5, DEFAULT_QUEUE_LIMIT=20;
 
     //State Progression
 
@@ -36,42 +37,53 @@ public abstract class MinigameBuilder {
     }
 
 
+    /**
+     * Updates the variables with their default values if they are not set.
+     */
+    protected void updateDefaults(){
+        if(minPlayers == null) minPlayers = DEFAULT_MIN_PLAYERS;
+        if(maxPlayers == null) maxPlayers = DEFAULT_MAX_PLAYERS;
+        if(timeLimit == null) timeLimit = DEFAULT_TIME_LIMIT;
+        if(queueLimit == null) queueLimit = DEFAULT_QUEUE_LIMIT;
+        if(startingItems == null) startingItems = new ItemStack[0];
+    }
+
     public String getProgression(){
         StringBuilder sb = new StringBuilder();
 
 
         sb.append("New Minigame Progression:\n");
-        if(name == null) sb.append(ChatColor.DARK_RED + "* Minigame Name [/mg build name MinigameName]");
+        if(name == null) sb.append(ChatColor.RED + "* Minigame Name [/mg build name MinigameName] (REQUIRED)");
         else sb.append(ChatColor.GREEN + "* Minigame Name [" + name + "]");
 
         sb.append("\n");
 
-        if(minPlayers == null) sb.append(ChatColor.DARK_RED + "* Minigame Minimum Players [/mg build minplayers 2]");
+        if(minPlayers == null) sb.append(ChatColor.DARK_RED + "* Minigame Minimum Players [/mg build minplayers 2] (Default 2)");
         else sb.append(ChatColor.GREEN + "* Minigame Minimum Players [" + minPlayers + "]");
 
         sb.append("\n");
 
-        if(maxPlayers == null) sb.append(ChatColor.DARK_RED + "* Minigame Maximum Players [/mg build maxplayers 16]");
+        if(maxPlayers == null) sb.append(ChatColor.DARK_RED + "* Minigame Maximum Players [/mg build maxplayers 16] (Default 16)");
         else sb.append(ChatColor.GREEN + "* Minigame Maximum Players [" + maxPlayers + "]");
 
         sb.append("\n");
 
-        if(timeLimit == null) sb.append(ChatColor.DARK_RED + "* Minigame Time Limit [/mg build timelimit 5] (in minutes)");
-        else sb.append(ChatColor.GREEN + "* Minigame Time Limit [" + timeLimit + "]");
+//        if(timeLimit == null) sb.append(ChatColor.DARK_RED + "* Minigame Time Limit [/mg build timelimit 5] (in minutes) (Default 5 minutes)");
+//        else sb.append(ChatColor.GREEN + "* Minigame Time Limit [" + timeLimit + "]");
 
-        sb.append("\n");
+//        sb.append("\n");
 
-        if(queueLimit == null) sb.append(ChatColor.DARK_RED + "* Minigame Queue Time Limit [/mg build queuelimit 1] (in minutes)");
-        else sb.append(ChatColor.GREEN + "* Minigame Queue Time Limit [" + queueLimit + "]");
+//        if(queueLimit == null) sb.append(ChatColor.DARK_RED + "* Minigame Queue Time Limit [/mg build queuelimit 20] (in seconds) (Default 20 seconds)");
+//        else sb.append(ChatColor.GREEN + "* Minigame Queue Time Limit [" + queueLimit + "]");
 
-        sb.append("\n");
+//        sb.append("\n");
 
-        if(spawnPoint == null) sb.append(ChatColor.DARK_RED + "* Minigame Spawn Location [/mg build spawn] (sets to current location)");
+        if(spawnPoint == null) sb.append(ChatColor.RED + "* Minigame Spawn Location [/mg build spawn] (sets to current location) (REQUIRED)");
         else sb.append(ChatColor.GREEN + "* Minigame Spawn Point [" + locationToString(spawnPoint) + "]");
 
         sb.append("\n");
 
-        if(spectatorPoint == null) sb.append(ChatColor.DARK_RED + "* Minigame Spectator Location [/mg build spectate] (sets to current location)");
+        if(spectatorPoint == null) sb.append(ChatColor.RED + "* Minigame Spectator Location [/mg build spectate] (sets to current location) (REQUIRED)");
         else sb.append(ChatColor.GREEN + "* Minigame Spectator Location [" + locationToString(spectatorPoint) + "]");
 
         sb.append("\n");
@@ -84,7 +96,7 @@ public abstract class MinigameBuilder {
         return sb.toString();
     }
 
-    private String locationToString(Location loc){
+    protected String locationToString(Location loc){
         return String.format("World: %s, X: %s, Y: %s, Z: %s", loc.getWorld().getName(), loc.getX(), loc.getY(), loc.getZ());
     }
 
@@ -95,7 +107,11 @@ public abstract class MinigameBuilder {
             Message.player(builder, "ERROR", "Invalid builder command");
             return false;
         }
-        switch(args[1]){
+        switch(args[1].toLowerCase()){
+            case "stop":
+                MinigameBuilders.getBuilders().stopBuilding(builder);
+                Message.player(builder, "INFO", "You have left build mode. ");
+                break;
             case "status":
                 String msg = getProgression();
 
@@ -103,22 +119,10 @@ public abstract class MinigameBuilder {
                 Message.player(builder, msg);
                 break;
             case "confirm":
-                if(name == null){
-                    Message.player(builder, "ERROR", "You Must Supply a Name for the Minigame. [/mg build name MinigameName]");
-                    return false;
+                if(confirmCreate()){
+                    updateDefaults();
+                    createMap();
                 }
-
-                if(spawnPoint == null){
-                    Message.player(builder, "ERROR", "You Must Supply a Spawn Point for the Minigame. [/mg build spawn]");
-                    return false;
-                }
-
-                if(spectatorPoint == null){
-                    Message.player(builder, "ERROR", "You Must Supply a Spectator Point for the Minigame. [/mg build spectate]");
-                    return false;
-                }
-
-                createMap();
                 break;
             case "spawn":
                 Location pLoc = builder.getPlayerObject().getLocation();
@@ -220,6 +224,25 @@ public abstract class MinigameBuilder {
         return true;
     }
 
+    protected boolean confirmCreate(){
+        if(name == null){
+            Message.player(builder, "ERROR", "You Must Supply a Name for the Minigame. [/mg build name MinigameName]");
+            return false;
+        }
+
+        if(spawnPoint == null){
+            Message.player(builder, "ERROR", "You Must Supply a Spawn Point for the Minigame. [/mg build spawn]");
+            return false;
+        }
+
+        if(spectatorPoint == null){
+            Message.player(builder, "ERROR", "You Must Supply a Spectator Point for the Minigame. [/mg build spectate]");
+            return false;
+        }
+
+        return true;
+    }
+
     private String startingItemsList(){
         StringBuilder sb = new StringBuilder();
         for(ItemStack i : startingItems){
@@ -229,5 +252,9 @@ public abstract class MinigameBuilder {
 
         String out = sb.toString();
         return out.substring(0,out.length()-2); //remove comma from last entry
+    }
+
+    public void stopBuilding(){
+        MinigameBuilders.getBuilders().stopBuilding(getBuilder());
     }
 }

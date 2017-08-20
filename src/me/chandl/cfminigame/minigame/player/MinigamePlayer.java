@@ -26,6 +26,7 @@ public class MinigamePlayer {
     private GameMode previousGamemode;
     private long gameTime;
     private Date lastDeath;
+    private boolean alive;
 
     //Keep track of the progress in each game. (e.g. Race: The last checkpoint that you have gone through)
     private int progress;
@@ -135,5 +136,13 @@ public class MinigamePlayer {
 
     public void setLastDeath(Date lastDeath) {
         this.lastDeath = lastDeath;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 }

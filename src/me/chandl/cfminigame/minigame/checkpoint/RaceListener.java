@@ -22,7 +22,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FireworkExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -87,15 +86,13 @@ public class RaceListener extends MinigameListener {
         if(progress > 0){
             if(p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() != Material.AIR){
                 Minigame curr = GameHandler.getHandler().getCurrentMinigame();
-                if(curr instanceof Race){
+                if(curr instanceof Race ){
                     ((Race) curr).onFall(mp);
                 }
 
 
             }
         }
-
-
 
     }
 
@@ -106,6 +103,10 @@ public class RaceListener extends MinigameListener {
         if(GameHandler.getHandler().getCurrentState() != MinigameState.IN_GAME){return;}
         Player p = evt.getEntity();
         MinigamePlayer mp = findPlayer(p);
+
+        if(mp == null)return;
+
+//        if(!mp.isAlive()) return;
 
         //Stop logic if player is not in minigame.
         if(!GameHandler.getHandler().getPlayerUUIDs().contains(p.getUniqueId())){return;}
@@ -132,16 +133,21 @@ public class RaceListener extends MinigameListener {
                     return;
                 }
             }
-        }
+        }else{return;}
 
+        Player p = (Player) e;
+        MinigamePlayer mp = findPlayer(p);
+        //Stop logic if player is not in minigame.
+        if(mp == null){return;}
+
+        if(!mp.isAlive()){
+            System.out.println("NOT ALIVE");
+            evt.setCancelled(true);
+        }
 
         //Call onDamage if player takes fall damage.
         if(e instanceof Player && (evt.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL || evt.getCause() == EntityDamageEvent.DamageCause.FALL)){
             System.out.println("DAMAGE CAUSED. TYPE: " + evt.getCause());
-            Player p = (Player) e;
-            MinigamePlayer mp = findPlayer(p);
-            //Stop logic if player is not in minigame.
-            if(!GameHandler.getHandler().getPlayerUUIDs().contains(p.getUniqueId())){return;}
 
             Minigame curr = GameHandler.getHandler().getCurrentMinigame();
             curr.onPlayerDamage(mp);

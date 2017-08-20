@@ -13,8 +13,6 @@ import me.chandl.cfminigame.util.Message;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
-import org.bukkit.entity.Firework;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
@@ -39,17 +37,18 @@ public class Race extends Minigame {
     @Override
     public void onPlayerDamage(MinigamePlayer player) {
 
-
 //            onDie(new PlayerDeathEvent(player.getPlayerObject(), null, 0 , "Fell in Game."), player);
 //        System.out.println("PLAYER DAMAGE D: ");
 //        player.getPlayerObject().damage(10);
-        player.getPlayerObject().setHealth(0);
+        if(player.isAlive())
+            player.getPlayerObject().setHealth(0);
     }
 
     public void onFall(MinigamePlayer player){
 //        System.out.println("PLAYER ON BLOCK D: ");
 //        player.getPlayerObject().damage();
-        player.getPlayerObject().setHealth(0);
+        if(player.isAlive())
+            player.getPlayerObject().setHealth(0);
     }
 
     public void onCheckpoint(MinigamePlayer player){
@@ -59,7 +58,8 @@ public class Race extends Minigame {
         fwMeta.setPower(2);
         firework.setItemMeta(fwMeta);
 
-        Message.player(player, "Reached Checkpoint " + player.getProgress() + 1  + " of " + checkPoints.size() + 1);
+        Message.player(player, "Reached Checkpoint " + (player.getProgress() + 1)  + " of " + checkPoints.size());
+//        System.out.println("Player Progress: " + player.getProgress()+". Checkpoints: " + checkPoints.size());
 
         player.setProgress(player.getProgress() + 1);
         player.getPlayerObject().getInventory().addItem(firework);
@@ -106,6 +106,7 @@ public class Race extends Minigame {
 
             player.setState(PlayerState.IN_GAME);
 
+            player.setAlive(true);
 
             System.out.println("Setting Player Current Life Count to " + getMap().getMaxLifeCount());
             player.setCurrentLifeCount(getMap().getMaxLifeCount());

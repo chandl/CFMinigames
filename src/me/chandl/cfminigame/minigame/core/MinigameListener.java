@@ -21,6 +21,8 @@ public class MinigameListener implements Listener{
         //Stop logic if player is not in minigame.
         if(!GameHandler.getHandler().getPlayerUUIDs().contains(p.getUniqueId())){return;}
 
+        mp.setAlive(true);
+
         Minigame curr = GameHandler.getHandler().getCurrentMinigame();
         curr.onRespawn(evt, mp);
     }

@@ -2,9 +2,7 @@ package me.chandl.cfminigame.minigame.builder;
 
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 public class MinigameBuilders {
@@ -25,11 +23,11 @@ public class MinigameBuilders {
         }
     }
 
-    public static boolean isBuilding(MinigamePlayer player){
+    public boolean isBuilding(MinigamePlayer player){
         return currentBuilders.containsKey(player.getPlayerObject().getUniqueId());
     }
 
-    public static boolean setBuilding(MinigamePlayer player, MinigameBuilder builder){
+    public boolean setBuilding(MinigamePlayer player, MinigameBuilder builder){
         if(!isBuilding(player)){
             currentBuilders.put(player.getPlayerObject().getUniqueId(), builder);
             return true;
@@ -38,7 +36,7 @@ public class MinigameBuilders {
         return false;
     }
 
-    public static boolean stopBuilding(MinigamePlayer player){
+    public boolean stopBuilding(MinigamePlayer player){
         if(isBuilding(player)){
             currentBuilders.remove(player.getPlayerObject().getUniqueId());
             return true;
@@ -47,12 +45,16 @@ public class MinigameBuilders {
         }
     }
 
-    public static MinigameBuilder getMinigameBuilder(MinigamePlayer player){
+    public MinigameBuilder getMinigameBuilder(MinigamePlayer player){
         if(isBuilding(player)){
             return currentBuilders.get(player.getPlayerObject().getUniqueId());
         }else{
             return null;
         }
+    }
+
+    public List<MinigameBuilder> getAllBuilders(){
+        return new ArrayList<>(currentBuilders.values());
     }
 
 

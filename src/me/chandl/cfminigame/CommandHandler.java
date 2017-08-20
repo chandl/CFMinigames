@@ -35,8 +35,8 @@ import java.util.List;
 
 public class CommandHandler implements CommandExecutor {
 
-    public static final String[] commands = {"new", "publish", "start", "stop",
-            "join", "leave", "highscore", "help", "status", "playerlist"};
+    public static final String[] commands = {"new", "start", "stop",
+            "join", "leave", "help"};
 
     private List<Checkpoint> testPoints;
 
@@ -171,7 +171,10 @@ public class CommandHandler implements CommandExecutor {
                                 }
                                 break;
 
-                            case "createrace":
+                            /*case "createrace":
+
+
+
                                 if(sender.hasPermission("CFMinigame.mg.admin")) {
                                     if(strings.length < 2){
                                         Message.player(player, "ERROR", "Usage: /mg createrace 'racename' ");
@@ -226,8 +229,8 @@ public class CommandHandler implements CommandExecutor {
                                 }else{
                                     Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
                                 }
-                                break;
-                            case "checkpoint":
+                                break;*/
+                            /*case "checkpoint":
                                 if(sender.hasPermission("CFMinigame.mg.admin")) {
                                     if (testPoints == null) testPoints = new ArrayList<>();
                                     Location here = sender.getLocation();
@@ -254,7 +257,7 @@ public class CommandHandler implements CommandExecutor {
                                     Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
                                 }
                                 break;
-
+                            */
                             case "cpfile":
                                 if(sender.hasPermission("CFMinigame.mg.admin")) {
                                     CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-1.txt"), "OOXXXXXXXXXOO\n" +
