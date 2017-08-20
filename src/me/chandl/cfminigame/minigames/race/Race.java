@@ -23,6 +23,7 @@ import java.util.Date;
 
 public class Race extends Minigame {
     private ArrayList<Checkpoint> checkPoints;
+    private RaceListener raceListener;
 
     public Race() {
         super();
@@ -112,8 +113,9 @@ public class Race extends Minigame {
 
 
         //Start Race Listener
-        CFMinigame.plugin.registerRaceHandler();
-        RaceListener.getListener().setCheckpoints(checkPoints);
+        raceListener = new RaceListener();
+        CFMinigame.plugin.registerListener(raceListener);
+        raceListener.setCheckpoints(checkPoints);
 
 
         setStartTime(new Date());
@@ -121,7 +123,10 @@ public class Race extends Minigame {
 
     @Override
     public void stop() {
-        CFMinigame.plugin.unregisterRaceHandler();
+        if(raceListener != null)
+        {
+            CFMinigame.plugin.unregisterListener(raceListener);
+        }
         if(checkPoints != null && checkPoints.size() > 0){
             for(Checkpoint p : checkPoints){
                 p.despawn();

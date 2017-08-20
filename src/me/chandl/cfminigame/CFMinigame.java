@@ -3,6 +3,7 @@ package me.chandl.cfminigame;
 
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigame.checkpoint.RaceListener;
+import me.chandl.cfminigame.minigame.core.MinigameListener;
 import me.chandl.cfminigame.minigame.core.MinigameState;
 import me.chandl.cfminigame.minigames.snowballfight.SnowballListener;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -39,21 +40,29 @@ public class CFMinigame extends JavaPlugin{
         ConfigurationSerialization.registerClass(Checkpoint.class);
     }
 
-    public void registerRaceHandler(){
-        getServer().getPluginManager().registerEvents(RaceListener.getListener(), this);
+    public void registerListener(MinigameListener listener){
+        getServer().getPluginManager().registerEvents(listener, this);
     }
 
-    public void unregisterRaceHandler(){
-        HandlerList.unregisterAll(RaceListener.getListener());
+    public void unregisterListener(MinigameListener listener){
+        HandlerList.unregisterAll(listener);
     }
 
-    public void registerSnowballHandler(){
-        getServer().getPluginManager().registerEvents(SnowballListener.getListener(), this);
-    }
-
-    public void unregisterSnowballHandler(){
-        HandlerList.unregisterAll(SnowballListener.getListener());
-    }
+//    public void registerRaceHandler(){
+//        getServer().getPluginManager().registerEvents(RaceListener.getListener(), this);
+//    }
+//
+//    public void unregisterRaceHandler(){
+//        HandlerList.unregisterAll(RaceListener.getListener());
+//    }
+//
+//    public void registerSnowballHandler(){
+//        getServer().getPluginManager().registerEvents(SnowballListener.getListener(), this);
+//    }
+//
+//    public void unregisterSnowballHandler(){
+//        HandlerList.unregisterAll(SnowballListener.getListener());
+//    }
 
 
     @Override

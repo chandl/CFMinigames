@@ -3,6 +3,7 @@ package me.chandl.cfminigame.minigame.checkpoint;
 import me.chandl.cfminigame.CFMinigame;
 import me.chandl.cfminigame.GameHandler;
 import me.chandl.cfminigame.minigame.core.Minigame;
+import me.chandl.cfminigame.minigame.core.MinigameListener;
 import me.chandl.cfminigame.minigame.core.MinigameState;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.minigames.race.Race;
@@ -27,24 +28,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 
 
-public class RaceListener implements Listener {
+public class RaceListener extends MinigameListener {
 
     private ArrayList<Checkpoint> checkpoints;
     private HashMap<UUID, MinigamePlayer> playerStore;
-    private static RaceListener instance;
     private Set<Firework> fireworks;
 
-    private RaceListener() {
+    public RaceListener() {
         checkpoints = new ArrayList<>();
         playerStore = new HashMap<>();
         fireworks = new HashSet<>();
-    }
-
-    public static RaceListener getListener(){
-        if(instance == null){
-            instance = new RaceListener();
-        }
-        return instance;
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -109,8 +102,6 @@ public class RaceListener implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent evt){
 
-
-
         System.out.println("Player Death. Cause: " + evt.getDeathMessage());
         if(GameHandler.getHandler().getCurrentState() != MinigameState.IN_GAME){return;}
         Player p = evt.getEntity();
@@ -121,18 +112,6 @@ public class RaceListener implements Listener {
 
         Minigame curr = GameHandler.getHandler().getCurrentMinigame();
         curr.onDie(evt, mp);
-    }
-
-    @EventHandler (priority =  EventPriority.HIGHEST)
-    public void onPlayerRespawn(PlayerRespawnEvent evt){
-        if(GameHandler.getHandler().getCurrentState() != MinigameState.IN_GAME){return;}
-        Player p = evt.getPlayer();
-        MinigamePlayer mp = findPlayer(p);
-        //Stop logic if player is not in minigame.
-        if(!GameHandler.getHandler().getPlayerUUIDs().contains(p.getUniqueId())){return;}
-
-        Minigame curr = GameHandler.getHandler().getCurrentMinigame();
-        curr.onRespawn(evt, mp);
     }
 
 
@@ -169,21 +148,7 @@ public class RaceListener implements Listener {
         }
     }
 
-    private MinigamePlayer findPlayer(Player player){
-        UUID playerId = player.getUniqueId();
-        MinigamePlayer mp;
-        /*if(playerStore.containsKey(playerId)){
-            mp = playerStore.get(playerId);
-        }else{
-//            mp = new MinigamePlayer(player, false);
-            mp = GameHandler.getHandler().getPlayer(playerId);
-            playerStore.put(playerId, mp);
-        }*/
 
-        mp = GameHandler.getHandler().getPlayer(playerId);
-
-        return mp;
-    }
 
 
     public void setCheckpoints(ArrayList<Checkpoint> checkpoints) {

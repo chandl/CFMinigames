@@ -11,6 +11,7 @@ import org.bukkit.GameMode;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class SnowballFight extends Minigame {
+    private SnowballListener snowballListener;
 
     public SnowballFight() {
         this.setType(MinigameType.SNOWBALLFIGHT);
@@ -26,12 +27,16 @@ public class SnowballFight extends Minigame {
             p.getPlayerObject().setGameMode(GameMode.SURVIVAL);
             p.getPlayerObject().getInventory().setContents( getMap().getStartingItems() );
         }
-        CFMinigame.plugin.registerSnowballHandler();
+        snowballListener = new SnowballListener();
+        CFMinigame.plugin.registerListener(snowballListener);
     }
 
     @Override
     public void stop() {
-        CFMinigame.plugin.unregisterSnowballHandler();
+        if(snowballListener != null)
+        {
+            CFMinigame.plugin.unregisterListener(snowballListener);
+        }
     }
 
     @Override
