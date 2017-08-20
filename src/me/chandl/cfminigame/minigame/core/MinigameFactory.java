@@ -3,9 +3,6 @@ package me.chandl.cfminigame.minigame.core;
 import me.chandl.cfminigame.CFMinigame;
 import me.chandl.cfminigame.ex.GameTypeNotFoundException;
 import me.chandl.cfminigame.ex.MapNotFoundException;
-import me.chandl.cfminigame.minigame.core.Minigame;
-import me.chandl.cfminigame.minigame.core.MinigameMap;
-import me.chandl.cfminigame.minigame.core.MinigameType;
 
 /**
  * Factory class to instantiate new {@link Minigame}s.
@@ -57,8 +54,6 @@ public class MinigameFactory {
         game.setDifficultyLevel(difficulty);
 
         return game;
-
-
     }
 
 }
