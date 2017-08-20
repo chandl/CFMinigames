@@ -31,6 +31,8 @@ import java.util.*;
  */
 public class RaceListener extends MinigameListener {
 
+    //TODO Clean up methods, add more Documentation.
+
     private ArrayList<Checkpoint> checkpoints;
     private HashMap<UUID, MinigamePlayer> playerStore;
     private Set<Firework> fireworks;

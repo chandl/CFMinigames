@@ -22,6 +22,8 @@ import static me.chandl.cfminigame.minigames.race.checkpoint.CheckpointArea.*;
  */
 public class Checkpoint implements Serializable, ConfigurationSerializable {
 
+    //TODO Clean up methods, add more Documentation.
+
     //This value will determine when you hit the checkpoint hitbox.
     // e.g. 2 means that you will hit the hitbox when 2 blocks in front or behind of the point.
     private static final double CHECKPOINT_HITBOX_EXTENSION = 2;

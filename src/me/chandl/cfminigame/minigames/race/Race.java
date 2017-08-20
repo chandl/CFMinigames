@@ -29,6 +29,10 @@ import java.util.Date;
  * @since Aug 20, 2017
  */
 public class Race extends Minigame {
+
+    //TODO Clean up methods, add more Documentation.
+
+
     private ArrayList<Checkpoint> checkPoints;
     private RaceListener raceListener;
 
