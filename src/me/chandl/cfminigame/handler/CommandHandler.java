@@ -11,6 +11,7 @@ import me.chandl.cfminigame.minigame.core.MinigameState;
 import me.chandl.cfminigame.minigame.core.MinigameType;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.minigames.race.builder.RaceBuilder;
+import me.chandl.cfminigame.minigames.snowballfight.builder.SnowballFightBuilder;
 import me.chandl.cfminigame.util.Message;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -287,10 +288,16 @@ public class CommandHandler implements CommandExecutor {
             return ;
         }
 
+        MinigameBuilder builder;
         switch(type){
             case ELYTRARACE:
                 Message.player(player, "In Minigame Build Mode! Type '/mg build status' to see Available Minigame Options.");
-                MinigameBuilder builder = new RaceBuilder(player);
+                builder = new RaceBuilder(player);
+                MinigameBuilderStore.getInstance().setBuilding(player, builder);
+                break;
+            case SNOWBALLFIGHT:
+                Message.player(player, "In Minigame Build Mode! Type '/mg build status' to see Available Minigame Options.");
+                builder = new SnowballFightBuilder(player);
                 MinigameBuilderStore.getInstance().setBuilding(player, builder);
                 break;
             default:
