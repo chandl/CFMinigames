@@ -271,7 +271,7 @@ public class GameHandler implements Listener {
      * @param playerId The {@link UUID} unique id for the Minecraft {@link org.bukkit.entity.Player} object.
      * @return a {@link MinigamePlayer} wrapper for the specified playerId, or {@code null} if the player is not in the current minigame.
      */
-    public static MinigamePlayer getPlayer(UUID playerId){
+    public MinigamePlayer getPlayer(UUID playerId){
         if(playerList.containsKey(playerId)){
             return playerList.get(playerId);
         }else{

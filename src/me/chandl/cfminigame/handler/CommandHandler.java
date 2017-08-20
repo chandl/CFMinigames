@@ -1,11 +1,10 @@
 package me.chandl.cfminigame.handler;
 
-import me.chandl.cfminigame.database.CheckpointConfig;
-import me.chandl.cfminigame.database.MapConfig;
+import me.chandl.cfminigame.database.CheckpointConfigStore;
+import me.chandl.cfminigame.database.MapStore;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilder;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilders;
 import me.chandl.cfminigame.minigame.player.MinigamePlayerStore;
-import me.chandl.cfminigame.minigames.race.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.core.MinigameMap;
 import me.chandl.cfminigame.minigame.core.MinigameState;
@@ -22,7 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * CommandHandler - a Bukkit {@link CommandExecutor} that controls all of the commands for this Plugin.
@@ -73,9 +71,9 @@ public class CommandHandler implements CommandExecutor {
 
                                     MinigameMap testMap = new MinigameMap(name, 10, sender.getLocation(), sender.getLocation(), 1, 1, startingItems);
 
-                                    FileConfiguration a = MapConfig.createMap(MinigameType.SNOWBALLFIGHT, name, testMap);
+                                    FileConfiguration conf = MapStore.createMap(MinigameType.SNOWBALLFIGHT, name, testMap);
 
-                                    MapConfig.saveMapFile();
+                                    MapStore.saveMapFile(conf, MapStore.getMapFile(MinigameType.SNOWBALLFIGHT, name));
 
                                     Message.player(player, "New SNOWBALL Map Created: " + name);
                                 }else{
@@ -306,7 +304,7 @@ public class CommandHandler implements CommandExecutor {
      * Self-Explanatory.
      */
     private void createCheckpointFiles(){
-        CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-1.txt"), "OOXXXXXXXXXOO\n" +
+        CheckpointConfigStore.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-1.txt"), "OOXXXXXXXXXOO\n" +
                 "OXYYYYYYYYYXO\n" +
                 "XYYYYYYYYYYYX\n" +
                 "XYYYYYYYYYYYX\n" +
@@ -319,7 +317,7 @@ public class CommandHandler implements CommandExecutor {
                 "XYYYYYYYYYYYX\n" +
                 "OXYYYYYYYYYXO\n" +
                 "OOXXXXXXXXXOO");
-        CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-2.txt"), "OOXXXXXXXOO\n" +
+        CheckpointConfigStore.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-2.txt"), "OOXXXXXXXOO\n" +
                 "OXYYYYYYYXO\n" +
                 "XYYYYYYYYYX\n" +
                 "XYYYYYYYYYX\n" +
@@ -330,7 +328,7 @@ public class CommandHandler implements CommandExecutor {
                 "XYYYYYYYYYX\n" +
                 "OXYYYYYYYXO\n" +
                 "OOXXXXXXXOO\n");
-        CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-3.txt"), "OOXXXXXOO\n" +
+        CheckpointConfigStore.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-3.txt"), "OOXXXXXOO\n" +
                 "OXYYYYYXO\n" +
                 "XYYYYYYYX\n" +
                 "XYYYYYYYX\n" +
@@ -339,7 +337,7 @@ public class CommandHandler implements CommandExecutor {
                 "XYYYYYYYX\n" +
                 "OXYYYYYXO\n" +
                 "OOXXXXXOO");
-        CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-4.txt"), "OOXXXOX\n" +
+        CheckpointConfigStore.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-4.txt"), "OOXXXOX\n" +
                 "OXYYYXO\n" +
                 "XYYYYYX\n" +
                 "XYYYYYX\n" +
@@ -347,7 +345,7 @@ public class CommandHandler implements CommandExecutor {
                 "OXYYYXO\n" +
                 "OOXXXOO\n" +
                 "XOOOOOO");
-        CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-5.txt"), "OOXXXOO\n" +
+        CheckpointConfigStore.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-5.txt"), "OOXXXOO\n" +
                 "OXYYYXO\n" +
                 "XYYYYYX\n" +
                 "XYYYYYX\n" +
