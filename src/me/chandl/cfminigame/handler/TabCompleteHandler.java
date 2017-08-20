@@ -10,15 +10,25 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.util.*;
 
-
+/**
+ * TabCompleteHandler - A Class that Handles Bukkit {@link TabCompleter} Tab Completion
+ */
 public class TabCompleteHandler implements TabCompleter {
     private static Date lastMapUpdate;
     private static ArrayList<String> mapNames;
 
-    public static ArrayList<String> getMapList(String type){
+    /**
+     * Gets the list of MinigameMaps that are saved on the server.
+     * Uses a timed-cache for updating the list.
+     * After 5 minutes, the list will be refreshed if someone tab-completes.
+     *
+     * @param type The Minigame Type.
+     * @return An {@link ArrayList} of the available map names in String form.
+     */
+    private static ArrayList<String> getMapList(String type){
+        Date now = new Date();
 
         //If there have been no updates in 5 minutes...
-        Date now = new Date();
         if(lastMapUpdate == null || now.getTime() - lastMapUpdate.getTime() >= 5 * 60 * 1000) {
             ArrayList<String> out = new ArrayList<>();
             File mapsPath = new File("plugins/CFMinigame/maps/" + type + "/");
@@ -30,10 +40,10 @@ public class TabCompleteHandler implements TabCompleter {
 
             String fn, name;
             for(File file : fList){
-                if(file.isFile() && !file.getName().equalsIgnoreCase(".DS_Store")){//make sure it is not a directory
+                if(file.isFile() && !file.getName().equalsIgnoreCase(".DS_Store")){//make sure it is not a directory or .DS_STORE
                     fn = file.getName();
-                    System.out.println("Indexed File : " + fn);
                     name = fn.split(".yml")[0];
+                    System.out.println("[CFMinigame] TabCompleteHandler - getMapList - Indexed File : " + fn + " ( " + name + ")");
                     maps.add(name);
                 }
             }
@@ -45,9 +55,9 @@ public class TabCompleteHandler implements TabCompleter {
         } else {
             return mapNames;
         }
-
     }
 
+    //Tab Completion Handler
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
         String startsWith = "";
