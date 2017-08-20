@@ -8,6 +8,25 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Minigame Builder Class - Abstract class to help mods build a new minigame from specified requirements.
+ *
+ * <p>
+ *     Base State Progression:
+         1) Set name of mg
+         2) Set Spawnpoint of MG
+         3) Set Minimum Players
+         4) Set Maximum Players
+         5) Set Time Limit
+         6) Set Queue Time Limit
+         7) Minigame-Specific Additions (e.g. Checkpoints)
+         8) Confirm
+ * </p>
+ *
+ * @author Chandler me@cseverson.com
+ * @version 1.0
+ * @since Aug 20, 2017
+ */
 public abstract class MinigameBuilder {
     private MinigamePlayer builder;
 
@@ -17,17 +36,8 @@ public abstract class MinigameBuilder {
     protected ItemStack[] startingItems;
     protected static final int DEFAULT_MIN_PLAYERS=2, DEFAULT_MAX_PLAYERS=16, DEFAULT_TIME_LIMIT=5, DEFAULT_QUEUE_LIMIT=20;
 
-    //State Progression
 
-    //  1) Set name of mg
-    //  2) Set Spawnpoint of MG
-    //  3) Set Minimum Players
-    //  4) Set Maximum Players
-    //  5) Set Time Limit
-    //  6) Set Queue Time Limit
-    //  7) Minigame-Specific Additions (e.g. Checkpoints)
-    //  8) Confirm
-
+    //Constructors.
     public MinigameBuilder(MinigamePlayer builder) {
         this.builder = builder;
     }
@@ -36,6 +46,8 @@ public abstract class MinigameBuilder {
         return builder;
     }
 
+
+    public abstract MinigameMap createMap();
 
     /**
      * Updates the variables with their default values if they are not set.
@@ -48,13 +60,32 @@ public abstract class MinigameBuilder {
         if(startingItems == null) startingItems = new ItemStack[0];
     }
 
+    /**
+     * Gets the current progression of the state of the new minigame.
+     *
+     * @return A formatted String list of the status of the steps to create the new minigame.
+     */
     public String getProgression(){
         StringBuilder sb = new StringBuilder();
-
 
         sb.append("New Minigame Progression:\n");
         if(name == null) sb.append(ChatColor.RED + "* Minigame Name [/mg build name MinigameName] (REQUIRED)");
         else sb.append(ChatColor.GREEN + "* Minigame Name [" + name + "]");
+
+        sb.append("\n");
+
+        if(spawnPoint == null) sb.append(ChatColor.RED + "* Minigame Spawn Location [/mg build spawn] (sets to current location) (REQUIRED)");
+        else sb.append(ChatColor.GREEN + "* Minigame Spawn Point [" + locationToString(spawnPoint) + "]");
+
+        sb.append("\n");
+
+        if(spectatorPoint == null) sb.append(ChatColor.RED + "* Minigame Spectator Location [/mg build spectate] (sets to current location) (REQUIRED)");
+        else sb.append(ChatColor.GREEN + "* Minigame Spectator Location [" + locationToString(spectatorPoint) + "]");
+
+        sb.append("\n");
+
+        if(startingItems == null) sb.append(ChatColor.DARK_RED + "* Minigame Starting Items [/mg build items] (sets to your current inventory)");
+        else sb.append(ChatColor.GREEN + "* Minigame Starting Items: " + startingItemsList());
 
         sb.append("\n");
 
@@ -78,30 +109,28 @@ public abstract class MinigameBuilder {
 
 //        sb.append("\n");
 
-        if(spawnPoint == null) sb.append(ChatColor.RED + "* Minigame Spawn Location [/mg build spawn] (sets to current location) (REQUIRED)");
-        else sb.append(ChatColor.GREEN + "* Minigame Spawn Point [" + locationToString(spawnPoint) + "]");
-
-        sb.append("\n");
-
-        if(spectatorPoint == null) sb.append(ChatColor.RED + "* Minigame Spectator Location [/mg build spectate] (sets to current location) (REQUIRED)");
-        else sb.append(ChatColor.GREEN + "* Minigame Spectator Location [" + locationToString(spectatorPoint) + "]");
-
-        sb.append("\n");
-
-        if(startingItems == null) sb.append(ChatColor.DARK_RED + "* Minigame Starting Items [/mg build items] (sets to your current inventory)");
-        else sb.append(ChatColor.GREEN + "* Minigame Starting Items: " + startingItemsList());
-
-        sb.append("\n");
-
         return sb.toString();
     }
 
+    /**
+     * Helper method to format Locations.
+     *
+     * @param loc The Minecraft Location to format.
+     * @return A Formatted Location.
+     */
     protected String locationToString(Location loc){
         return String.format("World: %s, X: %s, Y: %s, Z: %s", loc.getWorld().getName(), loc.getX(), loc.getY(), loc.getZ());
     }
 
-    public abstract MinigameMap createMap();
 
+    /**
+     * Custom Command Handler for Minigame Building.
+     * All commands are prefixed with /mg build
+     *
+     * @param args The argments after /mg build ...
+     * @return True if the command processed successfully, false if there were any errors.
+     * @throws IllegalArgumentException When the command was not found.
+     */
     public boolean handleCommand(String[] args) throws IllegalArgumentException{
         if(args.length < 2) {
             Message.player(builder, "ERROR", "Invalid builder command");
@@ -109,7 +138,7 @@ public abstract class MinigameBuilder {
         }
         switch(args[1].toLowerCase()){
             case "stop":
-                MinigameBuilders.getBuilders().stopBuilding(builder);
+                MinigameBuilderStore.getInstance().stopBuilding(builder);
                 Message.player(builder, "INFO", "You have left build mode. ");
                 break;
             case "status":
@@ -224,6 +253,11 @@ public abstract class MinigameBuilder {
         return true;
     }
 
+    /**
+     * Confirms that all required fields are set before being able to create the minigame.
+     *
+     * @return True if all required fields are filled, False otherwise.
+     */
     protected boolean confirmCreate(){
         if(name == null){
             Message.player(builder, "ERROR", "You Must Supply a Name for the Minigame. [/mg build name MinigameName]");
@@ -243,6 +277,10 @@ public abstract class MinigameBuilder {
         return true;
     }
 
+    /**
+     * Helper method to get the List of Starting Items and the number of each.
+     * @return A List of Starting Items in a String representation.
+     */
     private String startingItemsList(){
         StringBuilder sb = new StringBuilder();
         for(ItemStack i : startingItems){
@@ -254,7 +292,10 @@ public abstract class MinigameBuilder {
         return out.substring(0,out.length()-2); //remove comma from last entry
     }
 
+    /**
+     * Called when the MingameBuilder stops building a new minigame.
+     */
     public void stopBuilding(){
-        MinigameBuilders.getBuilders().stopBuilding(getBuilder());
+        MinigameBuilderStore.getInstance().stopBuilding(getBuilder());
     }
 }
