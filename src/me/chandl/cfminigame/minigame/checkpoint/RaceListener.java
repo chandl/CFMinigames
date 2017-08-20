@@ -1,5 +1,6 @@
 package me.chandl.cfminigame.minigame.checkpoint;
 
+import me.chandl.cfminigame.CFMinigame;
 import me.chandl.cfminigame.GameHandler;
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.core.MinigameState;
@@ -10,15 +11,18 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FireworkExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -28,9 +32,12 @@ public class RaceListener implements Listener {
     private ArrayList<Checkpoint> checkpoints;
     private HashMap<UUID, MinigamePlayer> playerStore;
     private static RaceListener instance;
+    private Set<Firework> fireworks;
+
     private RaceListener() {
         checkpoints = new ArrayList<>();
         playerStore = new HashMap<>();
+        fireworks = new HashSet<>();
     }
 
     public static RaceListener getListener(){
@@ -38,6 +45,18 @@ public class RaceListener implements Listener {
             instance = new RaceListener();
         }
         return instance;
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onExplosion(FireworkExplodeEvent event) {
+        final Firework firework = event.getEntity();
+        fireworks.add(firework);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                fireworks.remove(firework);
+            }
+        }.runTaskLater(CFMinigame.plugin, 5);
     }
 
     @EventHandler
@@ -116,20 +135,26 @@ public class RaceListener implements Listener {
         curr.onRespawn(evt, mp);
     }
 
-    @EventHandler
-    public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent evt){
-        if(GameHandler.getHandler().getCurrentState() != MinigameState.IN_GAME){return;}
-        Entity damageEntity = evt.getDamager();
-        if(damageEntity.getType() != EntityType.FIREWORK && evt.getEntity() instanceof Player){
-            evt.setCancelled(true);
-        }
-    }
 
-    @EventHandler
+
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageEvent evt){
         if(GameHandler.getHandler().getCurrentState() != MinigameState.IN_GAME){return;}
 
         Entity e = evt.getEntity();
+
+        if(e instanceof Player){
+            for(Entity entity : evt.getEntity().getNearbyEntities(5,5,5)){
+                if(!(entity instanceof Firework)){
+                    continue;
+                }
+                if(fireworks.contains(entity)){
+                    evt.setCancelled(true);
+                    return;
+                }
+            }
+        }
+
 
         //Call onDamage if player takes fall damage.
         if(e instanceof Player && (evt.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL || evt.getCause() == EntityDamageEvent.DamageCause.FALL)){

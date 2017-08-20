@@ -9,6 +9,7 @@ import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.minigame.player.PlayerState;
+import me.chandl.cfminigame.util.Message;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
@@ -56,6 +57,8 @@ public class Race extends Minigame {
         fwMeta.addEffects(FireworkEffect.builder().withColor(Color.RED).with(FireworkEffect.Type.BALL_LARGE).build());
         fwMeta.setPower(2);
         firework.setItemMeta(fwMeta);
+
+        Message.player(player, "Reached Checkpoint " + player.getProgress() + 1  + " of " + checkPoints.size() + 1);
 
         player.setProgress(player.getProgress() + 1);
         player.getPlayerObject().getInventory().addItem(firework);

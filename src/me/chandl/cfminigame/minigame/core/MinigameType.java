@@ -3,6 +3,7 @@ package me.chandl.cfminigame.minigame.core;
 
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigames.race.ElytraRace;
+import me.chandl.cfminigame.minigames.snowballfight.SnowballFight;
 
 import java.io.Serializable;
 

@@ -73,19 +73,15 @@ public abstract class Minigame {
         //Respawn Players
         if(player.getState() == PlayerState.IN_GAME){
             event.setRespawnLocation(map.getSpawnPoint());
+            //give player MG starting items
+            player.getPlayerObject().getInventory().setContents( getMap().getStartingItems() );
         }else if(player.getState() == PlayerState.SPECTATING){
             event.setRespawnLocation(getMap().getSpectatorPoint());
         }
-
-        //give player MG starting items
-        player.getPlayerObject().getInventory().setContents( getMap().getStartingItems() );
-
     }
 
     public void onDie(PlayerDeathEvent event, MinigamePlayer player){
 //        player.getPlayerObject().getInventory().setContents(null);
-
-
 
         event.getDrops().clear();
         player.setProgress(0);

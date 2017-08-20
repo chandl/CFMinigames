@@ -6,13 +6,16 @@ import me.chandl.cfminigame.minigame.builder.MinigameBuilder;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilders;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigame.core.Minigame;
+import me.chandl.cfminigame.minigame.core.MinigameMap;
 import me.chandl.cfminigame.minigame.core.MinigameState;
 import me.chandl.cfminigame.minigame.core.MinigameType;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.minigames.race.RaceMap;
 import me.chandl.cfminigame.minigames.race.builder.RaceBuilder;
+import me.chandl.cfminigame.minigames.snowballfight.SnowballFight;
 import me.chandl.cfminigame.util.Message;
 import me.chandl.cfminigame.util.TextUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -21,6 +24,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.InvalidDescriptionException;
+import org.bukkit.plugin.InvalidPluginException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,6 +54,35 @@ public class CommandHandler implements CommandExecutor {
 
                     if(strings.length > 0){
                         switch(strings[0].toLowerCase()){
+
+                            case "createsnowball":
+                                if(sender.hasPermission("CFMinigame.mg.admin")) {
+                                    if(strings.length < 2){
+                                        Message.player(player, "ERROR", "Usage: /mg createsnowball 'name' ");
+                                        return false;
+                                    }
+                                    String name = "";
+
+                                    for(int i=1; i<strings.length; i++){
+                                        name += strings[i];
+                                        if(i+1 < strings.length) name += "-";
+                                    }
+
+                                    System.out.println("createsnowball called");
+                                    ItemStack[] startingItems = new ItemStack[1];
+                                    startingItems[0] = new ItemStack(Material.SNOW_BALL, 16);
+
+                                    MinigameMap testMap = new MinigameMap(name, 10, sender.getLocation(), sender.getLocation(), 1, 1, startingItems);
+
+                                    FileConfiguration a = MapConfig.createMap(MinigameType.SNOWBALLFIGHT, name, testMap);
+
+                                    MapConfig.saveMapFile();
+
+                                    Message.player(player, "New SNOWBALL Map Created: " + name);
+                                }else{
+                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
+                                }
+                                break;
                             case "build":
                                 if(sender.hasPermission("CFMinigame.mg.admin")){
                                     MinigameBuilder builder = MinigameBuilders.getBuilders().getMinigameBuilder(player);

@@ -4,6 +4,7 @@ package me.chandl.cfminigame;
 import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigame.checkpoint.RaceListener;
 import me.chandl.cfminigame.minigame.core.MinigameState;
+import me.chandl.cfminigame.minigames.snowballfight.SnowballListener;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -44,6 +45,14 @@ public class CFMinigame extends JavaPlugin{
 
     public void unregisterRaceHandler(){
         HandlerList.unregisterAll(RaceListener.getListener());
+    }
+
+    public void registerSnowballHandler(){
+        getServer().getPluginManager().registerEvents(SnowballListener.getListener(), this);
+    }
+
+    public void unregisterSnowballHandler(){
+        HandlerList.unregisterAll(SnowballListener.getListener());
     }
 
 
