@@ -4,6 +4,7 @@ import me.chandl.cfminigame.database.CheckpointConfig;
 import me.chandl.cfminigame.database.MapConfig;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilder;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilders;
+import me.chandl.cfminigame.minigame.player.MinigamePlayerStore;
 import me.chandl.cfminigame.minigames.race.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.core.MinigameMap;
@@ -23,13 +24,19 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.List;
 
-
+/**
+ * CommandHandler - a Bukkit {@link CommandExecutor} that controls all of the commands for this Plugin.
+ *
+ * @author Chandler me@cseverson.com
+ * @version 1.0
+ * @since Aug 19, 2017
+ */
 public class CommandHandler implements CommandExecutor {
 
+    // List of commands that can be used. This is used for Tab-Completion
     public static final String[] commands = {"new", "start", "stop",
             "join", "leave", "help"};
 
-    private List<Checkpoint> testPoints;
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
@@ -40,12 +47,13 @@ public class CommandHandler implements CommandExecutor {
 
             switch(s.toLowerCase()){
                 case "mg":
-//                    System.out.println("mg command called");
-                    MinigamePlayer player = new MinigamePlayer(sender, false);
+                    //Get MinigamePlayer object for Player.
+                    MinigamePlayer player = MinigamePlayerStore.findPlayer(sender);
 
                     if(strings.length > 0){
                         switch(strings[0].toLowerCase()){
 
+                            //Createsnowball Command - Used to create a quick Snowball Fight Game.
                             case "createsnowball":
                                 if(sender.hasPermission("CFMinigame.mg.admin")) {
                                     if(strings.length < 2){
@@ -74,6 +82,8 @@ public class CommandHandler implements CommandExecutor {
                                     Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
                                 }
                                 break;
+
+                            //Build Command - Used in conjunction with 'New' command, serves as dialogue to create new Minigame Map.
                             case "build":
                                 if(sender.hasPermission("CFMinigame.mg.admin")){
                                     MinigameBuilder builder = MinigameBuilders.getBuilders().getMinigameBuilder(player);
@@ -84,9 +94,9 @@ public class CommandHandler implements CommandExecutor {
                                 }
 
                                 break;
+                            //New Command - Used to create new Minigame Maps.
                             case "new":
                                 if(sender.hasPermission("CFMinigame.mg.admin")) {
-                                    System.out.println("'mg new' command called");
                                     if (strings.length < 2)
                                         Message.player(sender, "ERROR", "Usage /mg new [MinigameType]");
                                     else {
@@ -96,17 +106,11 @@ public class CommandHandler implements CommandExecutor {
                                     Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
                                 }
                                 break;
-                            case "publish":
-                                if(sender.hasPermission("CFMinigame.mg.admin")) {
-                                    System.out.println("'mg publish' command called");
-                                }else{
-                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
-                                }
-                                break;
+
+                            //Start Command - Used to start a new Minigame.
                             case "start":
                                 if(sender.hasPermission("CFMinigame.mg.start")) {
-                                    player = new MinigamePlayer(sender, true);
-                                    System.out.println("'mg start' command called");
+                                    player = MinigamePlayerStore.findResetPlayer(sender);
                                     if (strings.length != 4) {
                                         Message.player(sender, "ERROR", "Usage: /mg start [MinigameType] [Map] [Difficulty]");
                                     } else {
@@ -116,42 +120,48 @@ public class CommandHandler implements CommandExecutor {
                                     Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
                                 }
                                 break;
+
+                            //Stop Command - Used to stop the Current Minigame.
                             case "stop":
                                 if(sender.hasPermission("CFMinigame.mg.stop")) {
-                                    System.out.println("'mg stop' command called");
                                     mgStop(player);
                                 }else{
                                     Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
                                 }
                                 break;
 
+                            //Join Command - Used to Join the Current Minigame.
                             case "join":
                                 if(sender.hasPermission("CFMinigame.mg.join")) {
-                                    player = new MinigamePlayer(sender, true);
-                                    System.out.println("'mg join' command called");
+                                    player = MinigamePlayerStore.findResetPlayer(sender);
                                     mgJoin(player);
                                 }else{
                                     Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
                                 }
                                 break;
+
+                            //Leave Command - Used to Leave the Current Minigame.
                             case "leave":
                                 if(sender.hasPermission("CFMinigame.mg.leave")) {
-                                    System.out.println("'mg leave' command called");
                                     mgLeave(player);
                                 }else{
                                     Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
                                 }
                                 break;
+
+                                /* HIGHSCORE - FOR FUTURE USE
+
                             case "highscore":
                                 if(sender.hasPermission("CFMinigame.mg.highscore")) {
                                     System.out.println("'mg highscore' command called");
                                 }else{
                                     Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
                                 }
-                                break;
+                                break;*/
+
+                            //Help Command - Used to show the available commands.
                             case "help":
                                 if(sender.hasPermission("CFMinigame.mg.help")) {
-                                    System.out.println("'mg help' command called");
                                     StringBuilder sb = new StringBuilder();
                                     sb.append("CFMinigame Commands:\n/mg");
                                     for (String cmd : commands)
@@ -162,143 +172,9 @@ public class CommandHandler implements CommandExecutor {
                                 }
                                 break;
 
-                            /*case "createrace":
-
-
-
+                            case "ccpf":
                                 if(sender.hasPermission("CFMinigame.mg.admin")) {
-                                    if(strings.length < 2){
-                                        Message.player(player, "ERROR", "Usage: /mg createrace 'racename' ");
-                                        return false;
-                                    }
-                                    String name = "";
-
-                                    for(int i=1; i<strings.length; i++){
-                                        name += strings[i];
-                                        if(i+1 < strings.length) name += "-";
-                                    }
-
-                                    System.out.println("createrace called");
-                                    ItemStack[] startingItems = new ItemStack[1];
-                                    startingItems[0] = new ItemStack(Material.ELYTRA);
-
-                                    RaceMap testMap = new RaceMap(name, 10, sender.getLocation(), sender.getLocation(), 1, 1, startingItems, testPoints);
-
-                                    FileConfiguration a = MapConfig.createMap(MinigameType.ELYTRARACE, name, testMap);
-                                    LinkedList<Checkpoint> checkpointList = new LinkedList<>(testPoints);
-                                    a.set("checkpoints", checkpointList);
-                                    MapConfig.saveMapFile();
-
-                                    Message.player(player, "New Map Created: " + name);
-
-                                    for (Checkpoint pt : testPoints) {
-                                        pt.despawn();
-                                    }
-
-                                    testPoints.clear();
-                                }else{
-                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
-                                }
-                                break;
-                            case "status":
-                                if(sender.hasPermission("CFMinigame.mg.admin")) {
-                                    System.out.println("MG STATUS:" + GameHandler.getHandler().getCurrentState());
-                                    if (GameHandler.getHandler().getCurrentState() != MinigameState.NO_GAME)
-                                        System.out.println("MG: " + GameHandler.getHandler().getCurrentMinigame().toString());
-                                }else{
-                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
-                                }
-                                break;
-                            case "playerlist":
-                                if(sender.hasPermission("CFMinigame.mg.playerlist")) {
-                                    if (GameHandler.getHandler().getCurrentState() != MinigameState.NO_GAME) {
-                                        int i = 1;
-                                        for (MinigamePlayer p : GameHandler.getHandler().getPlayerList()) {
-                                            sender.sendMessage(TextUtil.formatMessage("Player " + (i++) + ": " + p.getPlayerObject().getName()));
-                                        }
-                                    }
-                                }else{
-                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
-                                }
-                                break;*/
-                            /*case "checkpoint":
-                                if(sender.hasPermission("CFMinigame.mg.admin")) {
-                                    if (testPoints == null) testPoints = new ArrayList<>();
-                                    Location here = sender.getLocation();
-                                    String cp = CheckpointConfig.loadPoint(MinigameType.ELYTRARACE, new Integer(strings[1]));
-
-
-                                    Checkpoint point = new Checkpoint(cp, here, here.getYaw());
-                                    Material mat = player.getPlayerObject().getInventory().getItemInMainHand().getType();
-                                    point.setMaterial(mat);
-                                    point.spawn();
-                                    testPoints.add(point);
-                                }else{
-                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
-                                }
-                                break;
-                            case "despawncheckpoints":
-                                if(sender.hasPermission("CFMinigame.mg.admin")) {
-                                    for (Checkpoint pt : testPoints) {
-                                        pt.despawn();
-                                    }
-
-                                    testPoints.clear();
-                                }else{
-                                    Message.player(sender, "ERROR", "Sorry, you do not have the permissions required to perform that command.");
-                                }
-                                break;
-                            */
-                            case "cpfile":
-                                if(sender.hasPermission("CFMinigame.mg.admin")) {
-                                    CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-1.txt"), "OOXXXXXXXXXOO\n" +
-                                            "OXYYYYYYYYYXO\n" +
-                                            "XYYYYYYYYYYYX\n" +
-                                            "XYYYYYYYYYYYX\n" +
-                                            "XYYYYYYYYYYYX\n" +
-                                            "XYYYYYYYYYYYX\n" +
-                                            "XYYYYYYYYYYYX\n" +
-                                            "XYYYYYYYYYYYX\n" +
-                                            "XYYYYYYYYYYYX\n" +
-                                            "XYYYYYYYYYYYX\n" +
-                                            "XYYYYYYYYYYYX\n" +
-                                            "OXYYYYYYYYYXO\n" +
-                                            "OOXXXXXXXXXOO");
-                                    CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-2.txt"), "OOXXXXXXXOO\n" +
-                                            "OXYYYYYYYXO\n" +
-                                            "XYYYYYYYYYX\n" +
-                                            "XYYYYYYYYYX\n" +
-                                            "XYYYYYYYYYX\n" +
-                                            "XYYYYYYYYYX\n" +
-                                            "XYYYYYYYYYX\n" +
-                                            "XYYYYYYYYYX\n" +
-                                            "XYYYYYYYYYX\n" +
-                                            "OXYYYYYYYXO\n" +
-                                            "OOXXXXXXXOO\n");
-                                    CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-3.txt"), "OOXXXXXOO\n" +
-                                            "OXYYYYYXO\n" +
-                                            "XYYYYYYYX\n" +
-                                            "XYYYYYYYX\n" +
-                                            "XYYYYYYYX\n" +
-                                            "XYYYYYYYX\n" +
-                                            "XYYYYYYYX\n" +
-                                            "OXYYYYYXO\n" +
-                                            "OOXXXXXOO");
-                                    CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-4.txt"), "OOXXXOX\n" +
-                                            "OXYYYXO\n" +
-                                            "XYYYYYX\n" +
-                                            "XYYYYYX\n" +
-                                            "XYYYYYX\n" +
-                                            "OXYYYXO\n" +
-                                            "OOXXXOO\n" +
-                                            "XOOOOOO");
-                                    CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-5.txt"), "OOXXXOO\n" +
-                                            "OXYYYXO\n" +
-                                            "XYYYYYX\n" +
-                                            "XYYYYYX\n" +
-                                            "XYYYYYX\n" +
-                                            "OXYYYXO\n" +
-                                            "OOXXXOO");
+                                    createCheckpointFiles();
                                 }
                                 break;
                             default:
@@ -319,6 +195,12 @@ public class CommandHandler implements CommandExecutor {
         return false;
     }
 
+    /**
+     * Called when a Player uses the /mg stop command.
+     * Stops the current minigame.
+     *
+     * @param player The player that called /mg stop
+     */
     private void mgStop(MinigamePlayer player){
         if(GameHandler.getHandler().getCurrentMinigame() != null && GameHandler.getHandler().getCurrentState() != MinigameState.NO_GAME){
             GameHandler.getHandler().stopMinigame();
@@ -328,15 +210,29 @@ public class CommandHandler implements CommandExecutor {
         }
     }
 
+    /**
+     * Called when a Player uses the /mg start command.
+     * Starts a new minigame and alerts players.
+     *
+     * @param player The player who is starting the minigame.
+     * @param typeStr  The desired type of the minigame.
+     * @param mapName The desired Map of the minigame.
+     * @param difficulty The desired difficulty level of the minigame.
+     */
     private void mgStart (MinigamePlayer player, String typeStr, String mapName, int difficulty){
-//        System.out.println("MGStart Player: " + player);
-        if(GameHandler.getHandler().createMinigame(player, typeStr, mapName, difficulty)){
+        if(GameHandler.getHandler().startNewMinigame(player, typeStr, mapName, difficulty)){
             Message.allPlayers(String.format("New %s minigame started. Use '/mg join' to join the lobby!", GameHandler.getHandler().getCurrentMinigame().getType()));
         }else{
             System.out.println(String.format("[CFMinigame ERROR] Minigame lobby COULD NOT BE started! %s: type: %s, map: %s, difficulty %d", player.getPlayerObject().getName(), typeStr, mapName, difficulty));
         }
     }
 
+    /**
+     * Called when a Player uses the /mg join command.
+     * Lets the player join the current minigame.
+     *
+     * @param player The player who is joining the Minigame.
+     */
     private void mgJoin(MinigamePlayer player){
         Minigame currentMinigame = GameHandler.getHandler().getCurrentMinigame();
 
@@ -344,9 +240,7 @@ public class CommandHandler implements CommandExecutor {
             Message.player(player, "No Minigame started. Start one with '/mg start'");
         }else if(GameHandler.getHandler().playerInGame(player)){
             Message.player(player, "ERROR", "You are already in the minigame lobby! Use '/mg leave' to leave.");
-
         }else{
-
             if(GameHandler.getHandler().addPlayer(player)){
                 Message.player(player, "Successfully Joined Minigame!");
             }else{
@@ -355,6 +249,12 @@ public class CommandHandler implements CommandExecutor {
         }
     }
 
+    /**
+     * Called when a Player uses the /mg leave command.
+     * Lets the player leave the current minigame.
+     *
+     * @param player The player who is leaving the Minigame.
+     */
     private void mgLeave(MinigamePlayer player){
         if(GameHandler.getHandler().removePlayer(player)){
             Message.player(player, "Successfully Left Minigame!");
@@ -363,7 +263,14 @@ public class CommandHandler implements CommandExecutor {
         }
     }
 
-    public void mgNewMap(MinigamePlayer player, String mgType){
+    /**
+     * Called whe a Player uses the /mg new command.
+     * Puts the player in Build mode so the /mg build command can be used.
+     *
+     * @param player The Player who is building the new Minigame.
+     * @param mgType The type of the minigame that is being built.
+     */
+    private void mgNewMap(MinigamePlayer player, String mgType){
         if(MinigameBuilders.getBuilders().isBuilding(player)){
             Message.player(player, "ERROR", "You are already in build mode. Type '/mg build stop' to exit.");
             return ;
@@ -393,5 +300,59 @@ public class CommandHandler implements CommandExecutor {
                 break;
 
         }
+    }
+
+    /**
+     * Self-Explanatory.
+     */
+    private void createCheckpointFiles(){
+        CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-1.txt"), "OOXXXXXXXXXOO\n" +
+                "OXYYYYYYYYYXO\n" +
+                "XYYYYYYYYYYYX\n" +
+                "XYYYYYYYYYYYX\n" +
+                "XYYYYYYYYYYYX\n" +
+                "XYYYYYYYYYYYX\n" +
+                "XYYYYYYYYYYYX\n" +
+                "XYYYYYYYYYYYX\n" +
+                "XYYYYYYYYYYYX\n" +
+                "XYYYYYYYYYYYX\n" +
+                "XYYYYYYYYYYYX\n" +
+                "OXYYYYYYYYYXO\n" +
+                "OOXXXXXXXXXOO");
+        CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-2.txt"), "OOXXXXXXXOO\n" +
+                "OXYYYYYYYXO\n" +
+                "XYYYYYYYYYX\n" +
+                "XYYYYYYYYYX\n" +
+                "XYYYYYYYYYX\n" +
+                "XYYYYYYYYYX\n" +
+                "XYYYYYYYYYX\n" +
+                "XYYYYYYYYYX\n" +
+                "XYYYYYYYYYX\n" +
+                "OXYYYYYYYXO\n" +
+                "OOXXXXXXXOO\n");
+        CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-3.txt"), "OOXXXXXOO\n" +
+                "OXYYYYYXO\n" +
+                "XYYYYYYYX\n" +
+                "XYYYYYYYX\n" +
+                "XYYYYYYYX\n" +
+                "XYYYYYYYX\n" +
+                "XYYYYYYYX\n" +
+                "OXYYYYYXO\n" +
+                "OOXXXXXOO");
+        CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-4.txt"), "OOXXXOX\n" +
+                "OXYYYXO\n" +
+                "XYYYYYX\n" +
+                "XYYYYYX\n" +
+                "XYYYYYX\n" +
+                "OXYYYXO\n" +
+                "OOXXXOO\n" +
+                "XOOOOOO");
+        CheckpointConfig.createCheckpointFile(new File("plugins/CFMinigame/checkpoints/ELYTRARACE-5.txt"), "OOXXXOO\n" +
+                "OXYYYXO\n" +
+                "XYYYYYX\n" +
+                "XYYYYYX\n" +
+                "XYYYYYX\n" +
+                "OXYYYXO\n" +
+                "OOXXXOO");
     }
 }
