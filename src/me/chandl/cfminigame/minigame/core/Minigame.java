@@ -12,6 +12,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Minigame - Main representation of all Minigames.
+ *
+ * @author Chandler me@cseverson.com
+ * @version 1.0
+ * @since Aug 19, 2017
+ */
 public abstract class Minigame {
     private Date startTime;
     private MinigameType type;
@@ -22,122 +29,30 @@ public abstract class Minigame {
 
     public Minigame(){}
 
-    @Override
-    public String toString(){
-        String out = String.format("[%s] %s Minigame. Map: %s. Difficulty: %d. " +
-                "Max Players: %d, Min Players: %d.", startTime.toString(),
-                type,
-                map.getName(),
-                difficultyLevel,
-                maximumPlayers,
-                minimumPlayers);
-        return out;
-    }
-
+    //Methods that children should implement.
     public abstract void start ();
     public abstract void stop ();
+    protected abstract boolean isGameFinished();
 
-
-    public abstract void onPlayerDamage(MinigamePlayer player);
-
-
-    public void onPlayerFinish(MinigamePlayer player){
-        if(scoreboard == null) {
-            scoreboard = new ArrayList<>();
-        }
-
-        Date finished = new Date();
-        long time = (finished.getTime() - startTime.getTime()) / 1000;
-        player.setGameTime(time);
-        scoreboard.add(player);
-
-        Message.playersInGame(player.getPlayerObject().getName() + " Finished the Minigame in position " + scoreboard.size() + "! Time: " + time + " seconds." );
-        System.out.println(player.getPlayerObject().getName() + " Finished the Minigame in position " + scoreboard.size() + "! Time: " + time + " seconds.");
-        player.setState(PlayerState.SPECTATING);
-        player.getPlayerObject().teleport(getMap().getSpectatorPoint());
-
-        if(GameHandler.getHandler().checkIfAllPlayersAreFinished()){
-            Message.allPlayers("INFO", "The Current Minigame Has Finished! 1st Place was " + scoreboard.get(0).getPlayerObject().getName() + " at " + scoreboard.get(0).getGameTime() + " seconds.");
-            System.out.println("The Current Minigame Has Finished! 1st Place was " + scoreboard.get(0).getPlayerObject().getName() + " at " + scoreboard.get(0).getGameTime() + " seconds.");
-
-            GameHandler.getHandler().stopMinigame();
-        }
-    }
-
-
-
-    public void onRespawn(PlayerRespawnEvent event, MinigamePlayer player){
-        System.out.println("ONRESPAWN CALLED!!!");
-        System.out.println("Player State: " + player.getState());
-        //Respawn Players
-        if(player.getState() == PlayerState.IN_GAME){
-            event.setRespawnLocation(map.getSpawnPoint());
-            //give player MG starting items
-            player.getPlayerObject().getInventory().setContents( getMap().getStartingItems() );
-        }else if(player.getState() == PlayerState.SPECTATING){
-            event.setRespawnLocation(getMap().getSpectatorPoint());
-        }
-    }
-
-    public void onDie(PlayerDeathEvent event, MinigamePlayer player){
-//        player.getPlayerObject().getInventory().setContents(null);
-
-        event.getDrops().clear();
-        player.setProgress(0);
-        if(player.getCurrentLifeCount() == 1){ //player just died for the last time
-            player.setState(PlayerState.SPECTATING);
-            Message.player(player, "You have Died and have used all of your lives. Spectating now...");
-
-            if(GameHandler.getHandler().checkIfAllPlayersAreFinished()){
-                if(scoreboard == null || scoreboard.size() == 0){
-                    Message.allPlayers("INFO", "The Current Minigame has Finished! Nobody was able to complete it!!");
-                }else{
-                    Message.allPlayers("INFO", "The Current Minigame Has Finished! 1st Place was " + scoreboard.get(0).getPlayerObject().getName() + " at " + scoreboard.get(0).getGameTime() + " seconds.");
-                }
-
-                GameHandler.getHandler().stopMinigame();
-            }
-        }else{
-            player.setCurrentLifeCount(player.getCurrentLifeCount() - 1);
-            Message.player(player, ChatColor.DARK_RED + "You Have Died!"+ ChatColor.WHITE +" Remaining Lives: " + player.getCurrentLifeCount());
-        }
-
-    }
 
     /**
-     * Default onJoin Method for Minigames.
+     * Default onPlayerJoin Method for Minigames.
      * Clears Player's Inventory, Saving previous inventory for after game.
      * Teleports Player to the Minigame Spawn Point
      * Gives Player the Minigame Starting items.
-     * @param player
+     *
+     * @param player The player that is joining the minigame.
      */
-    public void onJoin(MinigamePlayer player){
+    public void onPlayerJoin(MinigamePlayer player){
         switch(GameHandler.getHandler().getCurrentState()){
             case IN_GAME:
-                //Clear player's inventory
-                player.clearItems();
-
-                player.setState(PlayerState.IN_GAME);
-
-                //teleport player to MG spectator location
-                player.getPlayerObject().teleport(getMap().getSpectatorPoint());
-
+                player.getHandler().minigameJoinInProgressAction();
                 //notify all players of someone new in the MG.
                 Message.allPlayers(String.format("%s started spectating the minigame! [%d/%d Players]", player.getPlayerObject().getDisplayName(), GameHandler.getHandler().getPlayerList().size(), getMaximumPlayers()));
-
-                //give player MG starting items
-                player.getPlayerObject().getInventory().setContents( getMap().getStartingItems() );
                 break;
 
             case IN_QUEUE:
-                //Clear player's inventory
-                player.clearItems();
-
-                player.setState(PlayerState.IN_QUEUE);
-
-                //teleport player to MG start location
-                player.getPlayerObject().teleport(getMap().getSpawnPoint());
-
+                player.getHandler().minigameJoinInQueueAction();
                 //notify all players of someone new in the MG.
                 Message.allPlayers(String.format("%s just joined the minigame! [%d/%d Players]", player.getPlayerObject().getDisplayName(), GameHandler.getHandler().getPlayerList().size(), getMaximumPlayers()));
                 break;
@@ -150,17 +65,117 @@ public abstract class Minigame {
 
     }
 
-    public void onLeave(MinigamePlayer player){
-        player.setState(PlayerState.NOT_IN_GAME);
-        player.loadItems();
-        player.getPlayerObject().teleport(player.getBeforeMGPosition());
+    /**
+     * Called when a player leaves the current minigame.
+     *
+     * @param player The player that left the minigame.
+     */
+    public void onPlayerLeave(MinigamePlayer player){
+        player.getHandler().minigameLeaveAction();
+
         //notify all players of someone leaving the MG.
         if(GameHandler.getHandler().getPlayerList().size() != 0)
             Message.allPlayers(String.format("%s just left the minigame! [%d/%d Players]", player.getPlayerObject().getDisplayName(), GameHandler.getHandler().getPlayerList().size(), getMaximumPlayers()));
     }
 
-    public Date getStartTime() {
-        return startTime;
+    /**
+     * Called when a Player finishes the Minigame.
+     *
+     * @param player The player that finished the minigame.
+     */
+    public void onPlayerFinish(MinigamePlayer player){
+
+        //Scoreboard Stuff
+        if(scoreboard == null) {
+            scoreboard = new ArrayList<>();
+        }
+        Date finished = new Date();
+        long timeTaken = (finished.getTime() - startTime.getTime()) / 1000;
+
+        //Call PlayerHandler.minigameFinishAction()
+        player.getHandler().minigameFinishAction(timeTaken);
+
+        //Add player to scoreboard
+        scoreboard.add(player);
+
+        //Notify all players in game & the console of who finished the Minigame.
+        Message.playersInGame(player.getPlayerObject().getName() + " Finished the Minigame in position " + scoreboard.size() + "! Time: " + timeTaken + " seconds." );
+        System.out.println(player.getPlayerObject().getName() + " Finished the Minigame in position " + scoreboard.size() + "! Time: " + timeTaken + " seconds.");
+
+
+        //Check if game is finished,
+        if(isGameFinished()){
+            MinigamePlayer winner = scoreboard.get(0);
+            Message.allPlayers("INFO", "The Current Minigame Has Finished! 1st Place was " + winner.getPlayerObject().getName() + " at " + winner.getGameTime() + " seconds.");
+            System.out.println("The Current Minigame Has Finished! 1st Place was " + winner.getPlayerObject().getName() + " at " + winner.getGameTime() + " seconds.");
+
+            GameHandler.getHandler().stopMinigame();
+        }
+    }
+
+    /**
+     * Called when a Player Respawns in the Minigame.
+     *
+     * @param event The Respawn Event generated by Minecraft when a player respawns.
+     * @param player The player that is respawning.
+     */
+    public void onPlayerRespawn(PlayerRespawnEvent event, MinigamePlayer player){
+        //Call minigameRespawnAction in Player's Handler
+        player.getHandler().minigameRespawnAction(event);
+    }
+
+
+    /**
+     * Called when a Player is Damaged in the Minigame.
+     * Implementation is dependent on the Mingiame Type.
+     *
+     * @param player The player that was damaged.
+     */
+    public void onPlayerDamage(MinigamePlayer player){}
+
+    /**
+     * Called when a Player Dies in the Minigame.
+     *
+     * @param event the Death Event generated by Minecraft when a player dies.
+     * @param player The player that died.
+     */
+    public void onPlayerDie(PlayerDeathEvent event, MinigamePlayer player){
+
+        //Call PlayerHandler.minigameDeathAction()
+        player.getHandler().minigameDeathAction();
+
+        event.getDrops().clear();
+
+        //Check if minigame is over now.
+        if(player.getState() == PlayerState.SPECTATING){ //player just died for the last time
+            Message.player(player, "You have Died and have used all of your lives. Spectating now.");
+
+            if(isGameFinished()){
+                if(scoreboard == null || scoreboard.size() == 0){
+                    Message.allPlayers("INFO", "The Current Minigame has Finished! Nobody was able to complete it!!");
+                }else{
+                    Message.allPlayers("INFO", "The Current Minigame Has Finished! 1st Place was " + scoreboard.get(0).getPlayerObject().getName() + " at " + scoreboard.get(0).getGameTime() + " seconds.");
+                }
+
+                GameHandler.getHandler().stopMinigame();
+            }
+        }else{
+            Message.player(player, ChatColor.DARK_RED + "You Have Died!"+ ChatColor.WHITE +" Remaining Lives: " + player.getCurrentLifeCount());
+        }
+
+    }
+
+    //===================Getters & Setters, toString====================
+    @Override
+    public String toString(){
+        String out = String.format("[%s] %s Minigame. Map: %s. Difficulty: %d. " +
+                        "Max Players: %d, Min Players: %d.", startTime.toString(),
+                type,
+                map.getName(),
+                difficultyLevel,
+                maximumPlayers,
+                minimumPlayers);
+        return out;
     }
 
     public void setStartTime(Date startTime) {
@@ -183,9 +198,6 @@ public abstract class Minigame {
         this.maximumPlayers = maximumPlayers;
     }
 
-    public int getMinimumPlayers() {
-        return minimumPlayers;
-    }
 
     public void setMinimumPlayers(int minimumPlayers) {
         this.minimumPlayers = minimumPlayers;
@@ -196,7 +208,6 @@ public abstract class Minigame {
     }
 
     public void setMap(MinigameMap map) {
-//        System.out.println("In SetMap. Map: " + map);
         this.map = map;
     }
 
