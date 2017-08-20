@@ -4,6 +4,9 @@ package me.chandl.cfminigame.scores;
 import me.chandl.cfminigame.minigame.core.MinigameMap;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 
+/**
+ * WinCount - For future use.
+ */
 public class WinCount {
     private MinigamePlayer player;
     private MinigameMap map;

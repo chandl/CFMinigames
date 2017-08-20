@@ -1,7 +1,7 @@
-package me.chandl.cfminigame.minigame.checkpoint;
+package me.chandl.cfminigame.minigames.race.checkpoint;
 
 import me.chandl.cfminigame.CFMinigame;
-import me.chandl.cfminigame.GameHandler;
+import me.chandl.cfminigame.handler.GameHandler;
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.core.MinigameListener;
 import me.chandl.cfminigame.minigame.core.MinigameState;
@@ -11,13 +11,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FireworkExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -26,8 +22,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-
+/**
+ * Subclassed MinigameListener for Race Minigames.
+ *
+ * @author Chandler me@cseverson.com
+ * @version 1.0
+ * @since Aug 20, 2017
+ */
 public class RaceListener extends MinigameListener {
+
+    //TODO Clean up methods, add more Documentation.
 
     private ArrayList<Checkpoint> checkpoints;
     private HashMap<UUID, MinigamePlayer> playerStore;
@@ -112,7 +116,7 @@ public class RaceListener extends MinigameListener {
         if(!GameHandler.getHandler().getPlayerUUIDs().contains(p.getUniqueId())){return;}
 
         Minigame curr = GameHandler.getHandler().getCurrentMinigame();
-        curr.onDie(evt, mp);
+        curr.onPlayerDie(evt, mp);
     }
 
 

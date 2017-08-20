@@ -4,7 +4,7 @@ import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 
 /**
- * Created by chandler on 7/30/17.
+ * HighScore - For Future Use.
  */
 public class HighScore {
     private Minigame minigame;

@@ -1,11 +1,17 @@
 package me.chandl.cfminigame.minigames.race;
 
-import me.chandl.cfminigame.GameHandler;
+import me.chandl.cfminigame.handler.GameHandler;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.minigame.player.PlayerState;
 import org.bukkit.GameMode;
 
-
+/**
+ * Elytra Race Minigame.
+ *
+ * @author Chandler me@cseverson.com
+ * @version 1.0
+ * @since Aug 20, 2017
+ */
 public class ElytraRace extends Race{
 
 
@@ -33,9 +39,9 @@ public class ElytraRace extends Race{
     }
 
     @Override
-    public void onLeave(MinigamePlayer player) {
+    public void onPlayerLeave(MinigamePlayer player) {
         player.getPlayerObject().setGameMode(player.getPreviousGamemode());
 
-        super.onLeave(player);
+        super.onPlayerLeave(player);
     }
 }

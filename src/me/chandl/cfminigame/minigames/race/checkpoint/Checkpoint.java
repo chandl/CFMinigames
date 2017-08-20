@@ -1,4 +1,4 @@
-package me.chandl.cfminigame.minigame.checkpoint;
+package me.chandl.cfminigame.minigames.race.checkpoint;
 
 
 import org.bukkit.Bukkit;
@@ -11,9 +11,18 @@ import java.io.Serializable;
 import java.util.*;
 
 
-import static me.chandl.cfminigame.minigame.checkpoint.CheckpointArea.*;
+import static me.chandl.cfminigame.minigames.race.checkpoint.CheckpointArea.*;
 
+/**
+ * Class to represent a Checkpoint for a Race.
+ *
+ * @author Chandler me@cseverson.com
+ * @version 1.0
+ * @since Aug 20, 2017
+ */
 public class Checkpoint implements Serializable, ConfigurationSerializable {
+
+    //TODO Clean up methods, add more Documentation.
 
     //This value will determine when you hit the checkpoint hitbox.
     // e.g. 2 means that you will hit the hitbox when 2 blocks in front or behind of the point.

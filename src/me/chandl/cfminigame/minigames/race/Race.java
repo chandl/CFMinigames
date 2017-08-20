@@ -1,25 +1,38 @@
 package me.chandl.cfminigame.minigames.race;
 
 import me.chandl.cfminigame.CFMinigame;
-import me.chandl.cfminigame.GameHandler;
-import me.chandl.cfminigame.database.CheckpointConfig;
-import me.chandl.cfminigame.database.MapConfig;
-import me.chandl.cfminigame.minigame.checkpoint.RaceListener;
+import me.chandl.cfminigame.handler.GameHandler;
+import me.chandl.cfminigame.database.CheckpointConfigStore;
+import me.chandl.cfminigame.database.MapStore;
+import me.chandl.cfminigame.minigames.race.checkpoint.RaceListener;
 import me.chandl.cfminigame.minigame.core.Minigame;
-import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
+import me.chandl.cfminigame.minigames.race.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.minigame.player.PlayerState;
 import me.chandl.cfminigame.util.Message;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * Race Minigame
+ *
+ * @author Chandler me@cseverson.com
+ * @version 1.0
+ * @since Aug 20, 2017
+ */
 public class Race extends Minigame {
+
+    //TODO Clean up methods, add more Documentation.
+
+
     private ArrayList<Checkpoint> checkPoints;
     private RaceListener raceListener;
 
@@ -27,6 +40,18 @@ public class Race extends Minigame {
         super();
     }
 
+    /**
+     * A race is finished once all players have finished the race (All players spectating)
+     */
+    @Override
+    protected boolean isGameFinished() {
+
+        for(MinigamePlayer player : GameHandler.getHandler().getPlayerList()){
+            if(player.getState() == PlayerState.IN_GAME) return false;
+        }
+
+        return true;
+    }
 
     @Override
     public void onPlayerFinish(MinigamePlayer player) {
@@ -37,7 +62,7 @@ public class Race extends Minigame {
     @Override
     public void onPlayerDamage(MinigamePlayer player) {
 
-//            onDie(new PlayerDeathEvent(player.getPlayerObject(), null, 0 , "Fell in Game."), player);
+//            onPlayerDie(new PlayerDeathEvent(player.getPlayerObject(), null, 0 , "Fell in Game."), player);
 //        System.out.println("PLAYER DAMAGE D: ");
 //        player.getPlayerObject().damage(10);
         if(player.isAlive())
@@ -73,24 +98,26 @@ public class Race extends Minigame {
 
     @Override
     public void start() {
-//        System.out.println("This Minigame: " + this);
-//        System.out.println("Type: "  + this.getType());
-//        System.out.println("Map: "  + this.getMap().getName());
 
         //Load correct shape for difficulty level...
-        String shape = CheckpointConfig.loadPoint(this.getType(), this.getDifficultyLevel());
+        String shape = CheckpointConfigStore.loadPoint(this.getType(), this.getDifficultyLevel());
 
         //Load and Configure Checkpoints
-        if(MapConfig.loadConfig(getType(), getMap().getName())){
-            checkPoints = (ArrayList<Checkpoint>) MapConfig.get("checkpoints");
+        FileConfiguration config ;
+        try {
+             config = MapStore.getConfig(getType(), getMap().getName());
+
+            checkPoints = (ArrayList<Checkpoint>) config.get("checkpoints");
             for(Checkpoint p : checkPoints){
-//                System.out.println("Checkpoint List: " + p);
                 p.setShape(shape);
             }
 
-        }else{
+        } catch (FileNotFoundException e) {
             System.err.println("ERROR: Could not Load Checkpoints.");
+            e.printStackTrace();
+            return;
         }
+
 
         //Spawn all of the checkpoints
         for(Checkpoint p : checkPoints ){

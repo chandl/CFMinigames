@@ -1,6 +1,6 @@
 package me.chandl.cfminigame.minigames.snowballfight;
 
-import me.chandl.cfminigame.GameHandler;
+import me.chandl.cfminigame.handler.GameHandler;
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.core.MinigameListener;
 import me.chandl.cfminigame.minigame.core.MinigameState;
@@ -19,7 +19,13 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 
 
-
+/**
+ * Subclass of MinigameListener - Listener for the SnowballFight Minigame
+ *
+ * @author Chandler me@cseverson.com
+ * @version 1.0
+ * @since Aug 20, 2017
+ */
 public class SnowballListener extends MinigameListener {
 
 
@@ -68,7 +74,7 @@ public class SnowballListener extends MinigameListener {
         if(!GameHandler.getHandler().getPlayerUUIDs().contains(p.getUniqueId())){return;}
 
         Minigame curr = GameHandler.getHandler().getCurrentMinigame();
-        curr.onDie(evt, mp);
+        curr.onPlayerDie(evt, mp);
     }
 
     public SnowballListener(){}

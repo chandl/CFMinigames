@@ -1,14 +1,21 @@
 package me.chandl.cfminigame.minigame.core;
 
 
-import me.chandl.cfminigame.database.MapConfig;
 import me.chandl.cfminigame.scores.HighScore;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Representation of a Map for a {@link Minigame}
+ *
+ * @author Chandler me@cseverson.com
+ * @version 1.0
+ * @since Aug 20, 2017
+ */
 public class MinigameMap {
     private String name;
     private int maxLifeCount;
@@ -18,30 +25,15 @@ public class MinigameMap {
 
     private long gameTimeLimit;
     private long queueTimeLimit;
+    private ItemStack[] startingItems;
+
+    private FileConfiguration mapFileConfig;
+
+    //For future use
     private long baseScore;
     private long[] difficultyMultipliers;
-
-    private ItemStack[] startingItems;
     private List<HighScore> highScores;
 
-
-    public static MinigameMap findMap(MinigameType type, String mapName){
-        if(MapConfig.loadConfig(type, mapName)){//map exists
-            String name = (String) MapConfig.get("mapName");
-            int maxLife = (Integer) MapConfig.get("maxLifeCount");
-            Location spawnPoint = (Location) MapConfig.get("spawnPoint");
-            Location spectatorPoint = (Location) MapConfig.get("spectatorPoint");
-            long gameTimeLimit = (Integer) MapConfig.get("gameTimeLimit");
-            long baseScore = (Integer) MapConfig.get("baseScore");
-            List<ItemStack> items = (List<ItemStack>) MapConfig.getList("startingItems");
-            MinigameMap out = new MinigameMap(name, maxLife, spawnPoint, spectatorPoint, gameTimeLimit, baseScore, items.toArray(new ItemStack[items.size()]));
-//            System.out.println("Could find map. " + out.toString());
-            return out;
-        }else{
-//            System.out.println("Could not find map. Type " + type +". MapName: " + mapName);
-            return null;
-        }
-    }
 
     @Override
     public String toString() {

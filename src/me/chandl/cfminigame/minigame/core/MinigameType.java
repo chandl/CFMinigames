@@ -1,12 +1,18 @@
 package me.chandl.cfminigame.minigame.core;
 
 
-import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigames.race.ElytraRace;
 import me.chandl.cfminigame.minigames.snowballfight.SnowballFight;
 
 import java.io.Serializable;
 
+/**
+ * Types of Minigames.
+ *
+ * @author Chandler me@cseverson.com
+ * @version 1.0
+ * @since Aug 20, 2017
+ */
 public enum MinigameType implements Serializable{
    RACE, ELYTRARACE, SNOWBALLFIGHT;
 
