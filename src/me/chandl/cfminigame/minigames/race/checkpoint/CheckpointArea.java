@@ -1,4 +1,4 @@
-package me.chandl.cfminigame.minigame.checkpoint;
+package me.chandl.cfminigame.minigames.race.checkpoint;
 
 
 import java.io.Serializable;

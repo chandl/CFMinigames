@@ -1,6 +1,6 @@
 package me.chandl.cfminigame.minigame.core;
 
-import me.chandl.cfminigame.GameHandler;
+import me.chandl.cfminigame.handler.GameHandler;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.minigame.player.PlayerState;
 import me.chandl.cfminigame.util.Message;
@@ -9,7 +9,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 

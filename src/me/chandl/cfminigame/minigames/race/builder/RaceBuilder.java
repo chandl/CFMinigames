@@ -6,8 +6,7 @@ import me.chandl.cfminigame.minigame.core.MinigameMap;
 import me.chandl.cfminigame.minigame.core.MinigameType;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilder;
-import me.chandl.cfminigame.minigame.builder.MinigameBuilders;
-import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
+import me.chandl.cfminigame.minigames.race.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigames.race.RaceMap;
 import me.chandl.cfminigame.util.Message;
 import org.bukkit.ChatColor;
@@ -16,7 +15,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;

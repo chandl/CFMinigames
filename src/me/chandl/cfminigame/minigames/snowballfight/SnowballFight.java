@@ -1,7 +1,7 @@
 package me.chandl.cfminigame.minigames.snowballfight;
 
 import me.chandl.cfminigame.CFMinigame;
-import me.chandl.cfminigame.GameHandler;
+import me.chandl.cfminigame.handler.GameHandler;
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.core.MinigameType;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;

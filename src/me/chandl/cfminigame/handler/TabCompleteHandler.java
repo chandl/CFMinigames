@@ -1,5 +1,6 @@
-package me.chandl.cfminigame;
+package me.chandl.cfminigame.handler;
 
+import me.chandl.cfminigame.CFMinigame;
 import me.chandl.cfminigame.minigame.core.MinigameType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -8,7 +9,6 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 public class TabCompleteHandler implements TabCompleter {
@@ -92,7 +92,7 @@ public class TabCompleteHandler implements TabCompleter {
                                 return out;
                             }
                             else if (strings.length == 4){
-                                for(int i= CFMinigame.DEFAULT_MIN_DIFFICULTY; i <= CFMinigame.DEFAULT_MAX_DIFFICULTY; i++){
+                                for(int i = CFMinigame.DEFAULT_MIN_DIFFICULTY; i <= CFMinigame.DEFAULT_MAX_DIFFICULTY; i++){
                                     out.add(i + "");
                                 }
                                 return out;

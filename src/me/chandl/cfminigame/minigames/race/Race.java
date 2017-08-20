@@ -1,12 +1,12 @@
 package me.chandl.cfminigame.minigames.race;
 
 import me.chandl.cfminigame.CFMinigame;
-import me.chandl.cfminigame.GameHandler;
+import me.chandl.cfminigame.handler.GameHandler;
 import me.chandl.cfminigame.database.CheckpointConfig;
 import me.chandl.cfminigame.database.MapConfig;
-import me.chandl.cfminigame.minigame.checkpoint.RaceListener;
+import me.chandl.cfminigame.minigames.race.checkpoint.RaceListener;
 import me.chandl.cfminigame.minigame.core.Minigame;
-import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
+import me.chandl.cfminigame.minigames.race.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.minigame.player.PlayerState;
 import me.chandl.cfminigame.util.Message;

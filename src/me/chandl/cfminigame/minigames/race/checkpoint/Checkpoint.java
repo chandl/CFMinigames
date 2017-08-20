@@ -1,4 +1,4 @@
-package me.chandl.cfminigame.minigame.checkpoint;
+package me.chandl.cfminigame.minigames.race.checkpoint;
 
 
 import org.bukkit.Bukkit;
@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.*;
 
 
-import static me.chandl.cfminigame.minigame.checkpoint.CheckpointArea.*;
+import static me.chandl.cfminigame.minigames.race.checkpoint.CheckpointArea.*;
 
 public class Checkpoint implements Serializable, ConfigurationSerializable {
 

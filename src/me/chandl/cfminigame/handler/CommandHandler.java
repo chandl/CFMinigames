@@ -1,22 +1,17 @@
-package me.chandl.cfminigame;
+package me.chandl.cfminigame.handler;
 
 import me.chandl.cfminigame.database.CheckpointConfig;
 import me.chandl.cfminigame.database.MapConfig;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilder;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilders;
-import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
+import me.chandl.cfminigame.minigames.race.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.core.MinigameMap;
 import me.chandl.cfminigame.minigame.core.MinigameState;
 import me.chandl.cfminigame.minigame.core.MinigameType;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
-import me.chandl.cfminigame.minigames.race.RaceMap;
 import me.chandl.cfminigame.minigames.race.builder.RaceBuilder;
-import me.chandl.cfminigame.minigames.snowballfight.SnowballFight;
 import me.chandl.cfminigame.util.Message;
-import me.chandl.cfminigame.util.TextUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,12 +19,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.InvalidDescriptionException;
-import org.bukkit.plugin.InvalidPluginException;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 

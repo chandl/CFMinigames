@@ -1,16 +1,16 @@
 package me.chandl.cfminigame;
 
 
+import me.chandl.cfminigame.handler.CommandHandler;
+import me.chandl.cfminigame.handler.GameHandler;
+import me.chandl.cfminigame.handler.TabCompleteHandler;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilder;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilders;
-import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
-import me.chandl.cfminigame.minigame.checkpoint.RaceListener;
+import me.chandl.cfminigame.minigames.race.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigame.core.MinigameListener;
 import me.chandl.cfminigame.minigame.core.MinigameState;
-import me.chandl.cfminigame.minigames.snowballfight.SnowballListener;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Logger;
 

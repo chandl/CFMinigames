@@ -1,6 +1,6 @@
 package me.chandl.cfminigame.minigames.race;
 
-import me.chandl.cfminigame.GameHandler;
+import me.chandl.cfminigame.handler.GameHandler;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
 import me.chandl.cfminigame.minigame.player.PlayerState;
 import org.bukkit.GameMode;

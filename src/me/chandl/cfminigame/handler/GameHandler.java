@@ -1,5 +1,6 @@
-package me.chandl.cfminigame;
+package me.chandl.cfminigame.handler;
 
+import me.chandl.cfminigame.CFMinigame;
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.core.MinigameMap;
 import me.chandl.cfminigame.minigame.core.MinigameState;

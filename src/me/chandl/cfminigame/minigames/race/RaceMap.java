@@ -1,7 +1,7 @@
 package me.chandl.cfminigame.minigames.race;
 
 import me.chandl.cfminigame.minigame.core.MinigameMap;
-import me.chandl.cfminigame.minigame.checkpoint.Checkpoint;
+import me.chandl.cfminigame.minigames.race.checkpoint.Checkpoint;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
