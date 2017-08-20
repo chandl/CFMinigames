@@ -3,7 +3,7 @@ package me.chandl.cfminigame.handler;
 import me.chandl.cfminigame.database.CheckpointConfigStore;
 import me.chandl.cfminigame.database.MapStore;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilder;
-import me.chandl.cfminigame.minigame.builder.MinigameBuilders;
+import me.chandl.cfminigame.minigame.builder.MinigameBuilderStore;
 import me.chandl.cfminigame.minigame.player.MinigamePlayerStore;
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.minigame.core.MinigameMap;
@@ -84,7 +84,7 @@ public class CommandHandler implements CommandExecutor {
                             //Build Command - Used in conjunction with 'New' command, serves as dialogue to create new Minigame Map.
                             case "build":
                                 if(sender.hasPermission("CFMinigame.mg.admin")){
-                                    MinigameBuilder builder = MinigameBuilders.getBuilders().getMinigameBuilder(player);
+                                    MinigameBuilder builder = MinigameBuilderStore.getInstance().getMinigameBuilder(player);
                                     if(builder == null) Message.player(player, "ERROR", "You are not in the Minigame Build Mode. Use '/mg new' to start.");
                                     else builder.handleCommand(strings);
                                 }else{
@@ -269,7 +269,7 @@ public class CommandHandler implements CommandExecutor {
      * @param mgType The type of the minigame that is being built.
      */
     private void mgNewMap(MinigamePlayer player, String mgType){
-        if(MinigameBuilders.getBuilders().isBuilding(player)){
+        if(MinigameBuilderStore.getInstance().isBuilding(player)){
             Message.player(player, "ERROR", "You are already in build mode. Type '/mg build stop' to exit.");
             return ;
         }
@@ -291,7 +291,7 @@ public class CommandHandler implements CommandExecutor {
             case ELYTRARACE:
                 Message.player(player, "In Minigame Build Mode! Type '/mg build status' to see Available Minigame Options.");
                 MinigameBuilder builder = new RaceBuilder(player);
-                MinigameBuilders.getBuilders().setBuilding(player, builder);
+                MinigameBuilderStore.getInstance().setBuilding(player, builder);
                 break;
             default:
                 Message.player(player, "ERROR", "No Minigame Builder for Type '"+ mgType + "' found!" );

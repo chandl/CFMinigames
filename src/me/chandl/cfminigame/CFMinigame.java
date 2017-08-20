@@ -5,7 +5,7 @@ import me.chandl.cfminigame.handler.CommandHandler;
 import me.chandl.cfminigame.handler.GameHandler;
 import me.chandl.cfminigame.handler.TabCompleteHandler;
 import me.chandl.cfminigame.minigame.builder.MinigameBuilder;
-import me.chandl.cfminigame.minigame.builder.MinigameBuilders;
+import me.chandl.cfminigame.minigame.builder.MinigameBuilderStore;
 import me.chandl.cfminigame.minigames.race.checkpoint.Checkpoint;
 import me.chandl.cfminigame.minigame.core.MinigameListener;
 import me.chandl.cfminigame.minigame.core.MinigameState;
@@ -82,7 +82,7 @@ public class CFMinigame extends JavaPlugin{
             GameHandler.getHandler().stopMinigame();
         }
 
-        for(MinigameBuilder builders : MinigameBuilders.getBuilders().getAllBuilders()){
+        for(MinigameBuilder builders : MinigameBuilderStore.getInstance().getAllBuilders()){
             builders.stopBuilding();
         }
         log.info("OnDisable called.");
