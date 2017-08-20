@@ -1,6 +1,8 @@
 package me.chandl.cfminigame.minigame.player;
 
 import me.chandl.cfminigame.database.PlayerConfig;
+import me.chandl.cfminigame.database.PlayerStore;
+import me.chandl.cfminigame.handler.PlayerHandler;
 import me.chandl.cfminigame.minigame.core.Minigame;
 import me.chandl.cfminigame.scores.HighScore;
 import me.chandl.cfminigame.scores.WinCount;
@@ -13,6 +15,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * A wrapper class for the Minecraft Player object used throughout the Minigames.
+ *
+ * @author Chandler me@cseverson.com
+ * @version 1.0
+ * @since Aug 20, 2017
+ */
 public class MinigamePlayer {
     private Player player;
     private List<HighScore> highScores;
@@ -27,6 +36,7 @@ public class MinigamePlayer {
     private long gameTime;
     private Date lastDeath;
     private boolean alive;
+    private PlayerHandler handler;
 
     //Keep track of the progress in each game. (e.g. Race: The last checkpoint that you have gone through)
     private int progress;
@@ -49,11 +59,12 @@ public class MinigamePlayer {
 
     public MinigamePlayer (Player p, boolean reset){
         player = p;
-        conf = new PlayerConfig();
+//        conf = new PlayerConfig(p);
+        conf = PlayerStore.getConfig(p);
+        handler = new PlayerHandler(this);
 
-        if(!conf.loadConfig(player) || reset){ // if config doesn't exist
-            conf.createUser(conf.getPlayerFile());
-
+        if(conf == null || reset){ // if config doesn't exist
+            conf = PlayerStore.createConfig(p);
 
             conf.set("uuid", player.getUniqueId().toString());
 
@@ -75,6 +86,10 @@ public class MinigamePlayer {
 
 //            System.out.println("PREVIOUS GAMEMODE LOADED: " + GameMode.valueOf((String)conf.get("previousGamemode")));
         }
+    }
+
+    public PlayerHandler getHandler() {
+        return handler;
     }
 
     public void loadItems(){
