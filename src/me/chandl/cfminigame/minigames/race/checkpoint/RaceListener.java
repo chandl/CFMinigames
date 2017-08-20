@@ -22,7 +22,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-
+/**
+ * Subclassed MinigameListener for Race Minigames.
+ *
+ * @author Chandler me@cseverson.com
+ * @version 1.0
+ * @since Aug 20, 2017
+ */
 public class RaceListener extends MinigameListener {
 
     private ArrayList<Checkpoint> checkpoints;
@@ -108,7 +114,7 @@ public class RaceListener extends MinigameListener {
         if(!GameHandler.getHandler().getPlayerUUIDs().contains(p.getUniqueId())){return;}
 
         Minigame curr = GameHandler.getHandler().getCurrentMinigame();
-        curr.onDie(evt, mp);
+        curr.onPlayerDie(evt, mp);
     }
 
 

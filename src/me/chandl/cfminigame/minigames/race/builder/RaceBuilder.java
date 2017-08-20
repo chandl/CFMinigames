@@ -1,7 +1,7 @@
 package me.chandl.cfminigame.minigames.race.builder;
 
-import me.chandl.cfminigame.database.CheckpointConfig;
-import me.chandl.cfminigame.database.MapConfig;
+import me.chandl.cfminigame.database.CheckpointConfigStore;
+import me.chandl.cfminigame.database.MapStore;
 import me.chandl.cfminigame.minigame.core.MinigameMap;
 import me.chandl.cfminigame.minigame.core.MinigameType;
 import me.chandl.cfminigame.minigame.player.MinigamePlayer;
@@ -19,7 +19,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-
+/**
+ * Subclassed MinigameBuilder for building Races.
+ *
+ * @author Chandler me@cseverson.com
+ * @version 1.0
+ * @since Aug 20, 2017
+ */
 public class RaceBuilder extends MinigameBuilder {
     private Queue<Checkpoint> points = null;
     private Integer maxLives;
@@ -43,9 +49,9 @@ public class RaceBuilder extends MinigameBuilder {
         List<Checkpoint> pts = new LinkedList<>(points);
 
         RaceMap map = new RaceMap(name, maxLives, spawnPoint, spectatorPoint, new Long(timeLimit), 1, startingItems, pts);
-        FileConfiguration conf = MapConfig.createMap(MinigameType.ELYTRARACE, name, map);
+        FileConfiguration conf = MapStore.createMap(MinigameType.ELYTRARACE, name, map);
         conf.set("checkpoints", pts);
-        MapConfig.saveMapFile();
+        MapStore.saveMapFile(conf, MapStore.getMapFile(MinigameType.ELYTRARACE, name));
 
         Message.player(getBuilder(), "New Map Created: " + name);
         System.out.println("CFMinigame. New Map Created: " + map + ". Created by " + getBuilder().getPlayerObject().getName());
@@ -93,7 +99,7 @@ public class RaceBuilder extends MinigameBuilder {
                     if(points == null) points = new LinkedList<>();
 
                     Location here = getBuilder().getPlayerObject().getLocation();
-                    String cp = CheckpointConfig.loadPoint(MinigameType.ELYTRARACE, 1);
+                    String cp = CheckpointConfigStore.loadPoint(MinigameType.ELYTRARACE, 1);
 
                     Checkpoint point = new Checkpoint(cp, here, here.getYaw());
                     Material mat = getBuilder().getPlayerObject().getInventory().getItemInMainHand().getType();

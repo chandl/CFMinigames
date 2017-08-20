@@ -8,6 +8,15 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 
+/**
+ * RaceMap subclass of MinigameMap
+ *
+ * Contains list of Checkpoints on top of other MinigameMap objects.
+ *
+ * @author Chandler me@cseverson.com
+ * @version 1.0
+ * @since Aug 20, 2017
+ */
 public class RaceMap extends MinigameMap {
     private List<Checkpoint> checkpoints;
 

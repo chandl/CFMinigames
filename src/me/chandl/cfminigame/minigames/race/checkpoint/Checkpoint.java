@@ -13,6 +13,13 @@ import java.util.*;
 
 import static me.chandl.cfminigame.minigames.race.checkpoint.CheckpointArea.*;
 
+/**
+ * Class to represent a Checkpoint for a Race.
+ *
+ * @author Chandler me@cseverson.com
+ * @version 1.0
+ * @since Aug 20, 2017
+ */
 public class Checkpoint implements Serializable, ConfigurationSerializable {
 
     //This value will determine when you hit the checkpoint hitbox.
